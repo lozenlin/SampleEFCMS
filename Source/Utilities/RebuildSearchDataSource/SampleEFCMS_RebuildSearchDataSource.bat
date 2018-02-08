@@ -1,0 +1,1 @@
+"C:\Program Files\Microsoft SQL Server\110\Tools\Binn\sqlcmd" -S .\sqlexpress2012 -E -i SampleEFCMS_RebuildSearchDataSource.sql -o D:\SqlDataBackup\SQLEXPRESS2012\SampleEFCMS\result_RebuildSearchDataSource.txt

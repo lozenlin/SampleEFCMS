@@ -1,0 +1,144 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterConfig.master.cs" Inherits="MasterConfig" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title></title>
+    <link href="/Management/Common/bootstrap-4/css/bootstrap.css" rel="stylesheet" />
+    <link href="/Management/Common/css/BpBootstrapChanged.css" rel="stylesheet" />
+    <link href="/Management/Common/css/BackendPage.css" rel="stylesheet" />
+    <link href="/Management/Common/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/Management/Common/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <link href="/Management/Common/jquery-ui-1.12.1/themes/south-street/jquery-ui.min.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder id="cphHead" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="config-body">
+    <form id="form1" runat="server">
+        <div class="config-area bgtx-main">
+            <div id="ErrorMsgArea" runat="server" class="alert alert-danger alert-dismissible fade show" role="alert" visible="false">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <asp:Literal ID="ltrErrMsg" runat="server"></asp:Literal>
+            </div>
+            <div class="url-info">
+                <a href="#" class="btn btn-sm btn-secondary py-0 subject" title="<%= Resources.Lang.ConfigForm_btnSubject_Hint %>">
+                    <%= Resources.Lang.ConfigForm_btnSubject %>
+                </a>
+                <a href="#" class="btn btn-sm btn-secondary py-0 url" title="<%= Resources.Lang.ConfigForm_btnUrl_Hint %>">
+                    <%= Resources.Lang.ConfigForm_btnUrl %>
+                </a>
+                <a href="#" class="btn btn-sm btn-success py-0 external" title="<%= Resources.Lang.ConfigForm_btnOpenToNewWindow_Hint %>">
+                    <i class="fa fa-level-up"></i> <%= Resources.Lang.ConfigForm_btnOpenToNewWindow %></a>
+            </div>
+            <asp:ContentPlaceHolder id="cphContent" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+        <div class="config-actions">
+            <asp:ContentPlaceHolder ID="cphActionButtons" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+        <input id="txtFlag" runat="server" type="hidden" value="N" />
+
+        <script src="Common/js/jquery-3.2.1.min.js"></script>
+        <!--<script src="Common/js/jquery-migrate-3.0.0.js"></script>-->
+        <script src="Common/js/popper.min.js"></script>
+        <script src="Common/bootstrap-4/js/bootstrap.min.js"></script>
+        <script src="Common/jquery-ui-1.12.1.Datepicker/jquery-ui.min.js"></script>
+        <asp:Literal ID="ltrDatepickerJsTW" runat="server" Text="<script src='Common/jquery-ui-1.12.1/i18n/datepicker-zh-TW.js'></script>"></asp:Literal>
+        <script src="Common/js/BackendPage.js"></script>
+        <script>
+            var isMobile = false;
+            if (navigator) {
+                isMobile = navigator.userAgent.match(/Mobile/i) != null;
+            }
+
+            //設定所有日期選擇小工具
+            $(".datepicker").datepicker({
+                showOn: 'both',
+                buttonImage: 'BPimages/icon/calendar.png',
+                buttonImageOnly: true,
+                dateFormat: 'yy-mm-dd',
+                changeYear: true,
+                changeMonth: false,
+                showButtonPanel: true
+            });
+
+            // modify height of config-area with clientHeight
+            function modifyConfigAreaHeight() {
+                if (isMobile) {
+                    return;
+                }
+
+                var newHeight = document.documentElement.clientHeight - 90;
+                if (newHeight < 0) {
+                    newHeight = 0;
+                }
+                var $configArea = $(".config-area");
+                if ($configArea.length > 0) {
+                    $configArea.eq(0).css("overflow", "auto");
+                    $configArea.eq(0).height(newHeight + "px");
+                }
+            }
+
+            $(window).on("load", function () {
+                modifyConfigAreaHeight();
+            });
+
+            $(window).resize(function () {
+                modifyConfigAreaHeight();
+            });
+
+            // url-info
+            if (window.opener) {
+                $(".url-info").hide();
+            } else {
+                if (window.parent) {
+                    window.parent.setDialogTitle(document.title);
+                }
+
+                $(".url-info .subject")
+                    .click(function () {
+                        prompt('<%= Resources.Lang.ConfigForm_Notice_Copy %>', document.title);
+                        return false;
+                    });
+
+                $(".url-info .url")
+                    .click(function () {
+                        prompt('<%= Resources.Lang.ConfigForm_Notice_Copy %>', document.location.href);
+                        return false;
+                    });
+
+                $(".url-info .external")
+                    .click(function () {
+                        if (confirm('<%= Resources.Lang.ConfigForm_Notice_BeforeOpenToNewWindow %>')) {
+                            if (window.parent) {
+                                window.parent.popWinOut(document.location.href, $(document).width(), $(document).height());
+                                closeThisForm();
+                            }
+                        }
+
+                        return false;
+                    });
+            }
+
+
+            function closeThisForm() {
+                if (window.opener) {
+                    window.close();
+                } else if (window.parent) {
+                    parent.closeDialog();
+                }
+            }
+        </script>
+    </form>
+
+    <asp:ContentPlaceHolder ID="cphBeforeBodyTail" runat="server">
+    </asp:ContentPlaceHolder>
+</body>
+</html>

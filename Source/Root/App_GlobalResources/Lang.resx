@@ -1,0 +1,330 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX 結構描述 
+    
+    2.0 版
+    
+     這個格式的主要目的是允許使用最容易理解的 
+    簡單 XML 格式。不同資料型別 
+    的產生和剖析是透過與資料型別關聯的 TypeConverter 
+    類別所完成。
+    
+    範例:
+    
+    ... ado.net/XML 標頭與結構描述 ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1">this is my long string</data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        [base64 mime encoded serialized .NET Framework object]
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        [base64 mime encoded string representing a byte array form of the .NET Framework object]
+    </data>
+                
+    其中有包含簡單名稱/值組的 "resheader" 資料列 
+    (列數不拘)。
+    
+    每個資料列都包含名稱和值。該資料列也會包含 
+    型別或 MIME 類型。型別會對應到支援 
+    透過 TypeConverter 架構進行文字/值轉換的 .NET 類別。 
+    不支援這項轉換的類別會經過序列化處理，並與 MIME 
+    類型組一起儲存。
+    
+    該 MIME 類型會用於序列化物件，並且告訴 
+    ResXResourceReader 如何取消保存該物件。目前該類型不具 
+    擴充性。若是特定 MIME 類型，就必須設定其值:
+    
+    注意 - application/x-microsoft.net.object.binary.base64 即是 
+    ResXResourceWriter 將會產生的格式，不過讀取器可以 
+    讀取下面所列任何一種格式。
+    
+    MIME 類型: application/x-microsoft.net.object.binary.base64
+    值   : 物件必須以 
+            : System.Serialization.Formatters.Binary.BinaryFormatter 序列化，
+            : 然後以 base64 編碼進行編碼。
+    
+    MIME 類型: application/x-microsoft.net.object.soap.base64
+    值   : 物件必須以 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter 序列化，
+            : 然後以 base64 編碼進行編碼。
+
+    MIME 類型: application/x-microsoft.net.object.bytearray.base64
+    值   : 物件必須序列化成位元組陣列，方法是 
+            : 使用 System.ComponentModel.TypeConverter，
+            : 然後以 base64 編碼進行編碼。
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WebsiteName" xml:space="preserve">
+    <value>SampleEFCMS 前台展示</value>
+    <comment>SampleEFCMS 前台展示</comment>
+  </data>
+  <data name="WebsiteNameShort" xml:space="preserve">
+    <value>SampleEFCMS</value>
+    <comment>SampleEFCMS</comment>
+  </data>
+  <data name="Pager_btnPrevious" xml:space="preserve">
+    <value>上一頁</value>
+    <comment>上一頁</comment>
+  </data>
+  <data name="Pager_btnPrevious_Hint" xml:space="preserve">
+    <value>上一頁</value>
+    <comment>上一頁</comment>
+  </data>
+  <data name="Pager_btnNext" xml:space="preserve">
+    <value>下一頁</value>
+    <comment>下一頁</comment>
+  </data>
+  <data name="Pager_btnNext_Hint" xml:space="preserve">
+    <value>下一頁</value>
+    <comment>下一頁</comment>
+  </data>
+  <data name="FileExtIconText_generic" xml:space="preserve">
+    <value>未分類檔案</value>
+    <comment>未分類檔案</comment>
+  </data>
+  <data name="FileExtIconText_doc" xml:space="preserve">
+    <value>Word 檔案</value>
+    <comment>Word 檔案</comment>
+  </data>
+  <data name="FileExtIconText_xls" xml:space="preserve">
+    <value>Excel 試算表檔案</value>
+    <comment>Excel 試算表檔案</comment>
+  </data>
+  <data name="FileExtIconText_ppt" xml:space="preserve">
+    <value>PowerPoint 投影片檔案</value>
+    <comment>PowerPoint 投影片檔案</comment>
+  </data>
+  <data name="FileExtIconText_odt" xml:space="preserve">
+    <value>Open Document 文件檔</value>
+    <comment>Open Document 文件檔</comment>
+  </data>
+  <data name="FileExtIconText_ods" xml:space="preserve">
+    <value>Open Document 試算表檔案</value>
+    <comment>Open Document 試算表檔案</comment>
+  </data>
+  <data name="FileExtIconText_odp" xml:space="preserve">
+    <value>Open Document 投影片檔案</value>
+    <comment>Open Document 投影片檔案</comment>
+  </data>
+  <data name="FileExtIconText_pdf" xml:space="preserve">
+    <value>Adobe Reader(Pdf)檔案</value>
+    <comment>Adobe Reader(Pdf)檔案</comment>
+  </data>
+  <data name="FileExtIconText_txt" xml:space="preserve">
+    <value>文字檔案</value>
+    <comment>文字檔案</comment>
+  </data>
+  <data name="FileExtIconText_gif" xml:space="preserve">
+    <value>GIF 圖片檔案</value>
+    <comment>GIF 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_jpg" xml:space="preserve">
+    <value>JPEG 圖片檔案</value>
+    <comment>JPEG 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_png" xml:space="preserve">
+    <value>PNG 圖片檔案</value>
+    <comment>PNG 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_svg" xml:space="preserve">
+    <value>SVG 圖片檔案</value>
+    <comment>SVG 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_tif" xml:space="preserve">
+    <value>TIFF 圖片檔案</value>
+    <comment>TIFF 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_mp3" xml:space="preserve">
+    <value>MP3 音訊檔</value>
+    <comment>MP3 音訊檔</comment>
+  </data>
+  <data name="FileExtIconText_wav" xml:space="preserve">
+    <value>WAV 音訊檔</value>
+    <comment>WAV 音訊檔</comment>
+  </data>
+  <data name="FileExtIconText_wma" xml:space="preserve">
+    <value>WMA 音訊檔</value>
+    <comment>WMA 音訊檔</comment>
+  </data>
+  <data name="FileExtIconText_avi" xml:space="preserve">
+    <value>AVI 影片檔</value>
+    <comment>AVI 影片檔</comment>
+  </data>
+  <data name="FileExtIconText_mp4" xml:space="preserve">
+    <value>MP4 影片檔</value>
+    <comment>MP4 影片檔</comment>
+  </data>
+  <data name="FileExtIconText_wmv" xml:space="preserve">
+    <value>WMV 影片檔</value>
+    <comment>WMV 影片檔</comment>
+  </data>
+  <data name="FileExtIconText_mov" xml:space="preserve">
+    <value>MOV 影片檔</value>
+    <comment>MOV 影片檔</comment>
+  </data>
+  <data name="FileExtIconText_zip" xml:space="preserve">
+    <value>ZIP 壓縮檔</value>
+    <comment>ZIP 壓縮檔</comment>
+  </data>
+  <data name="FileExtIconText_rar" xml:space="preserve">
+    <value>RAR 壓縮檔</value>
+    <comment>RAR 壓縮檔</comment>
+  </data>
+  <data name="btnHome" xml:space="preserve">
+    <value>首頁</value>
+    <comment>首頁</comment>
+  </data>
+  <data name="btnHome_Hint" xml:space="preserve">
+    <value>首頁</value>
+    <comment>首頁</comment>
+  </data>
+  <data name="Att_lblDownload" xml:space="preserve">
+    <value>下載檔案</value>
+    <comment>下載檔案</comment>
+  </data>
+  <data name="Att_lblFileSize" xml:space="preserve">
+    <value>檔案大小</value>
+    <comment>檔案大小</comment>
+  </data>
+  <data name="Att_lblDownloadTimes" xml:space="preserve">
+    <value>下載次數</value>
+    <comment>下載次數</comment>
+  </data>
+  <data name="Att_lblMdfDate" xml:space="preserve">
+    <value>更新時間</value>
+    <comment>更新時間</comment>
+  </data>
+  <data name="btnReturnToList" xml:space="preserve">
+    <value>回上層</value>
+    <comment>回上層</comment>
+  </data>
+  <data name="ErrorPage_Subject" xml:space="preserve">
+    <value>找不到網頁</value>
+    <comment>PAGE NOT FOUND</comment>
+  </data>
+  <data name="ErrorPage_Context" xml:space="preserve">
+    <value>您點擊的網頁連結可能發生錯誤或者已經被刪除。</value>
+    <comment>The link you clicked may be broken or the page may have been removed.</comment>
+  </data>
+  <data name="ErrorPage_VisitThe" xml:space="preserve">
+    <value>回到</value>
+    <comment>visit the</comment>
+  </data>
+  <data name="ErrorPage_btnHome" xml:space="preserve">
+    <value>首頁</value>
+    <comment>HOMEPAGE</comment>
+  </data>
+  <data name="SectionLabel_Pictures" xml:space="preserve">
+    <value>相關照片</value>
+    <comment>相關照片</comment>
+  </data>
+  <data name="SectionLabel_Videos" xml:space="preserve">
+    <value>相關影片</value>
+    <comment>相關影片</comment>
+  </data>
+  <data name="PreviewMode_Notice" xml:space="preserve">
+    <value>您正使用預覽模式檢視本頁</value>
+    <comment>您正使用預覽模式檢視本頁</comment>
+  </data>
+  <data name="LazyLoading_btnLoad" xml:space="preserve">
+    <value>載入更多</value>
+    <comment>載入更多</comment>
+  </data>
+  <data name="LazyLoading_Loading" xml:space="preserve">
+    <value>載入中</value>
+    <comment>載入中</comment>
+  </data>
+  <data name="LazyLoading_IsLast" xml:space="preserve">
+    <value>已到最後一筆</value>
+    <comment>已到最後一筆</comment>
+  </data>
+  <data name="ErrMsg_LoadListFailed" xml:space="preserve">
+    <value>載入清單時發生異常錯誤</value>
+    <comment>載入清單時發生異常錯誤</comment>
+  </data>
+  <data name="SearchResult_txtKeyword_Hint" xml:space="preserve">
+    <value>多項關鍵字請使用空格區分</value>
+    <comment>多項關鍵字請使用空格區分</comment>
+  </data>
+  <data name="SearchResult_btnSearch" xml:space="preserve">
+    <value>搜尋</value>
+    <comment>搜尋</comment>
+  </data>
+  <data name="SearchResult_btnSearch_Hint" xml:space="preserve">
+    <value>搜尋</value>
+    <comment>搜尋</comment>
+  </data>
+  <data name="SearchResult_lblKeyword" xml:space="preserve">
+    <value>關鍵字</value>
+    <comment>關鍵字</comment>
+  </data>
+  <data name="SearchResult_lblTotal" xml:space="preserve">
+    <value>結果總共</value>
+    <comment>結果總共</comment>
+  </data>
+  <data name="SearchResult_lblPosition" xml:space="preserve">
+    <value>位置</value>
+    <comment>位置</comment>
+  </data>
+  <data name="lblLanguage" xml:space="preserve">
+    <value>語言</value>
+    <comment>語言</comment>
+  </data>
+  <data name="xxxxx" xml:space="preserve">
+    <value>xxxxx</value>
+    <comment>xxxxx</comment>
+  </data>
+</root>

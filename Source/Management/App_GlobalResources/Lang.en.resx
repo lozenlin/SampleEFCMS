@@ -1,0 +1,1948 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BackStageName" xml:space="preserve">
+    <value>SampleEFCMS Management Information System</value>
+    <comment>SampleEFCMS 後端管理</comment>
+  </data>
+  <data name="BackStageNameShort" xml:space="preserve">
+    <value>SampleEFCMS</value>
+    <comment>SampleEFCMS MIS</comment>
+  </data>
+  <data name="Login_Subtitle" xml:space="preserve">
+    <value>Sign in</value>
+    <comment>使用者登入</comment>
+  </data>
+  <data name="Login_AccountTitle" xml:space="preserve">
+    <value>Account</value>
+    <comment>帳　號</comment>
+  </data>
+  <data name="Login_PasswordTitle" xml:space="preserve">
+    <value>Password</value>
+    <comment>密　碼</comment>
+  </data>
+  <data name="Login_CheckCodeTitle" xml:space="preserve">
+    <value>Verification code</value>
+    <comment>驗證碼</comment>
+  </data>
+  <data name="Login_btnLogin" xml:space="preserve">
+    <value>Sign in</value>
+    <comment>登 入</comment>
+  </data>
+  <data name="Login_btnChangePsw" xml:space="preserve">
+    <value>Change password</value>
+    <comment>變更密碼</comment>
+  </data>
+  <data name="Login_btnDontRememberPsw" xml:space="preserve">
+    <value>Forgot password?</value>
+    <comment>忘記密碼</comment>
+  </data>
+  <data name="Login_YourIpTitle" xml:space="preserve">
+    <value>Your IP</value>
+    <comment>您的網路位址</comment>
+  </data>
+  <data name="ErrMsg_AccountFailed" xml:space="preserve">
+    <value>Account or password is incorrect</value>
+    <comment>帳號或密碼錯誤</comment>
+  </data>
+  <data name="ErrMsg_IPDenied" xml:space="preserve">
+    <value>Service to this IP has been suspended</value>
+    <comment>系統暫時停止對目前所在位址的服務</comment>
+  </data>
+  <data name="ErrMsg_Exception" xml:space="preserve">
+    <value>Exception error</value>
+    <comment>異常錯誤</comment>
+  </data>
+  <data name="ErrMsg_AccountUnavailable" xml:space="preserve">
+    <value>This account is unavailable</value>
+    <comment>此帳號已被停權</comment>
+  </data>
+  <data name="ErrMsg_GetDataException" xml:space="preserve">
+    <value>Exception error(retrieve data)</value>
+    <comment>取得資料時發生異常錯誤</comment>
+  </data>
+  <data name="ErrMsg_WrongCheckCode" xml:space="preserve">
+    <value>Verification code is wrong</value>
+    <comment>驗證碼錯誤</comment>
+  </data>
+  <data name="CaptchaPic_Hint" xml:space="preserve">
+    <value>Please click here if Verification Code is not clear.</value>
+    <comment>如驗證圖無法辨識，請點擊這裡重新產生</comment>
+  </data>
+  <data name="Main_RoleTitle" xml:space="preserve">
+    <value>Role</value>
+    <comment>身分</comment>
+  </data>
+  <data name="Main_DeptTitle" xml:space="preserve">
+    <value>Dept.</value>
+    <comment>部門</comment>
+  </data>
+  <data name="Main_btnAccountSettings" xml:space="preserve">
+    <value>Account settings</value>
+    <comment>帳號設定</comment>
+  </data>
+  <data name="Main_btnLogout" xml:space="preserve">
+    <value>Log out</value>
+    <comment>登出</comment>
+  </data>
+  <data name="btnEditOperations" xml:space="preserve">
+    <value>Edit</value>
+    <comment>編輯</comment>
+  </data>
+  <data name="btnEditOperations_Hint" xml:space="preserve">
+    <value>Edit items of operation</value>
+    <comment>編輯後端作業選項</comment>
+  </data>
+  <data name="Main_btnExpand" xml:space="preserve">
+    <value>Expand</value>
+    <comment>展開</comment>
+  </data>
+  <data name="Main_btnExpand_Hint" xml:space="preserve">
+    <value>Expand to see all functions</value>
+    <comment>展開所有功能</comment>
+  </data>
+  <data name="Main_Home" xml:space="preserve">
+    <value>Home</value>
+    <comment>首頁</comment>
+  </data>
+  <data name="Main_btnBackToParent" xml:space="preserve">
+    <value>Back</value>
+    <comment>回上層</comment>
+  </data>
+  <data name="Main_btnBackToParent_Hint" xml:space="preserve">
+    <value>Back to parent</value>
+    <comment>回上層</comment>
+  </data>
+  <data name="Main_btnEdit" xml:space="preserve">
+    <value>Edit</value>
+    <comment>修改</comment>
+  </data>
+  <data name="Main_btnEdit_Hint" xml:space="preserve">
+    <value>Edit this item</value>
+    <comment>修改本項目</comment>
+  </data>
+  <data name="Main_btnAddNew" xml:space="preserve">
+    <value>Add new</value>
+    <comment>新增</comment>
+  </data>
+  <data name="Main_btnAddNew_Hint" xml:space="preserve">
+    <value>Add a new sub item</value>
+    <comment>新增子項目</comment>
+  </data>
+  <data name="Main_btnDelete" xml:space="preserve">
+    <value>Delete</value>
+    <comment>刪除</comment>
+  </data>
+  <data name="Main_btnDelete_Hint" xml:space="preserve">
+    <value>Delete this item</value>
+    <comment>刪除本項目</comment>
+  </data>
+  <data name="Main_btnView" xml:space="preserve">
+    <value>View</value>
+    <comment>檢視</comment>
+  </data>
+  <data name="Main_btnView_Hint" xml:space="preserve">
+    <value>View this page</value>
+    <comment>檢視網頁</comment>
+  </data>
+  <data name="Main_btnViewZhTw" xml:space="preserve">
+    <value>View (中)</value>
+    <comment>檢視(中)</comment>
+  </data>
+  <data name="Main_btnViewZhTw_Hint" xml:space="preserve">
+    <value>View this page (Traditional Chinese)</value>
+    <comment>檢視網頁(正體中文版)</comment>
+  </data>
+  <data name="Main_btnViewEn" xml:space="preserve">
+    <value>(Eng)</value>
+    <comment>檢視網頁(Eng)</comment>
+  </data>
+  <data name="Main_btnViewEn_Hint" xml:space="preserve">
+    <value>View this page (English)</value>
+    <comment>檢視網頁(English)</comment>
+  </data>
+  <data name="Main_btnPreview" xml:space="preserve">
+    <value>Preview</value>
+    <comment>預覽</comment>
+  </data>
+  <data name="Main_btnPreview_Hint" xml:space="preserve">
+    <value>Preview unopened page content</value>
+    <comment>預覽未開放的網頁內容</comment>
+  </data>
+  <data name="Main_btnPreviewZhTw" xml:space="preserve">
+    <value>Preview (中)</value>
+    <comment>預覽(中)</comment>
+  </data>
+  <data name="Main_btnPreviewZhTw_Hint" xml:space="preserve">
+    <value>Preview unopened page content (Traditional Chinese)</value>
+    <comment>預覽未開放的網頁內容(正體中文版)</comment>
+  </data>
+  <data name="Main_btnPreviewEn" xml:space="preserve">
+    <value>(Eng)</value>
+    <comment>預覽(Eng)</comment>
+  </data>
+  <data name="Main_btnPreviewEn_Hint" xml:space="preserve">
+    <value>Preview unopened page content (English)</value>
+    <comment>預覽未開放的網頁內容(English)</comment>
+  </data>
+  <data name="Footer_CompanyInfo" xml:space="preserve">
+    <value>© Company</value>
+    <comment>© Company</comment>
+  </data>
+  <data name="Dashboard_Subtitle" xml:space="preserve">
+    <value>Information</value>
+    <comment>Information</comment>
+  </data>
+  <data name="Dashboard_Greeting" xml:space="preserve">
+    <value>Welcome to SampleEFCMS backstage.</value>
+    <comment>您已成功登入後端管理系統！</comment>
+  </data>
+  <data name="Dashboard_LoginInfoTitle" xml:space="preserve">
+    <value>Login information</value>
+    <comment>登入資訊</comment>
+  </data>
+  <data name="Dashboard_AccountTitle" xml:space="preserve">
+    <value>Account</value>
+    <comment>帳　號</comment>
+  </data>
+  <data name="Dashboard_ThisLoginTimeTitle" xml:space="preserve">
+    <value>This login time</value>
+    <comment>本次登入時間</comment>
+  </data>
+  <data name="Dashboard_LastLoginTimeTitle" xml:space="preserve">
+    <value>Last login time</value>
+    <comment>上次登入時間</comment>
+  </data>
+  <data name="Dashboard_IpTitle" xml:space="preserve">
+    <value>IP</value>
+    <comment>IP 位置</comment>
+  </data>
+  <data name="ErrMsg_LostSessionState" xml:space="preserve">
+    <value>lost session state!</value>
+    <comment>Session 遺失 (lost session state)</comment>
+  </data>
+  <data name="SearchPanel_Title" xml:space="preserve">
+    <value>Search conditions</value>
+    <comment>搜尋條件</comment>
+  </data>
+  <data name="SearchPanel_btnExpand" xml:space="preserve">
+    <value>Expand to change conditions</value>
+    <comment>變更搜尋條件</comment>
+  </data>
+  <data name="SearchPanel_btnExpand_Hint" xml:space="preserve">
+    <value>Expand to change conditions</value>
+    <comment>變更搜尋條件</comment>
+  </data>
+  <data name="SearchPanel_btnCollapse" xml:space="preserve">
+    <value>Collapse</value>
+    <comment>收合</comment>
+  </data>
+  <data name="SearchPanel_btnCollapse_Hint" xml:space="preserve">
+    <value>Collapse</value>
+    <comment>收合</comment>
+  </data>
+  <data name="SearchPanel_btnSearch" xml:space="preserve">
+    <value>Search</value>
+    <comment>查詢</comment>
+  </data>
+  <data name="SearchPanel_btnSearch_Hint" xml:space="preserve">
+    <value>Search</value>
+    <comment>查詢</comment>
+  </data>
+  <data name="SearchPanel_btnClear" xml:space="preserve">
+    <value>Clear</value>
+    <comment>清除條件</comment>
+  </data>
+  <data name="SearchPanel_btnClear_Hint" xml:space="preserve">
+    <value>Clear</value>
+    <comment>清除條件</comment>
+  </data>
+  <data name="SearchPanel_lblEmpRange" xml:space="preserve">
+    <value>Status</value>
+    <comment>帳號狀態</comment>
+  </data>
+  <data name="SearchPanel_lblDept" xml:space="preserve">
+    <value>Dept.</value>
+    <comment>部門</comment>
+  </data>
+  <data name="SearchPanel_lblKw" xml:space="preserve">
+    <value>Keyword</value>
+    <comment>關鍵字</comment>
+  </data>
+  <data name="SearchOption_All" xml:space="preserve">
+    <value>(All)</value>
+    <comment>(全部)</comment>
+  </data>
+  <data name="SearchOption_Normal" xml:space="preserve">
+    <value>Normal</value>
+    <comment>正常</comment>
+  </data>
+  <data name="SearchOption_AccessDenied" xml:space="preserve">
+    <value>Access is denied</value>
+    <comment>已停權</comment>
+  </data>
+  <data name="Col_Seqno" xml:space="preserve">
+    <value>Seq.</value>
+    <comment>序號</comment>
+  </data>
+  <data name="Col_Seqno_Hint" xml:space="preserve">
+    <value>Seq.</value>
+    <comment>序號</comment>
+  </data>
+  <data name="Col_DeptName" xml:space="preserve">
+    <value>Dept. name</value>
+    <comment>部門</comment>
+  </data>
+  <data name="Col_DeptName_Hint" xml:space="preserve">
+    <value>Department name</value>
+    <comment>部門</comment>
+  </data>
+  <data name="Col_Role" xml:space="preserve">
+    <value>Role</value>
+    <comment>身分</comment>
+  </data>
+  <data name="Col_Role_Hint" xml:space="preserve">
+    <value>Role</value>
+    <comment>身分</comment>
+  </data>
+  <data name="Col_EmpName" xml:space="preserve">
+    <value>Name</value>
+    <comment>姓名</comment>
+  </data>
+  <data name="Col_EmpName_Hint" xml:space="preserve">
+    <value>Name</value>
+    <comment>姓名</comment>
+  </data>
+  <data name="Col_EmpAccount" xml:space="preserve">
+    <value>Account</value>
+    <comment>帳號</comment>
+  </data>
+  <data name="Col_EmpAccount_Hint" xml:space="preserve">
+    <value>Account</value>
+    <comment>帳號</comment>
+  </data>
+  <data name="Col_AccessDenied" xml:space="preserve">
+    <value>Access is denied</value>
+    <comment>停權</comment>
+  </data>
+  <data name="Col_AccessDenied_Hint" xml:space="preserve">
+    <value>Access is denied</value>
+    <comment>停權</comment>
+  </data>
+  <data name="Col_Status" xml:space="preserve">
+    <value>Status</value>
+    <comment>狀態</comment>
+  </data>
+  <data name="Col_Status_Hint" xml:space="preserve">
+    <value>Status</value>
+    <comment>狀態</comment>
+  </data>
+  <data name="Col_ValidationDate" xml:space="preserve">
+    <value>Validation date</value>
+    <comment>上架日期</comment>
+  </data>
+  <data name="Col_ValidationDate_Hint" xml:space="preserve">
+    <value>Validation date</value>
+    <comment>上架日期</comment>
+  </data>
+  <data name="Col_Remark" xml:space="preserve">
+    <value>Remark</value>
+    <comment>備註</comment>
+  </data>
+  <data name="Col_Remark_Hint" xml:space="preserve">
+    <value>Remark</value>
+    <comment>備註</comment>
+  </data>
+  <data name="Col_Management" xml:space="preserve">
+    <value>Management</value>
+    <comment>管理功能</comment>
+  </data>
+  <data name="Col_Management_Hint" xml:space="preserve">
+    <value>Management</value>
+    <comment>管理功能</comment>
+  </data>
+  <data name="Col_OwnerName" xml:space="preserve">
+    <value>Owner</value>
+    <comment>擁有者</comment>
+  </data>
+  <data name="Col_OwnerName_Hint" xml:space="preserve">
+    <value>Owner</value>
+    <comment>擁有者</comment>
+  </data>
+  <data name="Col_Psw" xml:space="preserve">
+    <value>Password</value>
+    <comment>密碼</comment>
+  </data>
+  <data name="Col_PswConfirm" xml:space="preserve">
+    <value>Confirm password</value>
+    <comment>再次確認密碼</comment>
+  </data>
+  <data name="Col_OwnerAccount" xml:space="preserve">
+    <value>Owner account</value>
+    <comment>擁有者帳號</comment>
+  </data>
+  <data name="Pager_btnFirstPage" xml:space="preserve">
+    <value>First</value>
+    <comment>第一頁</comment>
+  </data>
+  <data name="Pager_btnFirstPage_Hint" xml:space="preserve">
+    <value>First</value>
+    <comment>第一頁</comment>
+  </data>
+  <data name="Pager_btnPrevious" xml:space="preserve">
+    <value>Previous</value>
+    <comment>上一頁</comment>
+  </data>
+  <data name="Pager_btnPrevious_Hint" xml:space="preserve">
+    <value>Previous</value>
+    <comment>上一頁</comment>
+  </data>
+  <data name="Pager_btnNext" xml:space="preserve">
+    <value>Next</value>
+    <comment>下一頁</comment>
+  </data>
+  <data name="Pager_btnNext_Hint" xml:space="preserve">
+    <value>Next</value>
+    <comment>下一頁</comment>
+  </data>
+  <data name="Pager_btnLast" xml:space="preserve">
+    <value>Last</value>
+    <comment>最後頁</comment>
+  </data>
+  <data name="Pager_btnLast_Hint" xml:space="preserve">
+    <value>Last</value>
+    <comment>最後頁</comment>
+  </data>
+  <data name="Pager_TotalCount_Format" xml:space="preserve">
+    <value>{0} items </value>
+    <comment>共 {0} 筆</comment>
+  </data>
+  <data name="Pager_PageInfo_Head" xml:space="preserve">
+    <value>page </value>
+    <comment>頁次 : </comment>
+  </data>
+  <data name="Pager_PageInfo_Mid" xml:space="preserve">
+    <value> of </value>
+    <comment>/</comment>
+  </data>
+  <data name="Pager_PageInfo_Tail" xml:space="preserve">
+    <value></value>
+    <comment> 頁</comment>
+  </data>
+  <data name="Pager_JumpTo" xml:space="preserve">
+    <value>jump to</value>
+    <comment>跳至</comment>
+  </data>
+  <data name="Pager_txtPageCode_Hint" xml:space="preserve">
+    <value>Enter the page number and press Enter to send out</value>
+    <comment>輸入頁碼後可按 Enter 送出</comment>
+  </data>
+  <data name="Pager_btnJumpToPage" xml:space="preserve">
+    <value>Send</value>
+    <comment>執行跳頁</comment>
+  </data>
+  <data name="Pager_btnJumpToPage_Hint" xml:space="preserve">
+    <value>Send</value>
+    <comment>執行跳頁</comment>
+  </data>
+  <data name="ErrMsg_InvalidPageCode" xml:space="preserve">
+    <value>Please enter a number above 1</value>
+    <comment>請輸入 1 以上的數字</comment>
+  </data>
+  <data name="ErrMsg_Required" xml:space="preserve">
+    <value>Required</value>
+    <comment>必填</comment>
+  </data>
+  <data name="Account_ConfirmDelete_Format" xml:space="preserve">
+    <value>delete data of [{0}][{1}]?</value>
+    <comment>確定刪除[{0}][{1}]?</comment>
+  </data>
+  <data name="ErrMsg_DeleteAccountFailed" xml:space="preserve">
+    <value>delete account failed.</value>
+    <comment>刪除帳號失敗</comment>
+  </data>
+  <data name="Status_Normal" xml:space="preserve">
+    <value>Normal</value>
+    <comment>正常</comment>
+  </data>
+  <data name="Status_OnSchedule" xml:space="preserve">
+    <value>On Schedule</value>
+    <comment>排程中</comment>
+  </data>
+  <data name="Status_AccessDeniedOrExpired" xml:space="preserve">
+    <value>Access is denied or Expired</value>
+    <comment>已停權或過期</comment>
+  </data>
+  <data name="Status_AccessDenied" xml:space="preserve">
+    <value>Access is denied</value>
+    <comment>已停權</comment>
+  </data>
+  <data name="Status_Online" xml:space="preserve">
+    <value>Online</value>
+    <comment>已上架</comment>
+  </data>
+  <data name="Status_Offline" xml:space="preserve">
+    <value>Offline</value>
+    <comment>已下架</comment>
+  </data>
+  <data name="GroupLabel_BasicInfo" xml:space="preserve">
+    <value>Basic information</value>
+    <comment>基本資料</comment>
+  </data>
+  <data name="GroupLabel_AdvancedInfo" xml:space="preserve">
+    <value>Advanced information</value>
+    <comment>進階資料</comment>
+  </data>
+  <data name="GroupLabel_AdminOnly" xml:space="preserve">
+    <value>Administrator-Only</value>
+    <comment>管理者專用</comment>
+  </data>
+  <data name="PswRuleNotice_LooseRule" xml:space="preserve">
+    <value>must be more than 6 digits long. Please use English letters, Arabic numerals or other special symbols (such as !@#...)</value>
+    <comment>限6個字元以上的英文字母、阿拉伯數字與特殊符號(!@#...)</comment>
+  </data>
+  <data name="PswRuleNotice_StrictRule" xml:space="preserve">
+    <value>must be more than 12 characters, containing at least special symbols, uppercase and lowercase letters and numbers</value>
+    <comment>12~15個字元，內容至少包含特殊符號、英文字母大寫及小寫、數字</comment>
+  </data>
+  <data name="ErrMsg_PswNotQualified" xml:space="preserve">
+    <value>Content does not match the rules</value>
+    <comment>密碼不符合規則</comment>
+  </data>
+  <data name="Account_PswComment" xml:space="preserve">
+    <value>If you wish to keep the present password, please leave this section in blank</value>
+    <comment>不變更密碼，請留空白</comment>
+  </data>
+  <data name="Account_btnGenPsw" xml:space="preserve">
+    <value>Regenerate random password</value>
+    <comment>重新產生亂數密碼</comment>
+  </data>
+  <data name="Account_btnGenPsw_Hint" xml:space="preserve">
+    <value>Regenerate random password</value>
+    <comment>重新產生亂數密碼</comment>
+  </data>
+  <data name="ErrMsg_PswConfirmNotMatch" xml:space="preserve">
+    <value>Please enter the same text</value>
+    <comment>請輸入相同的文字內容</comment>
+  </data>
+  <data name="ErrMsg_WrongFormat" xml:space="preserve">
+    <value>The format is incorrect</value>
+    <comment>格式不正確</comment>
+  </data>
+  <data name="Account_chkIsAccessDenied" xml:space="preserve">
+    <value>deny access</value>
+    <comment>設定為停權</comment>
+  </data>
+  <data name="ErrMsg_InvalidDate" xml:space="preserve">
+    <value>The date is incorrect</value>
+    <comment>日期不正確</comment>
+  </data>
+  <data name="Account_Title_AddNew" xml:space="preserve">
+    <value>Add an account</value>
+    <comment>新增帳號</comment>
+  </data>
+  <data name="Account_Title_Edit_Format" xml:space="preserve">
+    <value>Edit account - id:{0}</value>
+    <comment>修改帳號 - id:{0}</comment>
+  </data>
+  <data name="ConfigForm_btnSubject" xml:space="preserve">
+    <value>Title</value>
+    <comment>標題</comment>
+  </data>
+  <data name="ConfigForm_btnSubject_Hint" xml:space="preserve">
+    <value>Title of this page</value>
+    <comment>本頁標題</comment>
+  </data>
+  <data name="ConfigForm_btnUrl" xml:space="preserve">
+    <value>URL</value>
+    <comment>網址</comment>
+  </data>
+  <data name="ConfigForm_btnUrl_Hint" xml:space="preserve">
+    <value>URL of this page</value>
+    <comment>開啟本頁網址</comment>
+  </data>
+  <data name="ConfigForm_btnOpenToNewWindow" xml:space="preserve">
+    <value>Open to...</value>
+    <comment>另開</comment>
+  </data>
+  <data name="ConfigForm_btnOpenToNewWindow_Hint" xml:space="preserve">
+    <value>Open to the outside window</value>
+    <comment>另開至外部視窗</comment>
+  </data>
+  <data name="ConfigForm_Notice_Copy" xml:space="preserve">
+    <value>Press Ctrl + C to copy the text</value>
+    <comment>請按 Ctrl + C 複製文字</comment>
+  </data>
+  <data name="ConfigForm_Notice_BeforeOpenToNewWindow" xml:space="preserve">
+    <value>Notice! The system will reload the contents of this page,\nIf you continue the operation will lose the information in the editing, continue?</value>
+    <comment>注意!系統將重新載入本頁內容，\n若繼續此動作會遺失編輯中的資料，是否繼續?</comment>
+  </data>
+  <data name="ConfigForm_Loading" xml:space="preserve">
+    <value>Loading...</value>
+    <comment>載入中...</comment>
+  </data>
+  <data name="HintTail_OpenNewWindow" xml:space="preserve">
+    <value>(Open in a new window)</value>
+    <comment>(另開新視窗)</comment>
+  </data>
+  <data name="Account_IsAccessDenied_Checked" xml:space="preserve">
+    <value>Checked</value>
+    <comment>已停權</comment>
+  </data>
+  <data name="Account_IsAccessDenied_Unchecked" xml:space="preserve">
+    <value>Unchecked</value>
+    <comment>未勾選</comment>
+  </data>
+  <data name="ErrMsg_AccountHasBeenUsed" xml:space="preserve">
+    <value>Account has been used</value>
+    <comment>帳號已被使用，請更換</comment>
+  </data>
+  <data name="ErrMsg_AddFailed" xml:space="preserve">
+    <value>Add data failed</value>
+    <comment>新增失敗</comment>
+  </data>
+  <data name="ErrMsg_UpdateFailed" xml:space="preserve">
+    <value>Update data failed</value>
+    <comment>更新失敗</comment>
+  </data>
+  <data name="Account_lblDefaultPsw" xml:space="preserve">
+    <value>Default password: </value>
+    <comment>預設密碼: </comment>
+  </data>
+  <data name="ConfigForm_btnSave" xml:space="preserve">
+    <value>Save</value>
+    <comment>儲 存</comment>
+  </data>
+  <data name="ConfigForm_btnCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>取 消</comment>
+  </data>
+  <data name="Col_RoleName" xml:space="preserve">
+    <value>Role name</value>
+    <comment>身分名稱</comment>
+  </data>
+  <data name="Col_RoleName_Hint" xml:space="preserve">
+    <value>Role name</value>
+    <comment>身分名稱</comment>
+  </data>
+  <data name="Col_RoleDisplayName" xml:space="preserve">
+    <value>Kind name</value>
+    <comment>顯示用名稱</comment>
+  </data>
+  <data name="Col_RoleDisplayName_Hint" xml:space="preserve">
+    <value>Kind name</value>
+    <comment>顯示用名稱</comment>
+  </data>
+  <data name="Col_SortNo" xml:space="preserve">
+    <value>Sort number</value>
+    <comment>排序編號</comment>
+  </data>
+  <data name="Col_SortNo_Hint" xml:space="preserve">
+    <value>Sort number</value>
+    <comment>排序編號</comment>
+  </data>
+  <data name="Col_EmpTotal" xml:space="preserve">
+    <value>Accounts</value>
+    <comment>帳號總數</comment>
+  </data>
+  <data name="Col_EmpTotal_Hint" xml:space="preserve">
+    <value>Accounts</value>
+    <comment>帳號總數</comment>
+  </data>
+  <data name="Main_btnGrant" xml:space="preserve">
+    <value>Grant</value>
+    <comment>授權</comment>
+  </data>
+  <data name="Main_btnGrant_Hint" xml:space="preserve">
+    <value>Grant privileges of role</value>
+    <comment>授權</comment>
+  </data>
+  <data name="Role_ConfirmDelete_Format" xml:space="preserve">
+    <value>delete data of [{0}][{1}]?</value>
+    <comment>確定刪除[{0}][{1}]?</comment>
+  </data>
+  <data name="ErrMsg_DeleteRoleFailed" xml:space="preserve">
+    <value>delete role failed.</value>
+    <comment>刪除身分失敗</comment>
+  </data>
+  <data name="ErrMsg_ThereIsAccountOfRole" xml:space="preserve">
+    <value>there is account of role, not allowed to delete.</value>
+    <comment>身分已有帳號使用，不允許刪除</comment>
+  </data>
+  <data name="Role_CopyPrivilegesFrom" xml:space="preserve">
+    <value>Copy privileges from</value>
+    <comment>複製權限自</comment>
+  </data>
+  <data name="CopyOption_DontCopy" xml:space="preserve">
+    <value>(skip)</value>
+    <comment>(不複製)</comment>
+  </data>
+  <data name="ErrMsg_IntegerOnly" xml:space="preserve">
+    <value>integer only</value>
+    <comment>限整數</comment>
+  </data>
+  <data name="ErrMsg_RoleNameLimit" xml:space="preserve">
+    <value>Only letters and numbers and underline are allowed</value>
+    <comment>限英數字和底線</comment>
+  </data>
+  <data name="Role_RoleNameComment" xml:space="preserve">
+    <value>Only letters and numbers and underline are allowed</value>
+    <comment>請輸入英數字或底線</comment>
+  </data>
+  <data name="Role_Title_AddNew" xml:space="preserve">
+    <value>Add a role</value>
+    <comment>新增身分</comment>
+  </data>
+  <data name="Role_Title_Edit_Format" xml:space="preserve">
+    <value>Edit role - id:{0}</value>
+    <comment>修改身分 - id:{0}</comment>
+  </data>
+  <data name="ErrMsg_RoleNameHasBeenUsed" xml:space="preserve">
+    <value>Role name has been used</value>
+    <comment>身分名稱已存在</comment>
+  </data>
+  <data name="GroupLabel_OperationList" xml:space="preserve">
+    <value>Operations</value>
+    <comment>作業選項名單</comment>
+  </data>
+  <data name="GroupLabel_OperationPrivilegeConfig" xml:space="preserve">
+    <value>Adjust privileges of the selected operation</value>
+    <comment>調整選擇的作業選項權限</comment>
+  </data>
+  <data name="Col_OperationName" xml:space="preserve">
+    <value>Operation name</value>
+    <comment>作業選項名稱</comment>
+  </data>
+  <data name="Col_OperationName_Hint" xml:space="preserve">
+    <value>Operation name</value>
+    <comment>作業選項名稱</comment>
+  </data>
+  <data name="Col_PrivilegeOfItem" xml:space="preserve">
+    <value>Operation</value>
+    <comment>作業選項</comment>
+  </data>
+  <data name="Col_PrivilegeOfItem_Hint" xml:space="preserve">
+    <value>Privileges of operation</value>
+    <comment>授權作業選項</comment>
+  </data>
+  <data name="Col_PrivilegeOfSubitemSelf" xml:space="preserve">
+    <value>Own sub-item</value>
+    <comment>擁有的子項目</comment>
+  </data>
+  <data name="Col_PrivilegeOfSubitemSelf_Hint" xml:space="preserve">
+    <value>Privileges of own sub-item</value>
+    <comment>授權擁有的子項目</comment>
+  </data>
+  <data name="Col_PrivilegeOfSubitemCrew" xml:space="preserve">
+    <value>Dept. sub-item</value>
+    <comment>部門的子項目</comment>
+  </data>
+  <data name="Col_PrivilegeOfSubitemCrew_Hint" xml:space="preserve">
+    <value>Privileges of department sub-item</value>
+    <comment>授權部門的子項目</comment>
+  </data>
+  <data name="Col_PrivilegeOfSubitemOthers" xml:space="preserve">
+    <value>All sub-item</value>
+    <comment>所有的子項目</comment>
+  </data>
+  <data name="Col_PrivilegeOfSubitemOthers_Hint" xml:space="preserve">
+    <value>Privileges of all of sub-item</value>
+    <comment>授權所有的子項目</comment>
+  </data>
+  <data name="Col_StatusOfEditing" xml:space="preserve">
+    <value>Status</value>
+    <comment>編輯狀態</comment>
+  </data>
+  <data name="Col_StatusOfEditing_Hint" xml:space="preserve">
+    <value>Status of editing</value>
+    <comment>編輯狀態</comment>
+  </data>
+  <data name="Privilege_NotAllowed" xml:space="preserve">
+    <value>Not allowed</value>
+    <comment>無權限</comment>
+  </data>
+  <data name="Privilege_NotAllowed_Hint" xml:space="preserve">
+    <value>Not allowed</value>
+    <comment>無權限</comment>
+  </data>
+  <data name="Privilege_Read" xml:space="preserve">
+    <value>Read</value>
+    <comment>可閱讀</comment>
+  </data>
+  <data name="Privilege_Read_Hint" xml:space="preserve">
+    <value>Allowed to Read</value>
+    <comment>可閱讀</comment>
+  </data>
+  <data name="Privilege_Edit" xml:space="preserve">
+    <value>Edit</value>
+    <comment>可修改</comment>
+  </data>
+  <data name="Privilege_Edit_Hint" xml:space="preserve">
+    <value>Allowed to Edit</value>
+    <comment>可修改</comment>
+  </data>
+  <data name="Privilege_Add" xml:space="preserve">
+    <value>Add</value>
+    <comment>可新增</comment>
+  </data>
+  <data name="Privilege_Add_Hint" xml:space="preserve">
+    <value>Allowed to Add</value>
+    <comment>可新增</comment>
+  </data>
+  <data name="Privilege_Delete" xml:space="preserve">
+    <value>Delete</value>
+    <comment>可刪除</comment>
+  </data>
+  <data name="Privilege_Delete_Hint" xml:space="preserve">
+    <value>Allowed to Delete</value>
+    <comment>可刪除</comment>
+  </data>
+  <data name="Role_Title_Grant_Format" xml:space="preserve">
+    <value>Grant privileges of role - id:{0}</value>
+    <comment>授權給身分 - id:{0}</comment>
+  </data>
+  <data name="ErrMsg_ThereIsnotAnyChangesOfPvg" xml:space="preserve">
+    <value>There is not any changes of privilege.</value>
+    <comment>沒有任何權限異動</comment>
+  </data>
+  <data name="ErrMsg_RolePrivilegeSaveFailed" xml:space="preserve">
+    <value>Save privileges failed</value>
+    <comment>儲存權限失敗</comment>
+  </data>
+  <data name="Dept_ConfirmDelete_Format" xml:space="preserve">
+    <value>delete data of [{0}][{1}]?</value>
+    <comment>確定刪除[{0}][{1}]?</comment>
+  </data>
+  <data name="ErrMsg_ThereIsAccountOfDept" xml:space="preserve">
+    <value>there is account of department, not allowed to delete.</value>
+    <comment>部門已有帳號使用，不允許刪除</comment>
+  </data>
+  <data name="ErrMsg_DeleteDeptFailed" xml:space="preserve">
+    <value>delete department failed.</value>
+    <comment>刪除部門失敗</comment>
+  </data>
+  <data name="Dept_Title_AddNew" xml:space="preserve">
+    <value>Add a department</value>
+    <comment>新增部門</comment>
+  </data>
+  <data name="Dept_Title_Edit_Format" xml:space="preserve">
+    <value>Edit department - id:{0}</value>
+    <comment>修改部門 - id:{0}</comment>
+  </data>
+  <data name="ErrMsg_DeptNameHasBeenUsed" xml:space="preserve">
+    <value>Department name has been used</value>
+    <comment>部門名稱已存在</comment>
+  </data>
+  <data name="SearchPanel_lblOpDateStart" xml:space="preserve">
+    <value>Time of start</value>
+    <comment>開始時間</comment>
+  </data>
+  <data name="SearchPanel_lblOpDateEnd" xml:space="preserve">
+    <value>Time of end</value>
+    <comment>結束時間</comment>
+  </data>
+  <data name="SearchPanel_lblAccount" xml:space="preserve">
+    <value>Account</value>
+    <comment>帳號</comment>
+  </data>
+  <data name="SearchPanel_lblIP" xml:space="preserve">
+    <value>IP</value>
+    <comment>IP</comment>
+  </data>
+  <data name="SearchPanel_lblIsKeyword" xml:space="preserve">
+    <value>is keyword</value>
+    <comment>為關鍵字</comment>
+  </data>
+  <data name="SearchPanel_lblIsKeywordOfHead" xml:space="preserve">
+    <value>is keyword of beginning</value>
+    <comment>為開頭關鍵字</comment>
+  </data>
+  <data name="SearchPanel_lblKeywordOfLog" xml:space="preserve">
+    <value>Keyword of log</value>
+    <comment>操作紀錄關鍵字</comment>
+  </data>
+  <data name="SearchPanel_lblRangeMode" xml:space="preserve">
+    <value>Range</value>
+    <comment>搜尋範圍</comment>
+  </data>
+  <data name="SearchOption_LoginRelated" xml:space="preserve">
+    <value>Login related</value>
+    <comment>登入相關</comment>
+  </data>
+  <data name="Col_OpDate" xml:space="preserve">
+    <value>Date and time</value>
+    <comment>日期時間</comment>
+  </data>
+  <data name="Col_OpDate_Hint" xml:space="preserve">
+    <value>Date and time</value>
+    <comment>日期時間</comment>
+  </data>
+  <data name="Col_IP" xml:space="preserve">
+    <value>IP</value>
+    <comment>IP</comment>
+  </data>
+  <data name="Col_IP_Hint" xml:space="preserve">
+    <value>IP</value>
+    <comment>IP</comment>
+  </data>
+  <data name="Col_EmpNameOfLog" xml:space="preserve">
+    <value>Name(Account)</value>
+    <comment>姓名(帳號)</comment>
+  </data>
+  <data name="Col_EmpNameOfLog_Hint" xml:space="preserve">
+    <value>Name(Account)</value>
+    <comment>姓名(帳號)</comment>
+  </data>
+  <data name="Col_LogRecord" xml:space="preserve">
+    <value>Log</value>
+    <comment>操作紀錄</comment>
+  </data>
+  <data name="Col_LogRecord_Hint" xml:space="preserve">
+    <value>Log</value>
+    <comment>操作紀錄</comment>
+  </data>
+  <data name="ErrMsg_InvalidOpDateStart" xml:space="preserve">
+    <value>Invalid time of start</value>
+    <comment>開始日期錯誤</comment>
+  </data>
+  <data name="ErrMsg_InvalidOpDateEnd" xml:space="preserve">
+    <value>Invalid time of end</value>
+    <comment>結束日期錯誤</comment>
+  </data>
+  <data name="GroupLabel_Subitems" xml:space="preserve">
+    <value>Sub-items</value>
+    <comment>子項目</comment>
+  </data>
+  <data name="PageName_Operations" xml:space="preserve">
+    <value>Operations</value>
+    <comment>後端作業選項</comment>
+  </data>
+  <data name="Col_AdjustSortNo" xml:space="preserve">
+    <value>Adjust</value>
+    <comment>順序</comment>
+  </data>
+  <data name="Col_AdjustSortNo_Hint" xml:space="preserve">
+    <value>Adjust the order</value>
+    <comment>調整順序</comment>
+  </data>
+  <data name="Col_Subject" xml:space="preserve">
+    <value>Subject</value>
+    <comment>標題</comment>
+  </data>
+  <data name="Col_Subject_Hint" xml:space="preserve">
+    <value>Subject</value>
+    <comment>標題</comment>
+  </data>
+  <data name="Col_OpenInNewWindow" xml:space="preserve">
+    <value>Open in new win.</value>
+    <comment>在新視窗</comment>
+  </data>
+  <data name="Col_OpenInNewWindow_Hint" xml:space="preserve">
+    <value>Open in new window</value>
+    <comment>開啟在新視窗</comment>
+  </data>
+  <data name="Col_CommonClass" xml:space="preserve">
+    <value>Common class</value>
+    <comment>單元共用元件</comment>
+  </data>
+  <data name="Col_CommonClass_Hint" xml:space="preserve">
+    <value>Common class</value>
+    <comment>單元共用元件</comment>
+  </data>
+  <data name="GroupLabel_Properties" xml:space="preserve">
+    <value>Properties</value>
+    <comment>屬性值</comment>
+  </data>
+  <data name="Col_Icon" xml:space="preserve">
+    <value>Icon</value>
+    <comment>圖示</comment>
+  </data>
+  <data name="Col_Icon_Hint" xml:space="preserve">
+    <value>Icon</value>
+    <comment>圖示</comment>
+  </data>
+  <data name="Col_LinkUrl" xml:space="preserve">
+    <value>URL</value>
+    <comment>超連結網址</comment>
+  </data>
+  <data name="Col_LinkUrl_Hint" xml:space="preserve">
+    <value>URL</value>
+    <comment>超連結網址</comment>
+  </data>
+  <data name="Col_HideThisItem" xml:space="preserve">
+    <value>Hide this item</value>
+    <comment>隱藏此項目</comment>
+  </data>
+  <data name="Col_HideThisItem_Hint" xml:space="preserve">
+    <value>Hide this item</value>
+    <comment>隱藏此項目</comment>
+  </data>
+  <data name="Col_MdfAccount" xml:space="preserve">
+    <value>Modifier account</value>
+    <comment>更新者帳號</comment>
+  </data>
+  <data name="Col_MdfAccount_Hint" xml:space="preserve">
+    <value>Modifier account</value>
+    <comment>更新者帳號</comment>
+  </data>
+  <data name="Col_MdfDate" xml:space="preserve">
+    <value>Updated</value>
+    <comment>更新時間</comment>
+  </data>
+  <data name="Col_MdfDate_Hint" xml:space="preserve">
+    <value>Updated</value>
+    <comment>更新時間</comment>
+  </data>
+  <data name="Operation_ConfirmDelete_Format" xml:space="preserve">
+    <value>delete data of [{0}]?</value>
+    <comment>確定刪除[{0}]?</comment>
+  </data>
+  <data name="IsNewWindow_Yes" xml:space="preserve">
+    <value>Yes</value>
+    <comment>是</comment>
+  </data>
+  <data name="IsNewWindow_No" xml:space="preserve">
+    <value></value>
+    <comment></comment>
+  </data>
+  <data name="CommonClass_HasValue" xml:space="preserve">
+    <value>Selected</value>
+    <comment>已指定</comment>
+  </data>
+  <data name="ErrMsg_DeleteOperationFailed" xml:space="preserve">
+    <value>delete operation failed</value>
+    <comment>刪除作業選項失敗</comment>
+  </data>
+  <data name="ErrMsg_ThereIsSubitemofOp" xml:space="preserve">
+    <value>there is sub-item of operation, not allowed to delete.</value>
+    <comment>此作業選項有子項目，不允許刪除</comment>
+  </data>
+  <data name="IsHideSelf_Hide" xml:space="preserve">
+    <value>Hide</value>
+    <comment>隱藏</comment>
+  </data>
+  <data name="IsHideSelf_Show" xml:space="preserve">
+    <value>Show</value>
+    <comment>顯示</comment>
+  </data>
+  <data name="btnMoveUp" xml:space="preserve">
+    <value>move up</value>
+    <comment>往上</comment>
+  </data>
+  <data name="btnMoveDown" xml:space="preserve">
+    <value>move down</value>
+    <comment>往下</comment>
+  </data>
+  <data name="Col_EnglishSubject" xml:space="preserve">
+    <value>English subject</value>
+    <comment>英文標題</comment>
+  </data>
+  <data name="Operation_btnBrowseImage" xml:space="preserve">
+    <value>Browse</value>
+    <comment>瀏覽</comment>
+  </data>
+  <data name="Operation_btnBrowseImage_Hint" xml:space="preserve">
+    <value>Browse website directory</value>
+    <comment>瀏覽網站目錄</comment>
+  </data>
+  <data name="Operation_lblPreview" xml:space="preserve">
+    <value>Preview</value>
+    <comment>預覽</comment>
+  </data>
+  <data name="Operation_btnBrowseImage_Notice" xml:space="preserve">
+    <value>Please put the graphic files in the website directory [BPimages/icon]</value>
+    <comment>請將圖示檔案放至網站目錄[ BPimages/icon ]中</comment>
+  </data>
+  <data name="Operation_txtLinkUrl_Notice" xml:space="preserve">
+    <value>．{website_url} = Will be replaced by the front-stage URL. e.g., http://SampleEFCMS.dev.com &lt;br /&gt;．{backend_url} = Will be replaced by the back-stage URL. e.g., https://SampleEFCMS.dev.com/Management</value>
+    <comment>．{website_url} = 帶入前台完整網址. e.g., http://SampleEFCMS.dev.com &lt;br /&gt;．{backend_url} = 帶入後台完整網址. e.g., https://SampleEFCMS.dev.com/Management</comment>
+  </data>
+  <data name="Operation_chkIsNewWindow" xml:space="preserve">
+    <value>Open in new window</value>
+    <comment>開啟在新視窗</comment>
+  </data>
+  <data name="Operation_btnBrowseClass" xml:space="preserve">
+    <value>Browse and select classes</value>
+    <comment>瀏覽並選擇元件</comment>
+  </data>
+  <data name="Operation_btnBrowseClass_Hint" xml:space="preserve">
+    <value>Browse and select classes</value>
+    <comment>瀏覽並選擇元件</comment>
+  </data>
+  <data name="Operation_btnBrowseClass_Notice" xml:space="preserve">
+    <value>．Case sensitive!&lt;br /&gt;．This setting is a data source of system used to determine the authority, if not sure, do not change!&lt;br /&gt;．「Site Architecture Mgmt.」set to「ArticleCommonOfBackend」!&lt;br /&gt;</value>
+    <comment>．有區分大小寫！&lt;br /&gt;．此設定為系統用來判斷權限的資料來源，若不確定時請勿更改！&lt;br /&gt;．「網站架構管理」請設定為「ArticleCommonOfBackend」！&lt;br /&gt;</comment>
+  </data>
+  <data name="Operation_btnBrowseClass_Notice2" xml:space="preserve">
+    <value>．When the URL is Article-Node.aspx, please set it as blank!</value>
+    <comment>．超連結網址為 Article-Node.aspx 時，請設定為空白！</comment>
+  </data>
+  <data name="Option_Choose" xml:space="preserve">
+    <value>(choose)</value>
+    <comment>(請選擇)</comment>
+  </data>
+  <data name="CommonClassesOption_Empty" xml:space="preserve">
+    <value>blank</value>
+    <comment>空白</comment>
+  </data>
+  <data name="Operation_Title_AddNew_Format" xml:space="preserve">
+    <value>Add an operation - id:{0}</value>
+    <comment>新增作業選項 - id:{0}</comment>
+  </data>
+  <data name="Operation_Title_Edit_Format" xml:space="preserve">
+    <value>Edit operation - id:{0}</value>
+    <comment>修改作業選項 - id:{0}</comment>
+  </data>
+  <data name="Col_Creator" xml:space="preserve">
+    <value>Creator</value>
+    <comment>建立者</comment>
+  </data>
+  <data name="Col_Creator_Hint" xml:space="preserve">
+    <value>Creator</value>
+    <comment>建立者</comment>
+  </data>
+  <data name="Col_CreateDate" xml:space="preserve">
+    <value>Create date</value>
+    <comment>建立日期</comment>
+  </data>
+  <data name="Col_CreateDate_Hint" xml:space="preserve">
+    <value>Create date</value>
+    <comment>建立日期</comment>
+  </data>
+  <data name="Col_Modifier" xml:space="preserve">
+    <value>Modifier</value>
+    <comment>更新者</comment>
+  </data>
+  <data name="Col_Modifier_Hint" xml:space="preserve">
+    <value>Modifier</value>
+    <comment>更新者</comment>
+  </data>
+  <data name="Col_ModifyDate" xml:space="preserve">
+    <value>Modify date</value>
+    <comment>更新日期</comment>
+  </data>
+  <data name="Col_ModifyDate_Hint" xml:space="preserve">
+    <value>Modify date</value>
+    <comment>更新日期</comment>
+  </data>
+  <data name="Col_PageShowType" xml:space="preserve">
+    <value>Page type</value>
+    <comment>開啟方式</comment>
+  </data>
+  <data name="Col_PageShowType_Hint" xml:space="preserve">
+    <value>Page type</value>
+    <comment>開啟方式</comment>
+  </data>
+  <data name="PageShowTypeOption_Page" xml:space="preserve">
+    <value>page</value>
+    <comment>呈現網頁</comment>
+  </data>
+  <data name="PageShowTypeOption_ToSubPage" xml:space="preserve">
+    <value>to sub-page</value>
+    <comment>跳轉下層</comment>
+  </data>
+  <data name="PageShowTypeOption_URL" xml:space="preserve">
+    <value>URL</value>
+    <comment>超連結</comment>
+  </data>
+  <data name="PageShowTypeOption_UseControl" xml:space="preserve">
+    <value>use control</value>
+    <comment>使用控制項</comment>
+  </data>
+  <data name="SearchPanel_lblSubjectKw" xml:space="preserve">
+    <value>Keyword of subject</value>
+    <comment>標題關鍵字</comment>
+  </data>
+  <data name="Col_Language" xml:space="preserve">
+    <value>Language</value>
+    <comment>語言</comment>
+  </data>
+  <data name="Col_Language_Hint" xml:space="preserve">
+    <value>Language</value>
+    <comment>語言</comment>
+  </data>
+  <data name="Article_ConfirmDelete_Format" xml:space="preserve">
+    <value>delete data of [{0}][{1}]?</value>
+    <comment>確定刪除[{0}][{1}]?</comment>
+  </data>
+  <data name="Status_DontDelete" xml:space="preserve">
+    <value>not allowed to delete</value>
+    <comment>禁止刪除</comment>
+  </data>
+  <data name="ErrMsg_DeleteArticleFailed" xml:space="preserve">
+    <value>delete page data failed.</value>
+    <comment>刪除網頁內容失敗</comment>
+  </data>
+  <data name="GroupLabel_PageSettings" xml:space="preserve">
+    <value>Page settings</value>
+    <comment>頁面設定</comment>
+  </data>
+  <data name="GroupLabel_ContextEditor" xml:space="preserve">
+    <value>Context editor</value>
+    <comment>內文編輯</comment>
+  </data>
+  <data name="GroupLabel_ModificationInfo" xml:space="preserve">
+    <value>Modification information</value>
+    <comment>異動資訊</comment>
+  </data>
+  <data name="Col_BannerPicFileName" xml:space="preserve">
+    <value>Banner pic. file name</value>
+    <comment>橫幅區圖檔名</comment>
+  </data>
+  <data name="Col_BannerPicFileName_Hint" xml:space="preserve">
+    <value>Banner picture file name</value>
+    <comment>橫幅區圖檔名</comment>
+  </data>
+  <data name="Article_txtBannerPicFileName_Notice" xml:space="preserve">
+    <value>Please put the picture file in the website directory [(language number)]</value>
+    <comment>請將圖檔放至網站目錄[ (語言編號) ]中</comment>
+  </data>
+  <data name="Col_ArticleAlias" xml:space="preserve">
+    <value>Alias of article</value>
+    <comment>網址別名</comment>
+  </data>
+  <data name="Col_ArticleAlias_Hint" xml:space="preserve">
+    <value>Alias of article</value>
+    <comment>網址別名</comment>
+  </data>
+  <data name="Col_LayoutMode" xml:space="preserve">
+    <value>Layout</value>
+    <comment>版面模式</comment>
+  </data>
+  <data name="Col_LayoutMode" xml:space="preserve">
+    <value>Layout</value>
+    <comment>版面模式</comment>
+  </data>
+  <data name="Article_txtLinkUrl_Notice" xml:space="preserve">
+    <value>Fill in the link URL, custom web program please use ~ / beginning. e.g., ~/News.aspx</value>
+    <comment>填入連結網址，客製化網頁程式請用 ~/ 開頭， e.g., ~/News.aspx</comment>
+  </data>
+  <data name="Article_txtControlName_Notice" xml:space="preserve">
+    <value>Fill in the control name</value>
+    <comment>填入控制項名稱</comment>
+  </data>
+  <data name="Article_lblControlName" xml:space="preserve">
+    <value>Control</value>
+    <comment>控制項</comment>
+  </data>
+  <data name="Article_lblSubItemControlName" xml:space="preserve">
+    <value>Sub-item default control</value>
+    <comment>子項目預設控制項</comment>
+  </data>
+  <data name="Col_HideArticle" xml:space="preserve">
+    <value>Hide article</value>
+    <comment>隱藏文章</comment>
+  </data>
+  <data name="Col_HideArticle_Hint" xml:space="preserve">
+    <value>Hide article</value>
+    <comment>隱藏文章</comment>
+  </data>
+  <data name="Article_chkIsHideSelf" xml:space="preserve">
+    <value>Hide this</value>
+    <comment>隱藏本篇</comment>
+  </data>
+  <data name="Article_chkIsHideSelf_Notice" xml:space="preserve">
+    <value>If there is a menu, this article does not appear in the parent's menu</value>
+    <comment>若有選單，在父層的選單中不出現本篇文章</comment>
+  </data>
+  <data name="Article_chkIsHideChild" xml:space="preserve">
+    <value>Hide sub-items</value>
+    <comment>隱藏子項目</comment>
+  </data>
+  <data name="Article_chkIsHideChild_Notice" xml:space="preserve">
+    <value>If there is a menu, all the sub-items will not be listed in the menu</value>
+    <comment>若有選單，在選單中不列出所有子項目</comment>
+  </data>
+  <data name="Col_NotAllowedToDelete" xml:space="preserve">
+    <value>Not allowed to delete</value>
+    <comment>禁止刪除</comment>
+  </data>
+  <data name="Col_NotAllowedToDelete_Hint" xml:space="preserve">
+    <value>Not allowed to delete</value>
+    <comment>禁止刪除</comment>
+  </data>
+  <data name="Article_chkDontDelete" xml:space="preserve">
+    <value>Hide button of delete</value>
+    <comment>隱藏刪除鈕</comment>
+  </data>
+  <data name="LayoutModeOption_WideContent" xml:space="preserve">
+    <value>Wide content</value>
+    <comment>全版</comment>
+  </data>
+  <data name="LayoutModeOption_TwoColContent" xml:space="preserve">
+    <value>2-col content</value>
+    <comment>兩欄式</comment>
+  </data>
+  <data name="Article_Title_AddNew_Format" xml:space="preserve">
+    <value>Add an article - parent id:{0}</value>
+    <comment>新增網頁 - 上層 id:{0}</comment>
+  </data>
+  <data name="Article_Title_Edit_Format" xml:space="preserve">
+    <value>Edit article - id:{0}</value>
+    <comment>修改網頁 - id:{0}</comment>
+  </data>
+  <data name="ErrMsg_AddMultiLangFailed" xml:space="preserve">
+    <value>add multi-language data failed</value>
+    <comment>新增多國語系資料失敗</comment>
+  </data>
+  <data name="ErrMsg_ArticleIdHasBeenUsed" xml:space="preserve">
+    <value>article id has been used</value>
+    <comment>網頁代碼已被使用</comment>
+  </data>
+  <data name="ErrMsg_ArticleAliasHasBeenUsed" xml:space="preserve">
+    <value>article alias has been used</value>
+    <comment>網址別名已被使用</comment>
+  </data>
+  <data name="ErrMsg_UpdateMultiLangFailed" xml:space="preserve">
+    <value>update multi-language data failed</value>
+    <comment>更新多國語系資料失敗</comment>
+  </data>
+  <data name="PvgStatus_Sending" xml:space="preserve">
+    <value>Sending</value>
+    <comment>傳送中</comment>
+  </data>
+  <data name="PvgStatus_TempStored" xml:space="preserve">
+    <value>Temp. stored</value>
+    <comment>已暫存</comment>
+  </data>
+  <data name="PvgStatus_SentFailed" xml:space="preserve">
+    <value>Sent failed</value>
+    <comment>傳送失敗</comment>
+  </data>
+  <data name="Col_LastUpdate" xml:space="preserve">
+    <value>Last update</value>
+    <comment>最後更新</comment>
+  </data>
+  <data name="Col_LastUpdate_Hint" xml:space="preserve">
+    <value>Last update</value>
+    <comment>最後更新</comment>
+  </data>
+  <data name="FileExtIconText_generic" xml:space="preserve">
+    <value>Uncategorised file</value>
+    <comment>未分類檔案</comment>
+  </data>
+  <data name="FileExtIconText_doc" xml:space="preserve">
+    <value>Word file</value>
+    <comment>Word 檔案</comment>
+  </data>
+  <data name="FileExtIconText_xls" xml:space="preserve">
+    <value>Excel file</value>
+    <comment>Excel 試算表檔案</comment>
+  </data>
+  <data name="FileExtIconText_ppt" xml:space="preserve">
+    <value>PowerPoint file</value>
+    <comment>PowerPoint 投影片檔案</comment>
+  </data>
+  <data name="FileExtIconText_odt" xml:space="preserve">
+    <value>odt file</value>
+    <comment>Open Document 文件檔</comment>
+  </data>
+  <data name="FileExtIconText_ods" xml:space="preserve">
+    <value>ods file</value>
+    <comment>Open Document 試算表檔案</comment>
+  </data>
+  <data name="FileExtIconText_odp" xml:space="preserve">
+    <value>odp file</value>
+    <comment>Open Document 投影片檔案</comment>
+  </data>
+  <data name="FileExtIconText_pdf" xml:space="preserve">
+    <value>Adobe Reader(Pdf) file</value>
+    <comment>Adobe Reader(Pdf)檔案</comment>
+  </data>
+  <data name="FileExtIconText_txt" xml:space="preserve">
+    <value>text file</value>
+    <comment>文字檔案</comment>
+  </data>
+  <data name="FileExtIconText_gif" xml:space="preserve">
+    <value>GIF file</value>
+    <comment>GIF 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_jpg" xml:space="preserve">
+    <value>JPEG file</value>
+    <comment>JPEG 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_png" xml:space="preserve">
+    <value>PNG file</value>
+    <comment>PNG 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_svg" xml:space="preserve">
+    <value>SVG file</value>
+    <comment>SVG 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_tif" xml:space="preserve">
+    <value>TIFF file</value>
+    <comment>TIFF 圖片檔案</comment>
+  </data>
+  <data name="FileExtIconText_mp3" xml:space="preserve">
+    <value>MP3 file</value>
+    <comment>MP3 音訊檔</comment>
+  </data>
+  <data name="FileExtIconText_wav" xml:space="preserve">
+    <value>WAV file</value>
+    <comment>WAV 音訊檔</comment>
+  </data>
+  <data name="FileExtIconText_wma" xml:space="preserve">
+    <value>WMA file</value>
+    <comment>WMA 音訊檔</comment>
+  </data>
+  <data name="FileExtIconText_avi" xml:space="preserve">
+    <value>AVI file</value>
+    <comment>AVI 影片檔</comment>
+  </data>
+  <data name="FileExtIconText_mp4" xml:space="preserve">
+    <value>MP4 file</value>
+    <comment>MP4 影片檔</comment>
+  </data>
+  <data name="FileExtIconText_wmv" xml:space="preserve">
+    <value>WMV file</value>
+    <comment>WMV 影片檔</comment>
+  </data>
+  <data name="FileExtIconText_mov" xml:space="preserve">
+    <value>MOV file</value>
+    <comment>MOV 影片檔</comment>
+  </data>
+  <data name="FileExtIconText_zip" xml:space="preserve">
+    <value>ZIP file</value>
+    <comment>ZIP 壓縮檔</comment>
+  </data>
+  <data name="FileExtIconText_rar" xml:space="preserve">
+    <value>RAR file</value>
+    <comment>RAR 壓縮檔</comment>
+  </data>
+  <data name="GroupLabel_Attachments" xml:space="preserve">
+    <value>Attachments</value>
+    <comment>附件檔案</comment>
+  </data>
+  <data name="Col_FileName" xml:space="preserve">
+    <value>File name</value>
+    <comment>檔案名稱</comment>
+  </data>
+  <data name="Col_FileName_Hint" xml:space="preserve">
+    <value>File name</value>
+    <comment>檔案名稱</comment>
+  </data>
+  <data name="Col_FileType" xml:space="preserve">
+    <value>Type</value>
+    <comment>檔案類型</comment>
+  </data>
+  <data name="Col_FileType_Hint" xml:space="preserve">
+    <value>File type</value>
+    <comment>檔案類型</comment>
+  </data>
+  <data name="Article_btnUploadAttachFile" xml:space="preserve">
+    <value>Upload</value>
+    <comment>上傳</comment>
+  </data>
+  <data name="Article_btnUploadAttachFile_Hint" xml:space="preserve">
+    <value>Upload attachment</value>
+    <comment>上傳附件檔案</comment>
+  </data>
+  <data name="Article_btnDownloadAtt" xml:space="preserve">
+    <value>Download</value>
+    <comment>下載</comment>
+  </data>
+  <data name="Article_btnDownloadAtt_Hint" xml:space="preserve">
+    <value>Download attachment</value>
+    <comment>下載附件檔案</comment>
+  </data>
+  <data name="ErrMsg_DeleteAttachmentFailed" xml:space="preserve">
+    <value>delete attachment failed</value>
+    <comment>刪除附件失敗</comment>
+  </data>
+  <data name="Col_BrowseFile" xml:space="preserve">
+    <value>Browse file</value>
+    <comment>瀏覽檔案</comment>
+  </data>
+  <data name="Col_BrowseFile_Hint" xml:space="preserve">
+    <value>Browse file</value>
+    <comment>瀏覽檔案</comment>
+  </data>
+  <data name="Col_CurrentFile" xml:space="preserve">
+    <value>Current file</value>
+    <comment>目前檔案</comment>
+  </data>
+  <data name="Col_CurrentFile_Hint" xml:space="preserve">
+    <value>Current file</value>
+    <comment>目前檔案</comment>
+  </data>
+  <data name="Col_ExtLimitations" xml:space="preserve">
+    <value>File type limitations</value>
+    <comment>檔案類型限制為</comment>
+  </data>
+  <data name="Col_ExtLimitations_Hint" xml:space="preserve">
+    <value>File type limitations</value>
+    <comment>檔案類型限制為</comment>
+  </data>
+  <data name="Attachment_fuPickedFile_Notice" xml:space="preserve">
+    <value>When uploading graphic file, if the file resolution exceeds 1920x1080, the system will automatically reduce and save the file to 1920x1080 or less</value>
+    <comment>上傳圖檔時，若圖檔解析度超過1920x1080，則系統將自動縮小並儲存圖檔至1920x1080以內</comment>
+  </data>
+  <data name="Attachment_Title_AddNew_Format" xml:space="preserve">
+    <value>Add an attachment of article - article id:{0}</value>
+    <comment>新增網頁附件 - 網頁id:{0}</comment>
+  </data>
+  <data name="Attachment_Title_Edit_Format" xml:space="preserve">
+    <value>Edit attachment of article - file id:{0}</value>
+    <comment>修改網頁附件 - 附件id:{0}</comment>
+  </data>
+  <data name="ErrMsg_SaveFailed" xml:space="preserve">
+    <value>Save data failed</value>
+    <comment>儲存失敗</comment>
+  </data>
+  <data name="GroupLabel_ArticlePictures" xml:space="preserve">
+    <value>Pictures</value>
+    <comment>照片區</comment>
+  </data>
+  <data name="Main_btnClickToOpenInNewWin" xml:space="preserve">
+    <value>Click to open</value>
+    <comment>點擊另開</comment>
+  </data>
+  <data name="Main_btnClickToOpenInNewWin_Hint" xml:space="preserve">
+    <value>Click to open in new window</value>
+    <comment>點擊另開</comment>
+  </data>
+  <data name="Article_btnUploadPicture" xml:space="preserve">
+    <value>Upload</value>
+    <comment>上傳</comment>
+  </data>
+  <data name="Article_btnUploadPicture_Hint" xml:space="preserve">
+    <value>Upload picture</value>
+    <comment>上傳照片</comment>
+  </data>
+  <data name="Article_btnDownloadArtPic" xml:space="preserve">
+    <value>Download</value>
+    <comment>下載</comment>
+  </data>
+  <data name="Article_btnDownloadArtPic_Hint" xml:space="preserve">
+    <value>Download picture file</value>
+    <comment>下載照片檔案</comment>
+  </data>
+  <data name="ArticlePicture_Title_AddNew_Format" xml:space="preserve">
+    <value>Add a picture of article - article id:{0}</value>
+    <comment>新增網頁照片 - 網頁id:{0}</comment>
+  </data>
+  <data name="ArticlePicture_Title_Edit_Format" xml:space="preserve">
+    <value>Edit picture of article - picture id:{0}</value>
+    <comment>修改網頁照片 - 照片id:{0}</comment>
+  </data>
+  <data name="ErrMsg_DeleteArticlePictureFailed" xml:space="preserve">
+    <value>delete picture failed</value>
+    <comment>刪除網頁照片失敗</comment>
+  </data>
+  <data name="Attachment_ConfirmDelete_Format" xml:space="preserve">
+    <value>delete data of [{0}][{1}]?</value>
+    <comment>確定刪除[{0}][{1}]?</comment>
+  </data>
+  <data name="ArticlePicture_ConfirmDelete_Format" xml:space="preserve">
+    <value>delete data of [{0}][{1}]?</value>
+    <comment>確定刪除[{0}][{1}]?</comment>
+  </data>
+  <data name="ArticleVideo_ConfirmDelete_Format" xml:space="preserve">
+    <value>delete data of [{0}][{1}]?</value>
+    <comment>確定刪除[{0}][{1}]?</comment>
+  </data>
+  <data name="GroupLabel_ArticleVideos" xml:space="preserve">
+    <value>Youtube videos</value>
+    <comment>Youtube 影片</comment>
+  </data>
+  <data name="Article_btnAddVideo" xml:space="preserve">
+    <value>Add</value>
+    <comment>新增</comment>
+  </data>
+  <data name="Article_btnAddVideo_Hint" xml:space="preserve">
+    <value>Add Youtube video</value>
+    <comment>新增 Youtube 影片</comment>
+  </data>
+  <data name="ErrMsg_DeleteArticleVideoFailed" xml:space="preserve">
+    <value>delete article video failed</value>
+    <comment>刪除網頁影片失敗</comment>
+  </data>
+  <data name="Col_YoutubeVideoUrl" xml:space="preserve">
+    <value>Youtube video URL</value>
+    <comment>Youtube 影片網址</comment>
+  </data>
+  <data name="Col_YoutubeVideoUrl_Hint" xml:space="preserve">
+    <value>Youtube video URL</value>
+    <comment>Youtube 影片網址</comment>
+  </data>
+  <data name="ArticleVideo_btnGetYoutubeId" xml:space="preserve">
+    <value>Extract id from Youtube video URL</value>
+    <comment>抓出 Youtube 影片代碼</comment>
+  </data>
+  <data name="ArticleVideo_btnGetYoutubeId_Confirm" xml:space="preserve">
+    <value>Are you sure you want to replace the current Youtube video id?</value>
+    <comment>確定要替換目前的 Youtube 影片代碼?</comment>
+  </data>
+  <data name="Col_YoutubeVideoId" xml:space="preserve">
+    <value>Youtube video id</value>
+    <comment>Youtube 影片代碼</comment>
+  </data>
+  <data name="Col_YoutubeVideoId_Hint" xml:space="preserve">
+    <value>Youtube video id</value>
+    <comment>Youtube 影片代碼</comment>
+  </data>
+  <data name="Col_VideoDesc" xml:space="preserve">
+    <value>Video description</value>
+    <comment>影片說明</comment>
+  </data>
+  <data name="Col_VideoDesc_Hint" xml:space="preserve">
+    <value>Video description</value>
+    <comment>影片說明</comment>
+  </data>
+  <data name="ArticleVideo_Title_AddNew_Format" xml:space="preserve">
+    <value>Add a Youtube video - article id:{0}</value>
+    <comment>新增 Youtube 影片 - 網頁id:{0}</comment>
+  </data>
+  <data name="ArticleVideo_Title_Edit_Format" xml:space="preserve">
+    <value>Edit Youtube video - video id:{0}</value>
+    <comment>修改 Youtube 影片 - 影片id:{0}</comment>
+  </data>
+  <data name="GroupLabel_Context" xml:space="preserve">
+    <value>Context</value>
+    <comment>內文</comment>
+  </data>
+  <data name="Article_btnEditContext" xml:space="preserve">
+    <value>Edit</value>
+    <comment>編輯</comment>
+  </data>
+  <data name="Article_btnEditContext_Hint" xml:space="preserve">
+    <value>Edit context</value>
+    <comment>編輯內文</comment>
+  </data>
+  <data name="Article_chkSubjectAtBannerArea" xml:space="preserve">
+    <value>Make the subject position in the banner area</value>
+    <comment>標題位置在橫幅區</comment>
+  </data>
+  <data name="Article_chkSubjectAtBannerArea_Notice" xml:space="preserve">
+    <value>Otherwise the position in the content area</value>
+    <comment>取消則位置在內容區</comment>
+  </data>
+  <data name="Col_Subtitle" xml:space="preserve">
+    <value>Subtitle</value>
+    <comment>副標題</comment>
+  </data>
+  <data name="Col_Subtitle_Hint" xml:space="preserve">
+    <value>Subtitle</value>
+    <comment>副標題</comment>
+  </data>
+  <data name="Col_Publisher" xml:space="preserve">
+    <value>Publisher</value>
+    <comment>發佈者</comment>
+  </data>
+  <data name="Col_Publisher_Hint" xml:space="preserve">
+    <value>Publisher</value>
+    <comment>發佈者</comment>
+  </data>
+  <data name="Col_PublishDate" xml:space="preserve">
+    <value>Release date</value>
+    <comment>發佈日期</comment>
+  </data>
+  <data name="Col_PublishDate_Hint" xml:space="preserve">
+    <value>Release date</value>
+    <comment>發佈日期</comment>
+  </data>
+  <data name="Article_lblLinkUrl" xml:space="preserve">
+    <value>URL</value>
+    <comment>超連結</comment>
+  </data>
+  <data name="Article_lblSubItemLinkUrl" xml:space="preserve">
+    <value>Sub-item default URL</value>
+    <comment>子項目預設超連結</comment>
+  </data>
+  <data name="Col_IsShowInUnitArea" xml:space="preserve">
+    <value>Appear in the unit area</value>
+    <comment>在單元區呈現</comment>
+  </data>
+  <data name="Col_IsShowInUnitArea_Hint" xml:space="preserve">
+    <value>Appear in the unit area</value>
+    <comment>在單元區呈現</comment>
+  </data>
+  <data name="Col_IsShowInSitemap" xml:space="preserve">
+    <value>Appear in the sitemap</value>
+    <comment>在網站導覽呈現</comment>
+  </data>
+  <data name="Col_IsShowInSitemap_Hint" xml:space="preserve">
+    <value>Appear in the sitemap</value>
+    <comment>在網站導覽呈現</comment>
+  </data>
+  <data name="Article_chkIsShowInUnitArea" xml:space="preserve">
+    <value>Appear in the unit area</value>
+    <comment>是否在單元區呈現</comment>
+  </data>
+  <data name="Article_chkIsShowInSitemap" xml:space="preserve">
+    <value>Appear in the sitemap</value>
+    <comment>是否在網站導覽呈現</comment>
+  </data>
+  <data name="Article_lblShowInFrontStage" xml:space="preserve">
+    <value>Display in the front-stage</value>
+    <comment>在前台顯示</comment>
+  </data>
+  <data name="Article_lblSortFieldOfFrontStage" xml:space="preserve">
+    <value>Sort in the front-stage</value>
+    <comment>在前台的排序</comment>
+  </data>
+  <data name="Article_btnSwitchAreaShowInFrontStage" xml:space="preserve">
+    <value>Switch</value>
+    <comment>切換</comment>
+  </data>
+  <data name="Option_Default" xml:space="preserve">
+    <value>(default)</value>
+    <comment>(預設值)</comment>
+  </data>
+  <data name="IsSortDescOption_asc" xml:space="preserve">
+    <value>Ascending</value>
+    <comment>由小至大</comment>
+  </data>
+  <data name="IsSortDescOption_desc" xml:space="preserve">
+    <value>Descending</value>
+    <comment>由大至小</comment>
+  </data>
+  <data name="TranResult_saved" xml:space="preserve">
+    <value>Saved</value>
+    <comment>已儲存</comment>
+  </data>
+  <data name="TranResult_sending" xml:space="preserve">
+    <value>Sending</value>
+    <comment>傳送中</comment>
+  </data>
+  <data name="TranResult_failed" xml:space="preserve">
+    <value>Save failed</value>
+    <comment>儲存失敗</comment>
+  </data>
+  <data name="Col_SearchDataSource" xml:space="preserve">
+    <value>Search sources</value>
+    <comment>搜尋用資料來源</comment>
+  </data>
+  <data name="Article_chkUpdateSearchDataSource" xml:space="preserve">
+    <value>Search sources are updated immediately after saving</value>
+    <comment>儲存時立即更新搜尋用資料來源</comment>
+  </data>
+  <data name="Article_btnPickControlName_Hint" xml:space="preserve">
+    <value>Browse layout controls</value>
+    <comment>瀏覽版型控制項</comment>
+  </data>
+  <data name="GroupLabel_LayoutControl" xml:space="preserve">
+    <value>Layout controls</value>
+    <comment>版型控制項</comment>
+  </data>
+  <data name="Pick_btnSelect" xml:space="preserve">
+    <value>Select</value>
+    <comment>選擇</comment>
+  </data>
+  <data name="Pick_btnClear" xml:space="preserve">
+    <value>Clear to blank</value>
+    <comment>清除為空白</comment>
+  </data>
+  <data name="Pick_ConfirmSelect_Format" xml:space="preserve">
+    <value>Are you sure you want to select [{0}]?</value>
+    <comment>是否確定選擇[{0}]?</comment>
+  </data>
+  <data name="GroupLabel_CustomWebProgram" xml:space="preserve">
+    <value>Custom web programs</value>
+    <comment>客製化網頁程式</comment>
+  </data>
+  <data name="Article_btnPickCustomWebProgram_Hint" xml:space="preserve">
+    <value>Browse custom web programs</value>
+    <comment>瀏覽客製化網頁程式</comment>
+  </data>
+  <data name="PswChange_Subtitle" xml:space="preserve">
+    <value>Change password</value>
+    <comment>變更密碼</comment>
+  </data>
+  <data name="Login_btnSubmit" xml:space="preserve">
+    <value>Submit</value>
+    <comment>送 出</comment>
+  </data>
+  <data name="Login_btnBackToLogin" xml:space="preserve">
+    <value>back to sign in</value>
+    <comment>回登入頁</comment>
+  </data>
+  <data name="PswChange_NewPswTitle" xml:space="preserve">
+    <value>New password</value>
+    <comment>新密碼</comment>
+  </data>
+  <data name="PswChange_NewPswConfirmTitle" xml:space="preserve">
+    <value>Confirm new password</value>
+    <comment>新密碼確認</comment>
+  </data>
+  <data name="ErrMsg_ChangePasswordException" xml:space="preserve">
+    <value>An exception error occurred while updating the password</value>
+    <comment>更新密碼時發生異常錯誤</comment>
+  </data>
+  <data name="PswChange_Success" xml:space="preserve">
+    <value>Password changed</value>
+    <comment>密碼已更新</comment>
+  </data>
+  <data name="ErrMsg_NoMatchedAccount" xml:space="preserve">
+    <value>Check that there is no account and email information</value>
+    <comment>查無指定帳號與 Email 資訊</comment>
+  </data>
+  <data name="PswRequire_Subtitle" xml:space="preserve">
+    <value>Requires reset password</value>
+    <comment>要求重置密碼</comment>
+  </data>
+  <data name="PswRequire_BoundEmailTitle" xml:space="preserve">
+    <value>Email of account</value>
+    <comment>登記於帳號的 Email</comment>
+  </data>
+  <data name="ErrMsg_PrepareEmailException" xml:space="preserve">
+    <value>An exception error occurred while preparing Email</value>
+    <comment>準備信件內容時發生異常錯誤</comment>
+  </data>
+  <data name="PswRequire_Success" xml:space="preserve">
+    <value>Email sent</value>
+    <comment>重置密碼通知信已送出</comment>
+  </data>
+  <data name="ErrMsg_PswRequireSendFailed" xml:space="preserve">
+    <value>Send notification mail failed</value>
+    <comment>要求重置密碼通知信寄送失敗</comment>
+  </data>
+  <data name="ErrMsg_InvalidTokenOfResetPsw" xml:space="preserve">
+    <value>Password reset verification code is invalid or has been cancelled</value>
+    <comment>要求重置密碼的驗證碼無效或已取消</comment>
+  </data>
+  <data name="PswChange_ResetPasswordCanceled" xml:space="preserve">
+    <value>Password reset request has been canceled</value>
+    <comment>已取消重置密碼的要求</comment>
+  </data>
+  <data name="ErrMsg_RoleGuestIsNotAllowedToUse" xml:space="preserve">
+    <value>Role "guest" is not allowed to use this feature.</value>
+    <comment>身分 "guest" 不允許使用本功能</comment>
+  </data>
+  <data name="WebsiteName" xml:space="preserve">
+    <value>SampleEFCMS Demo</value>
+    <comment>SampleEFCMS Demo</comment>
+  </data>
+  <data name="WebsiteNameShort" xml:space="preserve">
+    <value>SampleEFCMS</value>
+    <comment>SampleEFCMS</comment>
+  </data>
+  <data name="Login_lblBackTo" xml:space="preserve">
+    <value>back to</value>
+    <comment>回到</comment>
+  </data>
+  <data name="Article_txtStartDate_Notice" xml:space="preserve">
+    <value>The default is 3 days after opening</value>
+    <comment>預設為 3 天後上架</comment>
+  </data>
+  <data name="Article_btnStartToday" xml:space="preserve">
+    <value>Change now to open</value>
+    <comment>更改為現在上架</comment>
+  </data>
+</root>

@@ -1,0 +1,339 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterMain.master.cs" Inherits="MasterMain" %>
+<%@ Register Src="~/UserControls/wucHeadUpDisplay.ascx" TagPrefix="uc1" TagName="wucHeadUpDisplay" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title></title>
+    <link href="/Management/Common/bootstrap-4/css/bootstrap.css" rel="stylesheet" />
+    <link href="/Management/Common/css/BpBootstrapChanged.css" rel="stylesheet" />
+    <link href="/Management/Common/css/BackendPage.css" rel="stylesheet" />
+    <link href="/Management/Common/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/Management/Common/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <link href="/Management/Common/jquery-ui-1.12.1/themes/south-street/jquery-ui.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .ui-widget-header .ui-icon {
+            background-image: url("Common/jquery-ui-1.12.1/themes/south-street/images/ui-icons_eeeeee_256x240.png")
+        }
+        a.ui-dialog-titlebar-maximize, a.ui-dialog-titlebar-restore {
+            width:20px !important;
+            height:20px !important;
+        }
+        #popupContainer {
+            box-shadow:#777 -1px -1px 1px;
+        }
+    </style>
+
+    <script src="Common/js/jquery-3.2.1.min.js"></script>
+    <%--<script src="Common/js/jquery-migrate-3.0.0.js"></script>--%>
+    <asp:ContentPlaceHolder id="cphHead" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="main-body">
+    <form id="form1" runat="server">
+        <header id="mainNavbar" class="main-navbar navbar navbar-expand flex-md-row flex-column navbar-dark bg-dark fixed-top" title="Top">
+            <a href="Dashboard.aspx" class="navbar-brand ci-logo"><%= Resources.Lang.BackStageNameShort %></a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <span class="navbar-text px-2"><i class="fa fa-user-circle-o NavIcon"></i> 
+                        <%= Resources.Lang.Main_RoleTitle %>: <asp:Literal ID="ltrRoleDisplayName" runat="server"></asp:Literal></span>
+                </li>
+                <li class="nav-item">
+                    <span class="navbar-text px-2"><i class="fa fa-briefcase NavIcon"></i> 
+                        <%= Resources.Lang.Main_DeptTitle %>: <asp:Literal ID="ltrDeptName" runat="server"></asp:Literal></span>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-md-auto">
+                <li class="nav-item dropdown">
+                    <a id="navMenuLink" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" 
+                        aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog NavIcon"></i> <asp:Literal ID="ltrAccountInfo" runat="server"></asp:Literal></a>
+                    <div class="dropdown-menu" aria-labelledby="navMenuLink">
+                        <a id="btnAccountSettings" runat="server" class="dropdown-item" href="#"><i class="fa fa-pencil-square-o fa-fw"></i> <%= Resources.Lang.Main_btnAccountSettings %></a>
+                        <div class="dropdown-divider"></div>
+                        <a id="btnLogout" runat="server" class="dropdown-item" href="#"><i class="fa fa-power-off fa-fw"></i> <%= Resources.Lang.Main_btnLogout %></a>
+                    </div>
+                </li>
+            </ul>
+        </header>
+        <div class="container-fluid">
+            <div id="ErrorMsgArea" runat="server" class="alert alert-danger alert-dismissible fade show" role="alert" visible="false">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <asp:Literal ID="ltrErrMsg" runat="server"></asp:Literal>
+            </div>
+            <div class="row">
+                <div class="col-md-3 pr-md-0">
+                    <div class="sidebar-container rounded bgtx-main">
+                        <div id="SidebarMenuCtrlArea" class="mb-1 text-right" style="display:none;">
+                            <a id="btnToggleSidebarMenu" href="#" class="btn btn-light border-secondary text-secondary"><i class="fa fa-bars fa-lg"></i></a>
+                        </div>
+                        <div class="sidebar-menu">
+                            <div class="form-group">
+                                <a id="btnEditOperations" runat="server" href="Operation-Node.aspx" class="btn btn-sm btn-success" visible="false">
+                                    <i class="fa fa-pencil-square-o"></i> <%= Resources.Lang.btnEditOperations %></a>
+                            </div>
+                            <hr id="LineOfCtrl" runat="server" class="content-divider" visible="false" />
+                            <div class="text-right" style="margin-top:-10px;">
+                                <a id="btnExpand" href="#" class="small" title='<%= Resources.Lang.Main_btnExpand_Hint %>'><%= Resources.Lang.Main_btnExpand %></a>
+                            </div>
+                            <ul class="nav nav-pills flex-column">
+                            <asp:Repeater ID="rptOpMenu" runat="server" OnItemDataBound="rptOpMenu_ItemDataBound">
+                            <ItemTemplate>
+                                <li id="OpHeaderArea" runat="server" class="nav-item card items-group">
+                                    <a id="btnOpHeader" runat="server" href="javascript:void(0);" class="nav-link item-header">
+                                        <img id="imgOpHeader" runat="server" src="BPimages/icon/data.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 
+                                        <asp:Literal ID="ltrOpHeaderSubject" runat="server"></asp:Literal>
+                                    </a>
+                                    <%-- item list (for operation) --%>
+                                    <asp:Repeater ID="rptOpItems" runat="server" OnItemDataBound="rptOpItems_ItemDataBound">
+                                        <HeaderTemplate>
+                                            <ul class="nav nav-pills flex-column flex-nowrap item-list">
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <li id="OpItemArea" runat="server" class="nav-item item-area">
+                                                <a id="btnOpItem" runat="server" href="#" class="nav-link item">
+                                                    <img id="imgOpItem" runat="server" src="BPimages/icon/data.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 
+                                                    <asp:Literal ID="ltrOpItemSubject" runat="server"></asp:Literal>
+                                                </a>
+                                            </li>
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            </ul>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <%-- tree list (for article) --%>
+                                    <asp:Repeater ID="rptArticles" runat="server" OnItemDataBound="rptArticles_ItemDataBound" Visible="false">
+                                        <HeaderTemplate>
+                                            <ul class="nav nav-pills flex-column flex-nowrap tree-list">
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <li id="BranchArea" runat="server" class="nav-item branch-area">
+                                                <a id="btnItem" runat="server" href="#" class="nav-link branch">
+                                                    <img src="BPimages/icon/Generic_Application.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/>
+                                                    <asp:Literal ID="ltrArticleSubject" runat="server"></asp:Literal>
+                                                </a>
+                                                <asp:Repeater ID="rptSubitems" runat="server" OnItemDataBound="rptArticles_ItemDataBound">
+                                                    <HeaderTemplate>
+                                                        <ul class="nav nav-pills flex-column flex-nowrap branch-list">
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <li id="BranchArea" runat="server" class="nav-item branch-area">
+                                                            <a id="btnItem" runat="server" href="#" class="nav-link branch">
+                                                                <img src="BPimages/icon/folderStuffed.png" align="absmiddle" style="width:16px; height:16px;" alt="*"/>
+                                                                <asp:Literal ID="ltrArticleSubject" runat="server"></asp:Literal>
+                                                            </a>
+                                                            <asp:Repeater ID="rptSubitems" runat="server" OnItemDataBound="rptArticles_ItemDataBound">
+                                                                <HeaderTemplate>
+                                                                    <ul class="nav nav-pills flex-column flex-nowrap branch-list">
+                                                                </HeaderTemplate>
+                                                                <ItemTemplate>
+                                                                    <li id="BranchArea" runat="server" class="nav-item branch-area">
+                                                                        <a id="btnItem" runat="server" href="#" class="nav-link branch">
+                                                                            <img src="BPimages/icon/file_s.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/>
+                                                                            <asp:Literal ID="ltrArticleSubject" runat="server"></asp:Literal>
+                                                                        </a>
+                                                                    </li>
+                                                                </ItemTemplate>
+                                                                <FooterTemplate>
+                                                                    </ul>
+                                                                </FooterTemplate>
+                                                            </asp:Repeater>
+                                                        </li>
+                                                    </ItemTemplate>
+                                                    <FooterTemplate>
+                                                        </ul>
+                                                    </FooterTemplate>
+                                                </asp:Repeater>
+                                            </li>
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            </ul>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <asp:PlaceHolder ID="test" runat="server" Visible="false">
+                                    <ul class="nav nav-pills flex-column flex-nowrap tree-list">
+                                        <li class="nav-item branch-area" articleId="a01">
+                                            <a href="#" class="nav-link branch">
+                                                <img src="BPimages/icon/Generic_Application.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第一層名稱</a>
+                                            <ul class="nav nav-pills flex-column flex-nowrap branch-list">
+                                                <li class="nav-item branch-area" articleId="a03">
+                                                    <a href="#" class="nav-link branch">
+                                                        <img src="BPimages/icon/folderStuffed.png" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第二層名稱</a>
+                                                    <ul class="nav nav-pills flex-column flex-nowrap branch-list">
+                                                        <li class="nav-item branch-area" articleId="a05">
+                                                            <a href="#" class="nav-link branch">
+                                                                <img src="BPimages/icon/file_s.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第三層名稱</a>
+                                                        </li>
+                                                        <li class="nav-item branch-area" articleId="a06">
+                                                            <a href="#" class="nav-link branch">
+                                                                <img src="BPimages/icon/file_s.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第三層名稱</a>
+                                                        </li>
+                                                        <li class="nav-item branch-area" articleId="a07">
+                                                            <a href="#" class="nav-link branch">
+                                                                <img src="BPimages/icon/file_s.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第三層名稱</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="nav-item branch-area" articleId="a04">
+                                                    <a href="#" class="nav-link branch">
+                                                        <img src="BPimages/icon/folderStuffed.png" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第二層名稱</a>
+                                                    <ul class="nav nav-pills flex-column flex-nowrap branch-list">
+                                                        <li class="nav-item branch-area" articleId="a08">
+                                                            <a href="#" class="nav-link branch">
+                                                                <img src="BPimages/icon/file_s.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第三層名稱</a>
+                                                        </li>
+                                                        <li class="nav-item branch-area" articleId="a09">
+                                                            <a href="#" class="nav-link branch">
+                                                                <img src="BPimages/icon/file_s.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第三層名稱</a>
+                                                        </li>
+                                                        <li class="nav-item branch-area" articleId="a10">
+                                                            <a href="#" class="nav-link branch">
+                                                                <img src="BPimages/icon/file_s.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第三層名稱</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="nav-item branch-area" articleId="a20">
+                                                    <a href="#" class="nav-link branch">
+                                                        <img src="BPimages/icon/folder.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第二層名稱</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item branch-area" articleId="a02">
+                                            <a href="#" class="nav-link branch">
+                                                <img src="BPimages/icon/Generic_Application.gif" align="absmiddle" style="width:16px; height:16px;" alt="*"/> 第一層名稱</a>
+                                        </li>
+                                    </ul>
+                                    </asp:PlaceHolder>
+                                </li>
+                            </ItemTemplate>
+                            </asp:Repeater>
+                            </ul>
+                            <div style="height:130px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="content-container rounded bgtx-main">
+                        <uc1:wucHeadUpDisplay ID="ucHeadUpDisplay" runat="server" />
+                        <asp:ContentPlaceHolder id="cphContent" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </div>
+            </div>
+            <hr class="content-divider" />
+            <footer class="footer-container bgtx-main rounded-bottom px-3 pt-2 pb-3 mb-3">
+                <span class="text-secondary"><%= Resources.Lang.Footer_CompanyInfo %></span>
+            </footer>
+        </div>
+        <input id="txtFlag" runat="server" type="hidden" value="N" />
+        <div id="dialog" title="&nbsp;">
+            <div class="msg" style="display:none;"><%= Resources.Lang.ConfigForm_Loading %></div>
+            <iframe id="popupContainer" frameborder="0"></iframe>
+        </div>
+    
+        <script src="Common/js/popper.min.js"></script>
+        <script src="Common/bootstrap-4/js/bootstrap.min.js"></script>
+        <script src="Common/jquery-ui-1.12.1.Dialog/jquery-ui.min.js"></script>
+        <script src="Common/js/jquery.dialogextend.min.js"></script><!-- -->
+        <script src="Common/js/BackendPage.js"></script>
+        <script>
+            var removedNavFix = false;
+            var isMobile = false;
+            if (navigator) {
+                isMobile = navigator.userAgent.match(/Mobile/i) != null;
+            }
+
+            $(".main-navbar").tooltip();
+
+            $("#popupContainer").on("load", function () {
+                if ($(this).is(':hidden')) {
+                    $(this).fadeIn(500);
+                    $('#dialog>.msg').hide();
+                }
+            });
+
+            if (useIframeDialog) {
+                $("#dialog").dialog({
+                    autoOpen: false,
+                    modal: true,
+                    draggable: false,
+                    show: "fade",
+                    hide: "fade",
+                    resize: function (event, ui) {
+                        applyDialogHeight(ui.size.height);
+                    },
+                    open: function (event, ui) {
+                        if ($(".main-navbar").hasClass("fixed-top")) {
+                            $(".main-navbar").removeClass("fixed-top");
+                            removedNavFix = true;
+                        }
+
+                        /*
+                        switch ($(this).dialogExtend("state")) {
+                            case "maximized":
+                                $(this).dialogExtend("maximize");   //fix bug that if dialog opens with normal state but closes with maximized state.
+                                break;
+                        }
+                        */
+                    },
+                    close: function (event, ui) {
+                        if (removedNavFix) {
+                            $(".main-navbar").addClass("fixed-top");
+                        }
+                    }
+                })
+                .dialogExtend({
+                    "maximizable": true,
+                    //"icons": {
+                    //    "maximize": "ui-icon-arrow-4-diag"
+                    //},
+                    "maximize": function (evt) {
+                        var parentHeight = $(this).parent().height();
+                        applyDialogHeight(parentHeight);
+                    },
+                    "restore": function (evt) {
+                        var parentHeight = $(this).parent().height();
+                        applyDialogHeight(parentHeight);
+                    }
+                });
+            }
+
+            function closeDialog() {
+                $("#dialog").dialog("close");
+            }
+
+            function setDialogTitle(value) {
+                $("#dialog").dialog("option", "title", value);
+            }
+
+            function resizeDialog(w, h) {
+                if ($("#dialog").dialogExtend("state") != "normal")
+                    return;
+
+                var mainHeight = $(window).height() - 80;
+
+                if (h > mainHeight) {
+                    h = mainHeight;
+                }
+
+                $("#dialog")
+                    .dialog("option", "width", w)
+                    .dialog("option", "height", h);
+
+                applyDialogHeight(h);
+            }
+        </script>
+        <script src="Common/js/jquery.hoverIntent.min.js"></script>
+        <script src="Common/js/Sidebar-menu.js"></script>
+    </form>
+
+    <asp:ContentPlaceHolder ID="cphBeforeBodyTail" runat="server">
+    </asp:ContentPlaceHolder>
+    <iframe src="Keep-Alive.aspx" height="35" style="display:none;"></iframe>
+</body>
+</html>
