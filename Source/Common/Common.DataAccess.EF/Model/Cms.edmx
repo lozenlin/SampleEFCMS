@@ -1,0 +1,1078 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CmsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="ArticleId" />
+          </Key>
+          <Property Name="ArticleId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentId" Type="uniqueidentifier" />
+          <Property Name="ArticleLevelNo" Type="int" />
+          <Property Name="ArticleAlias" Type="varchar" MaxLength="50" />
+          <Property Name="BannerPicFileName" Type="nvarchar" MaxLength="255" />
+          <Property Name="LayoutModeId" Type="int" />
+          <Property Name="ShowTypeId" Type="int" />
+          <Property Name="LinkUrl" Type="nvarchar" MaxLength="2048" />
+          <Property Name="LinkTarget" Type="varchar" MaxLength="10" />
+          <Property Name="ControlName" Type="varchar" MaxLength="100" />
+          <Property Name="SubItemControlName" Type="varchar" MaxLength="100" />
+          <Property Name="IsHideSelf" Type="bit" Nullable="false" />
+          <Property Name="IsHideChild" Type="bit" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="SortNo" Type="int" />
+          <Property Name="DontDelete" Type="bit" Nullable="false" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+          <Property Name="SubjectAtBannerArea" Type="bit" Nullable="false" />
+          <Property Name="PublishDate" Type="datetime" />
+          <Property Name="IsShowInUnitArea" Type="bit" Nullable="false" />
+          <Property Name="IsShowInSitemap" Type="bit" Nullable="false" />
+          <Property Name="SortFieldOfFrontStage" Type="varchar" MaxLength="50" />
+          <Property Name="IsSortDescOfFrontStage" Type="bit" Nullable="false" />
+          <Property Name="IsListAreaShowInFrontStage" Type="bit" Nullable="false" />
+          <Property Name="IsAttAreaShowInFrontStage" Type="bit" Nullable="false" />
+          <Property Name="IsPicAreaShowInFrontStage" Type="bit" Nullable="false" />
+          <Property Name="IsVideoAreaShowInFrontStage" Type="bit" Nullable="false" />
+          <Property Name="SubItemLinkUrl" Type="nvarchar" MaxLength="2048" />
+        </EntityType>
+        <EntityType Name="ArticleMultiLang">
+          <Key>
+            <PropertyRef Name="ArticleId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="ArticleId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CultureName" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleSubject" Type="nvarchar" MaxLength="200" />
+          <Property Name="ArticleContext" Type="nvarchar(max)" />
+          <Property Name="ReadCount" Type="int" Nullable="false" />
+          <Property Name="IsShowInLang" Type="bit" Nullable="false" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+          <Property Name="Subtitle" Type="nvarchar" MaxLength="500" />
+          <Property Name="PublisherName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TextContext" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ArticlePicture">
+          <Key>
+            <PropertyRef Name="PicId" />
+          </Key>
+          <Property Name="PicId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleId" Type="uniqueidentifier" />
+          <Property Name="FileSavedName" Type="nvarchar" MaxLength="500" />
+          <Property Name="FileSize" Type="int" Nullable="false" />
+          <Property Name="SortNo" Type="int" />
+          <Property Name="FileMIME" Type="varchar" MaxLength="255" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ArticlePictureMultiLang">
+          <Key>
+            <PropertyRef Name="PicId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="PicId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CultureName" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PicSubject" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsShowInLang" Type="bit" Nullable="false" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ArticleVideo">
+          <Key>
+            <PropertyRef Name="VidId" />
+          </Key>
+          <Property Name="VidId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleId" Type="uniqueidentifier" />
+          <Property Name="SortNo" Type="int" />
+          <Property Name="VidLinkUrl" Type="nvarchar" MaxLength="2048" />
+          <Property Name="SourceVideoId" Type="varchar" MaxLength="100" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ArticleVideoMultiLang">
+          <Key>
+            <PropertyRef Name="VidId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="VidId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CultureName" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VidSubject" Type="nvarchar" MaxLength="200" />
+          <Property Name="VidDesc" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsShowInLang" Type="bit" Nullable="false" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="AttachFile">
+          <Key>
+            <PropertyRef Name="AttId" />
+          </Key>
+          <Property Name="AttId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleId" Type="uniqueidentifier" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="150" />
+          <Property Name="FileSavedName" Type="nvarchar" MaxLength="500" />
+          <Property Name="FileSize" Type="int" Nullable="false" />
+          <Property Name="SortNo" Type="int" />
+          <Property Name="FileMIME" Type="varchar" MaxLength="255" />
+          <Property Name="DontDelete" Type="bit" Nullable="false" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="AttachFileMultiLang">
+          <Key>
+            <PropertyRef Name="AttId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="AttId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CultureName" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AttSubject" Type="nvarchar" MaxLength="200" />
+          <Property Name="ReadCount" Type="int" Nullable="false" />
+          <Property Name="IsShowInLang" Type="bit" Nullable="false" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="BackEndLog">
+          <Key>
+            <PropertyRef Name="Seqno" />
+          </Key>
+          <Property Name="Seqno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpAccount" Type="varchar" MaxLength="20" />
+          <Property Name="Description" Type="nvarchar" MaxLength="4000" />
+          <Property Name="OpDate" Type="datetime" />
+          <Property Name="IP" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DeptId" />
+          </Key>
+          <Property Name="DeptId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DeptName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SortNo" Type="int" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmpId" />
+          </Key>
+          <Property Name="EmpId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpAccount" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="EmpPassword" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="EmpName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="200" />
+          <Property Name="DeptId" Type="int" />
+          <Property Name="RoleId" Type="int" />
+          <Property Name="IsAccessDenied" Type="bit" Nullable="false" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="OwnerAccount" Type="varchar" MaxLength="20" />
+          <Property Name="IsEmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="EmailConfirmKey" Type="varchar" MaxLength="255" />
+          <Property Name="PasswordHashed" Type="bit" Nullable="false" />
+          <Property Name="EmailConfirmKeyDate" Type="datetime" />
+          <Property Name="PasswordResetKey" Type="varchar" MaxLength="255" />
+          <Property Name="PasswordResetKeyDate" Type="datetime" />
+          <Property Name="DefaultRandomPassword" Type="varchar" MaxLength="50" />
+          <Property Name="ThisLoginTime" Type="datetime" />
+          <Property Name="ThisLoginIP" Type="varchar" MaxLength="50" />
+          <Property Name="LastLoginTime" Type="datetime" />
+          <Property Name="LastLoginIP" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="EmployeeRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="RoleDisplayName" Type="nvarchar" MaxLength="20" />
+          <Property Name="SortNo" Type="int" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="EmployeeRoleOperationsDesc">
+          <Key>
+            <PropertyRef Name="RoleName" />
+            <PropertyRef Name="OpId" />
+          </Key>
+          <Property Name="RoleName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="OpId" Type="int" Nullable="false" />
+          <Property Name="CanRead" Type="bit" Nullable="false" />
+          <Property Name="CanEdit" Type="bit" Nullable="false" />
+          <Property Name="CanReadSubItemOfSelf" Type="bit" Nullable="false" />
+          <Property Name="CanEditSubItemOfSelf" Type="bit" Nullable="false" />
+          <Property Name="CanAddSubItemOfSelf" Type="bit" Nullable="false" />
+          <Property Name="CanDelSubItemOfSelf" Type="bit" Nullable="false" />
+          <Property Name="CanReadSubItemOfCrew" Type="bit" Nullable="false" />
+          <Property Name="CanEditSubItemOfCrew" Type="bit" Nullable="false" />
+          <Property Name="CanDelSubItemOfCrew" Type="bit" Nullable="false" />
+          <Property Name="CanReadSubItemOfOthers" Type="bit" Nullable="false" />
+          <Property Name="CanEditSubItemOfOthers" Type="bit" Nullable="false" />
+          <Property Name="CanDelSubItemOfOthers" Type="bit" Nullable="false" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Keyword">
+          <Key>
+            <PropertyRef Name="Seqno" />
+          </Key>
+          <Property Name="Seqno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CultureName" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Kw" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UsedCount" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Operations">
+          <Key>
+            <PropertyRef Name="OpId" />
+          </Key>
+          <Property Name="OpId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentId" Type="int" />
+          <Property Name="OpSubject" Type="nvarchar" MaxLength="100" />
+          <Property Name="LinkUrl" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsNewWindow" Type="bit" Nullable="false" />
+          <Property Name="IconImageFile" Type="nvarchar" MaxLength="255" />
+          <Property Name="SortNo" Type="int" />
+          <Property Name="IsHideSelf" Type="bit" Nullable="false" />
+          <Property Name="CommonClass" Type="varchar" MaxLength="100" />
+          <Property Name="PostAccount" Type="varchar" MaxLength="20" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfAccount" Type="varchar" MaxLength="20" />
+          <Property Name="MdfDate" Type="datetime" />
+          <Property Name="EnglishSubject" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="SearchDataSource">
+          <Key>
+            <PropertyRef Name="ArticleId" />
+            <PropertyRef Name="SubId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="ArticleId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SubId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CultureName" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleSubject" Type="nvarchar" MaxLength="200" />
+          <Property Name="ArticleContext" Type="nvarchar(max)" />
+          <Property Name="ReadCount" Type="int" Nullable="false" />
+          <Property Name="LinkUrl" Type="nvarchar" MaxLength="2048" />
+          <Property Name="PublishDate" Type="datetime" />
+          <Property Name="BreadcrumbData" Type="nvarchar" MaxLength="4000" />
+          <Property Name="Lv1ArticleId" Type="uniqueidentifier" />
+          <Property Name="PostDate" Type="datetime" />
+          <Property Name="MdfDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Employee_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DeptId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="DeptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_EmployeeRole">
+          <End Role="EmployeeRole" Type="Self.EmployeeRole" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeRole">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--產生期間發現錯誤:
+警告 6035: 關聯性 'FK_EmployeeRoleOperationsDesc_EmployeeRole' 在主要端上，有不屬於資料表索引鍵的資料行。已排除此關聯性。
+        <Association Name="FK_EmployeeRoleOperationsDesc_EmployeeRole" />-->
+        <Association Name="FK_EmployeeRoleOperationsDesc_Operations">
+          <End Role="Operations" Type="Self.Operations" Multiplicity="1" />
+          <End Role="EmployeeRoleOperationsDesc" Type="Self.EmployeeRoleOperationsDesc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operations">
+              <PropertyRef Name="OpId" />
+            </Principal>
+            <Dependent Role="EmployeeRoleOperationsDesc">
+              <PropertyRef Name="OpId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="spSearchDataSource_Build" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MainLinkUrl" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="CmsModelStoreContainer">
+          <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ArticleMultiLang" EntityType="Self.ArticleMultiLang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ArticlePicture" EntityType="Self.ArticlePicture" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ArticlePictureMultiLang" EntityType="Self.ArticlePictureMultiLang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ArticleVideo" EntityType="Self.ArticleVideo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ArticleVideoMultiLang" EntityType="Self.ArticleVideoMultiLang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttachFile" EntityType="Self.AttachFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttachFileMultiLang" EntityType="Self.AttachFileMultiLang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BackEndLog" EntityType="Self.BackEndLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeRole" EntityType="Self.EmployeeRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeRoleOperationsDesc" EntityType="Self.EmployeeRoleOperationsDesc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Keyword" EntityType="Self.Keyword" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Operations" EntityType="Self.Operations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SearchDataSource" EntityType="Self.SearchDataSource" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employee_Department" Association="Self.FK_Employee_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_EmployeeRole" Association="Self.FK_Employee_EmployeeRole">
+            <End Role="EmployeeRole" EntitySet="EmployeeRole" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeRoleOperationsDesc_Operations" Association="Self.FK_EmployeeRoleOperationsDesc_Operations">
+            <End Role="Operations" EntitySet="Operations" />
+            <End Role="EmployeeRoleOperationsDesc" EntitySet="EmployeeRoleOperationsDesc" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CmsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="ArticleId" />
+          </Key>
+          <Property Name="ArticleId" Type="Guid" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentId" Type="Guid" />
+          <Property Name="ArticleLevelNo" Type="Int32" />
+          <Property Name="ArticleAlias" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BannerPicFileName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="LayoutModeId" Type="Int32" />
+          <Property Name="ShowTypeId" Type="Int32" />
+          <Property Name="LinkUrl" Type="String" MaxLength="2048" FixedLength="false" Unicode="true" />
+          <Property Name="LinkTarget" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ControlName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SubItemControlName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsHideSelf" Type="Boolean" Nullable="false" />
+          <Property Name="IsHideChild" Type="Boolean" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="SortNo" Type="Int32" />
+          <Property Name="DontDelete" Type="Boolean" Nullable="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+          <Property Name="SubjectAtBannerArea" Type="Boolean" Nullable="false" />
+          <Property Name="PublishDate" Type="DateTime" Precision="3" />
+          <Property Name="IsShowInUnitArea" Type="Boolean" Nullable="false" />
+          <Property Name="IsShowInSitemap" Type="Boolean" Nullable="false" />
+          <Property Name="SortFieldOfFrontStage" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsSortDescOfFrontStage" Type="Boolean" Nullable="false" />
+          <Property Name="IsListAreaShowInFrontStage" Type="Boolean" Nullable="false" />
+          <Property Name="IsAttAreaShowInFrontStage" Type="Boolean" Nullable="false" />
+          <Property Name="IsPicAreaShowInFrontStage" Type="Boolean" Nullable="false" />
+          <Property Name="IsVideoAreaShowInFrontStage" Type="Boolean" Nullable="false" />
+          <Property Name="SubItemLinkUrl" Type="String" MaxLength="2048" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ArticleMultiLang">
+          <Key>
+            <PropertyRef Name="ArticleId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="ArticleId" Type="Guid" Nullable="false" />
+          <Property Name="CultureName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticleSubject" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ArticleContext" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ReadCount" Type="Int32" Nullable="false" />
+          <Property Name="IsShowInLang" Type="Boolean" Nullable="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+          <Property Name="Subtitle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PublisherName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TextContext" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ArticlePicture">
+          <Key>
+            <PropertyRef Name="PicId" />
+          </Key>
+          <Property Name="PicId" Type="Guid" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticleId" Type="Guid" />
+          <Property Name="FileSavedName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FileSize" Type="Int32" Nullable="false" />
+          <Property Name="SortNo" Type="Int32" />
+          <Property Name="FileMIME" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ArticlePictureMultiLang">
+          <Key>
+            <PropertyRef Name="PicId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="PicId" Type="Guid" Nullable="false" />
+          <Property Name="CultureName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PicSubject" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsShowInLang" Type="Boolean" Nullable="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ArticleVideo">
+          <Key>
+            <PropertyRef Name="VidId" />
+          </Key>
+          <Property Name="VidId" Type="Guid" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticleId" Type="Guid" />
+          <Property Name="SortNo" Type="Int32" />
+          <Property Name="VidLinkUrl" Type="String" MaxLength="2048" FixedLength="false" Unicode="true" />
+          <Property Name="SourceVideoId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ArticleVideoMultiLang">
+          <Key>
+            <PropertyRef Name="VidId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="VidId" Type="Guid" Nullable="false" />
+          <Property Name="CultureName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VidSubject" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VidDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsShowInLang" Type="Boolean" Nullable="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="AttachFile">
+          <Key>
+            <PropertyRef Name="AttId" />
+          </Key>
+          <Property Name="AttId" Type="Guid" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticleId" Type="Guid" />
+          <Property Name="FilePath" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FileSavedName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FileSize" Type="Int32" Nullable="false" />
+          <Property Name="SortNo" Type="Int32" />
+          <Property Name="FileMIME" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DontDelete" Type="Boolean" Nullable="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="AttachFileMultiLang">
+          <Key>
+            <PropertyRef Name="AttId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="AttId" Type="Guid" Nullable="false" />
+          <Property Name="CultureName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttSubject" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ReadCount" Type="Int32" Nullable="false" />
+          <Property Name="IsShowInLang" Type="Boolean" Nullable="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="BackEndLog">
+          <Key>
+            <PropertyRef Name="Seqno" />
+          </Key>
+          <Property Name="Seqno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="OpDate" Type="DateTime" Precision="3" />
+          <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DeptId" />
+          </Key>
+          <Property Name="DeptId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DeptName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SortNo" Type="Int32" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_Department" FromRole="Department" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmpId" />
+          </Key>
+          <Property Name="EmpId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmpPassword" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmpName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DeptId" Type="Int32" />
+          <Property Name="RoleId" Type="Int32" />
+          <Property Name="IsAccessDenied" Type="Boolean" Nullable="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="OwnerAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IsEmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="EmailConfirmKey" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PasswordHashed" Type="Boolean" Nullable="false" />
+          <Property Name="EmailConfirmKeyDate" Type="DateTime" Precision="3" />
+          <Property Name="PasswordResetKey" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PasswordResetKeyDate" Type="DateTime" Precision="3" />
+          <Property Name="DefaultRandomPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ThisLoginTime" Type="DateTime" Precision="3" />
+          <Property Name="ThisLoginIP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastLoginTime" Type="DateTime" Precision="3" />
+          <Property Name="LastLoginIP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Employee_Department" FromRole="Employee" ToRole="Department" />
+          <NavigationProperty Name="EmployeeRole" Relationship="Self.FK_Employee_EmployeeRole" FromRole="Employee" ToRole="EmployeeRole" />
+        </EntityType>
+        <EntityType Name="EmployeeRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RoleDisplayName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SortNo" Type="Int32" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_EmployeeRole" FromRole="EmployeeRole" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmployeeRoleOperationsDesc">
+          <Key>
+            <PropertyRef Name="RoleName" />
+            <PropertyRef Name="OpId" />
+          </Key>
+          <Property Name="RoleName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OpId" Type="Int32" Nullable="false" />
+          <Property Name="CanRead" Type="Boolean" Nullable="false" />
+          <Property Name="CanEdit" Type="Boolean" Nullable="false" />
+          <Property Name="CanReadSubItemOfSelf" Type="Boolean" Nullable="false" />
+          <Property Name="CanEditSubItemOfSelf" Type="Boolean" Nullable="false" />
+          <Property Name="CanAddSubItemOfSelf" Type="Boolean" Nullable="false" />
+          <Property Name="CanDelSubItemOfSelf" Type="Boolean" Nullable="false" />
+          <Property Name="CanReadSubItemOfCrew" Type="Boolean" Nullable="false" />
+          <Property Name="CanEditSubItemOfCrew" Type="Boolean" Nullable="false" />
+          <Property Name="CanDelSubItemOfCrew" Type="Boolean" Nullable="false" />
+          <Property Name="CanReadSubItemOfOthers" Type="Boolean" Nullable="false" />
+          <Property Name="CanEditSubItemOfOthers" Type="Boolean" Nullable="false" />
+          <Property Name="CanDelSubItemOfOthers" Type="Boolean" Nullable="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Operations" Relationship="Self.FK_EmployeeRoleOperationsDesc_Operations" FromRole="EmployeeRoleOperationsDesc" ToRole="Operations" />
+        </EntityType>
+        <EntityType Name="Keyword">
+          <Key>
+            <PropertyRef Name="Seqno" />
+          </Key>
+          <Property Name="Seqno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CultureName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Kw" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UsedCount" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Operations">
+          <Key>
+            <PropertyRef Name="OpId" />
+          </Key>
+          <Property Name="OpId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentId" Type="Int32" />
+          <Property Name="OpSubject" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LinkUrl" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsNewWindow" Type="Boolean" Nullable="false" />
+          <Property Name="IconImageFile" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SortNo" Type="Int32" />
+          <Property Name="IsHideSelf" Type="Boolean" Nullable="false" />
+          <Property Name="CommonClass" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PostAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+          <Property Name="EnglishSubject" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EmployeeRoleOperationsDesc" Relationship="Self.FK_EmployeeRoleOperationsDesc_Operations" FromRole="Operations" ToRole="EmployeeRoleOperationsDesc" />
+        </EntityType>
+        <EntityType Name="SearchDataSource">
+          <Key>
+            <PropertyRef Name="ArticleId" />
+            <PropertyRef Name="SubId" />
+            <PropertyRef Name="CultureName" />
+          </Key>
+          <Property Name="ArticleId" Type="Guid" Nullable="false" />
+          <Property Name="SubId" Type="Guid" Nullable="false" />
+          <Property Name="CultureName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SeqnoForCluster" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticleSubject" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ArticleContext" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ReadCount" Type="Int32" Nullable="false" />
+          <Property Name="LinkUrl" Type="String" MaxLength="2048" FixedLength="false" Unicode="true" />
+          <Property Name="PublishDate" Type="DateTime" Precision="3" />
+          <Property Name="BreadcrumbData" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="Lv1ArticleId" Type="Guid" />
+          <Property Name="PostDate" Type="DateTime" Precision="3" />
+          <Property Name="MdfDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_Employee_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DeptId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="DeptId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_EmployeeRole">
+          <End Role="EmployeeRole" Type="Self.EmployeeRole" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeRole">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeRoleOperationsDesc_Operations">
+          <End Role="Operations" Type="Self.Operations" Multiplicity="1" />
+          <End Role="EmployeeRoleOperationsDesc" Type="Self.EmployeeRoleOperationsDesc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operations">
+              <PropertyRef Name="OpId" />
+            </Principal>
+            <Dependent Role="EmployeeRoleOperationsDesc">
+              <PropertyRef Name="OpId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CmsContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Article" EntityType="Self.Article" />
+          <EntitySet Name="ArticleMultiLang" EntityType="Self.ArticleMultiLang" />
+          <EntitySet Name="ArticlePicture" EntityType="Self.ArticlePicture" />
+          <EntitySet Name="ArticlePictureMultiLang" EntityType="Self.ArticlePictureMultiLang" />
+          <EntitySet Name="ArticleVideo" EntityType="Self.ArticleVideo" />
+          <EntitySet Name="ArticleVideoMultiLang" EntityType="Self.ArticleVideoMultiLang" />
+          <EntitySet Name="AttachFile" EntityType="Self.AttachFile" />
+          <EntitySet Name="AttachFileMultiLang" EntityType="Self.AttachFileMultiLang" />
+          <EntitySet Name="BackEndLog" EntityType="Self.BackEndLog" />
+          <EntitySet Name="Department" EntityType="Self.Department" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" />
+          <EntitySet Name="EmployeeRole" EntityType="Self.EmployeeRole" />
+          <EntitySet Name="EmployeeRoleOperationsDesc" EntityType="Self.EmployeeRoleOperationsDesc" />
+          <EntitySet Name="Keyword" EntityType="Self.Keyword" />
+          <EntitySet Name="Operations" EntityType="Self.Operations" />
+          <EntitySet Name="SearchDataSource" EntityType="Self.SearchDataSource" />
+          <AssociationSet Name="FK_Employee_Department" Association="Self.FK_Employee_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_EmployeeRole" Association="Self.FK_Employee_EmployeeRole">
+            <End Role="EmployeeRole" EntitySet="EmployeeRole" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeRoleOperationsDesc_Operations" Association="Self.FK_EmployeeRoleOperationsDesc_Operations">
+            <End Role="Operations" EntitySet="Operations" />
+            <End Role="EmployeeRoleOperationsDesc" EntitySet="EmployeeRoleOperationsDesc" />
+          </AssociationSet>
+          <FunctionImport Name="spSearchDataSource_Build">
+            <Parameter Name="MainLinkUrl" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CmsModelStoreContainer" CdmEntityContainer="CmsContext">
+          <EntitySetMapping Name="Article">
+            <EntityTypeMapping TypeName="CmsModel.Article">
+              <MappingFragment StoreEntitySet="Article">
+                <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
+                <ScalarProperty Name="SeqnoForCluster" ColumnName="SeqnoForCluster" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="ArticleLevelNo" ColumnName="ArticleLevelNo" />
+                <ScalarProperty Name="ArticleAlias" ColumnName="ArticleAlias" />
+                <ScalarProperty Name="BannerPicFileName" ColumnName="BannerPicFileName" />
+                <ScalarProperty Name="LayoutModeId" ColumnName="LayoutModeId" />
+                <ScalarProperty Name="ShowTypeId" ColumnName="ShowTypeId" />
+                <ScalarProperty Name="LinkUrl" ColumnName="LinkUrl" />
+                <ScalarProperty Name="LinkTarget" ColumnName="LinkTarget" />
+                <ScalarProperty Name="ControlName" ColumnName="ControlName" />
+                <ScalarProperty Name="SubItemControlName" ColumnName="SubItemControlName" />
+                <ScalarProperty Name="IsHideSelf" ColumnName="IsHideSelf" />
+                <ScalarProperty Name="IsHideChild" ColumnName="IsHideChild" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="SortNo" ColumnName="SortNo" />
+                <ScalarProperty Name="DontDelete" ColumnName="DontDelete" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+                <ScalarProperty Name="SubjectAtBannerArea" ColumnName="SubjectAtBannerArea" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="IsShowInUnitArea" ColumnName="IsShowInUnitArea" />
+                <ScalarProperty Name="IsShowInSitemap" ColumnName="IsShowInSitemap" />
+                <ScalarProperty Name="SortFieldOfFrontStage" ColumnName="SortFieldOfFrontStage" />
+                <ScalarProperty Name="IsSortDescOfFrontStage" ColumnName="IsSortDescOfFrontStage" />
+                <ScalarProperty Name="IsListAreaShowInFrontStage" ColumnName="IsListAreaShowInFrontStage" />
+                <ScalarProperty Name="IsAttAreaShowInFrontStage" ColumnName="IsAttAreaShowInFrontStage" />
+                <ScalarProperty Name="IsPicAreaShowInFrontStage" ColumnName="IsPicAreaShowInFrontStage" />
+                <ScalarProperty Name="IsVideoAreaShowInFrontStage" ColumnName="IsVideoAreaShowInFrontStage" />
+                <ScalarProperty Name="SubItemLinkUrl" ColumnName="SubItemLinkUrl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArticleMultiLang">
+            <EntityTypeMapping TypeName="CmsModel.ArticleMultiLang">
+              <MappingFragment StoreEntitySet="ArticleMultiLang">
+                <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
+                <ScalarProperty Name="CultureName" ColumnName="CultureName" />
+                <ScalarProperty Name="SeqnoForCluster" ColumnName="SeqnoForCluster" />
+                <ScalarProperty Name="ArticleSubject" ColumnName="ArticleSubject" />
+                <ScalarProperty Name="ArticleContext" ColumnName="ArticleContext" />
+                <ScalarProperty Name="ReadCount" ColumnName="ReadCount" />
+                <ScalarProperty Name="IsShowInLang" ColumnName="IsShowInLang" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+                <ScalarProperty Name="Subtitle" ColumnName="Subtitle" />
+                <ScalarProperty Name="PublisherName" ColumnName="PublisherName" />
+                <ScalarProperty Name="TextContext" ColumnName="TextContext" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArticlePicture">
+            <EntityTypeMapping TypeName="CmsModel.ArticlePicture">
+              <MappingFragment StoreEntitySet="ArticlePicture">
+                <ScalarProperty Name="PicId" ColumnName="PicId" />
+                <ScalarProperty Name="SeqnoForCluster" ColumnName="SeqnoForCluster" />
+                <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
+                <ScalarProperty Name="FileSavedName" ColumnName="FileSavedName" />
+                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+                <ScalarProperty Name="SortNo" ColumnName="SortNo" />
+                <ScalarProperty Name="FileMIME" ColumnName="FileMIME" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArticlePictureMultiLang">
+            <EntityTypeMapping TypeName="CmsModel.ArticlePictureMultiLang">
+              <MappingFragment StoreEntitySet="ArticlePictureMultiLang">
+                <ScalarProperty Name="PicId" ColumnName="PicId" />
+                <ScalarProperty Name="CultureName" ColumnName="CultureName" />
+                <ScalarProperty Name="SeqnoForCluster" ColumnName="SeqnoForCluster" />
+                <ScalarProperty Name="PicSubject" ColumnName="PicSubject" />
+                <ScalarProperty Name="IsShowInLang" ColumnName="IsShowInLang" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArticleVideo">
+            <EntityTypeMapping TypeName="CmsModel.ArticleVideo">
+              <MappingFragment StoreEntitySet="ArticleVideo">
+                <ScalarProperty Name="VidId" ColumnName="VidId" />
+                <ScalarProperty Name="SeqnoForCluster" ColumnName="SeqnoForCluster" />
+                <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
+                <ScalarProperty Name="SortNo" ColumnName="SortNo" />
+                <ScalarProperty Name="VidLinkUrl" ColumnName="VidLinkUrl" />
+                <ScalarProperty Name="SourceVideoId" ColumnName="SourceVideoId" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArticleVideoMultiLang">
+            <EntityTypeMapping TypeName="CmsModel.ArticleVideoMultiLang">
+              <MappingFragment StoreEntitySet="ArticleVideoMultiLang">
+                <ScalarProperty Name="VidId" ColumnName="VidId" />
+                <ScalarProperty Name="CultureName" ColumnName="CultureName" />
+                <ScalarProperty Name="SeqnoForCluster" ColumnName="SeqnoForCluster" />
+                <ScalarProperty Name="VidSubject" ColumnName="VidSubject" />
+                <ScalarProperty Name="VidDesc" ColumnName="VidDesc" />
+                <ScalarProperty Name="IsShowInLang" ColumnName="IsShowInLang" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AttachFile">
+            <EntityTypeMapping TypeName="CmsModel.AttachFile">
+              <MappingFragment StoreEntitySet="AttachFile">
+                <ScalarProperty Name="AttId" ColumnName="AttId" />
+                <ScalarProperty Name="SeqnoForCluster" ColumnName="SeqnoForCluster" />
+                <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileSavedName" ColumnName="FileSavedName" />
+                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+                <ScalarProperty Name="SortNo" ColumnName="SortNo" />
+                <ScalarProperty Name="FileMIME" ColumnName="FileMIME" />
+                <ScalarProperty Name="DontDelete" ColumnName="DontDelete" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AttachFileMultiLang">
+            <EntityTypeMapping TypeName="CmsModel.AttachFileMultiLang">
+              <MappingFragment StoreEntitySet="AttachFileMultiLang">
+                <ScalarProperty Name="AttId" ColumnName="AttId" />
+                <ScalarProperty Name="CultureName" ColumnName="CultureName" />
+                <ScalarProperty Name="SeqnoForCluster" ColumnName="SeqnoForCluster" />
+                <ScalarProperty Name="AttSubject" ColumnName="AttSubject" />
+                <ScalarProperty Name="ReadCount" ColumnName="ReadCount" />
+                <ScalarProperty Name="IsShowInLang" ColumnName="IsShowInLang" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BackEndLog">
+            <EntityTypeMapping TypeName="CmsModel.BackEndLog">
+              <MappingFragment StoreEntitySet="BackEndLog">
+                <ScalarProperty Name="Seqno" ColumnName="Seqno" />
+                <ScalarProperty Name="EmpAccount" ColumnName="EmpAccount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OpDate" ColumnName="OpDate" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Department">
+            <EntityTypeMapping TypeName="CmsModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="DeptId" ColumnName="DeptId" />
+                <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+                <ScalarProperty Name="SortNo" ColumnName="SortNo" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee">
+            <EntityTypeMapping TypeName="CmsModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EmpId" ColumnName="EmpId" />
+                <ScalarProperty Name="EmpAccount" ColumnName="EmpAccount" />
+                <ScalarProperty Name="EmpPassword" ColumnName="EmpPassword" />
+                <ScalarProperty Name="EmpName" ColumnName="EmpName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="DeptId" ColumnName="DeptId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="IsAccessDenied" ColumnName="IsAccessDenied" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="OwnerAccount" ColumnName="OwnerAccount" />
+                <ScalarProperty Name="IsEmailConfirmed" ColumnName="IsEmailConfirmed" />
+                <ScalarProperty Name="EmailConfirmKey" ColumnName="EmailConfirmKey" />
+                <ScalarProperty Name="PasswordHashed" ColumnName="PasswordHashed" />
+                <ScalarProperty Name="EmailConfirmKeyDate" ColumnName="EmailConfirmKeyDate" />
+                <ScalarProperty Name="PasswordResetKey" ColumnName="PasswordResetKey" />
+                <ScalarProperty Name="PasswordResetKeyDate" ColumnName="PasswordResetKeyDate" />
+                <ScalarProperty Name="DefaultRandomPassword" ColumnName="DefaultRandomPassword" />
+                <ScalarProperty Name="ThisLoginTime" ColumnName="ThisLoginTime" />
+                <ScalarProperty Name="ThisLoginIP" ColumnName="ThisLoginIP" />
+                <ScalarProperty Name="LastLoginTime" ColumnName="LastLoginTime" />
+                <ScalarProperty Name="LastLoginIP" ColumnName="LastLoginIP" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeRole">
+            <EntityTypeMapping TypeName="CmsModel.EmployeeRole">
+              <MappingFragment StoreEntitySet="EmployeeRole">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleDisplayName" ColumnName="RoleDisplayName" />
+                <ScalarProperty Name="SortNo" ColumnName="SortNo" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeRoleOperationsDesc">
+            <EntityTypeMapping TypeName="CmsModel.EmployeeRoleOperationsDesc">
+              <MappingFragment StoreEntitySet="EmployeeRoleOperationsDesc">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="OpId" ColumnName="OpId" />
+                <ScalarProperty Name="CanRead" ColumnName="CanRead" />
+                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
+                <ScalarProperty Name="CanReadSubItemOfSelf" ColumnName="CanReadSubItemOfSelf" />
+                <ScalarProperty Name="CanEditSubItemOfSelf" ColumnName="CanEditSubItemOfSelf" />
+                <ScalarProperty Name="CanAddSubItemOfSelf" ColumnName="CanAddSubItemOfSelf" />
+                <ScalarProperty Name="CanDelSubItemOfSelf" ColumnName="CanDelSubItemOfSelf" />
+                <ScalarProperty Name="CanReadSubItemOfCrew" ColumnName="CanReadSubItemOfCrew" />
+                <ScalarProperty Name="CanEditSubItemOfCrew" ColumnName="CanEditSubItemOfCrew" />
+                <ScalarProperty Name="CanDelSubItemOfCrew" ColumnName="CanDelSubItemOfCrew" />
+                <ScalarProperty Name="CanReadSubItemOfOthers" ColumnName="CanReadSubItemOfOthers" />
+                <ScalarProperty Name="CanEditSubItemOfOthers" ColumnName="CanEditSubItemOfOthers" />
+                <ScalarProperty Name="CanDelSubItemOfOthers" ColumnName="CanDelSubItemOfOthers" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Keyword">
+            <EntityTypeMapping TypeName="CmsModel.Keyword">
+              <MappingFragment StoreEntitySet="Keyword">
+                <ScalarProperty Name="Seqno" ColumnName="Seqno" />
+                <ScalarProperty Name="CultureName" ColumnName="CultureName" />
+                <ScalarProperty Name="Kw" ColumnName="Kw" />
+                <ScalarProperty Name="UsedCount" ColumnName="UsedCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Operations">
+            <EntityTypeMapping TypeName="CmsModel.Operations">
+              <MappingFragment StoreEntitySet="Operations">
+                <ScalarProperty Name="OpId" ColumnName="OpId" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="OpSubject" ColumnName="OpSubject" />
+                <ScalarProperty Name="LinkUrl" ColumnName="LinkUrl" />
+                <ScalarProperty Name="IsNewWindow" ColumnName="IsNewWindow" />
+                <ScalarProperty Name="IconImageFile" ColumnName="IconImageFile" />
+                <ScalarProperty Name="SortNo" ColumnName="SortNo" />
+                <ScalarProperty Name="IsHideSelf" ColumnName="IsHideSelf" />
+                <ScalarProperty Name="CommonClass" ColumnName="CommonClass" />
+                <ScalarProperty Name="PostAccount" ColumnName="PostAccount" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfAccount" ColumnName="MdfAccount" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+                <ScalarProperty Name="EnglishSubject" ColumnName="EnglishSubject" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SearchDataSource">
+            <EntityTypeMapping TypeName="CmsModel.SearchDataSource">
+              <MappingFragment StoreEntitySet="SearchDataSource">
+                <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
+                <ScalarProperty Name="SubId" ColumnName="SubId" />
+                <ScalarProperty Name="CultureName" ColumnName="CultureName" />
+                <ScalarProperty Name="SeqnoForCluster" ColumnName="SeqnoForCluster" />
+                <ScalarProperty Name="ArticleSubject" ColumnName="ArticleSubject" />
+                <ScalarProperty Name="ArticleContext" ColumnName="ArticleContext" />
+                <ScalarProperty Name="ReadCount" ColumnName="ReadCount" />
+                <ScalarProperty Name="LinkUrl" ColumnName="LinkUrl" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="BreadcrumbData" ColumnName="BreadcrumbData" />
+                <ScalarProperty Name="Lv1ArticleId" ColumnName="Lv1ArticleId" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="MdfDate" ColumnName="MdfDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spSearchDataSource_Build" FunctionName="CmsModel.Store.spSearchDataSource_Build" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -53,7 +53,7 @@
                     <td>
                         <small><asp:Literal ID="ltrUtilityVersion" runat="server"></asp:Literal></small>
                     </td>
-                    <th><small>Common.DataAccess Ver.</small></th>
+                    <th><small>Common.DataAccess.EF Ver.</small></th>
                     <td>
                         <small><asp:Literal ID="ltrDataAccessVersion" runat="server"></asp:Literal></small>
                     </td>

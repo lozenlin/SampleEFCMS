@@ -58,7 +58,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Common.DataAccess Ver.</th>
+                        <th>Common.DataAccess.EF Ver.</th>
                         <td>
                             <asp:Literal ID="ltrDataAccessVersion" runat="server"></asp:Literal>
                         </td>

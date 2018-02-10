@@ -118,7 +118,7 @@ public partial class Sitemap : FrontendBasePage
             System.Reflection.Assembly asmLogicObject = System.Reflection.Assembly.Load("Common.LogicObject");
             ltrLogicObjectVersion.Text = asmLogicObject.GetName().Version.ToString();
 
-            System.Reflection.Assembly asmDataAccess = System.Reflection.Assembly.Load("Common.DataAccess");
+            System.Reflection.Assembly asmDataAccess = System.Reflection.Assembly.Load("Common.DataAccess.EF");
             ltrDataAccessVersion.Text = asmDataAccess.GetName().Version.ToString();
 
             System.Reflection.Assembly asmUtility = System.Reflection.Assembly.Load("Common.Utility");

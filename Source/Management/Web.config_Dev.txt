@@ -2,6 +2,8 @@
 <configuration>
   <configSections>
     <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net"/>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
   </configSections>
   <appSettings>
     <!-- 設定可以在後台編輯的語言版本 -->
@@ -11,6 +13,7 @@
     <add key="PswSalt2" value="your2"/>
   </appSettings>
   <connectionStrings>
+    <add name="CmsContext" connectionString="metadata=res://*/Model.Cms.csdl|res://*/Model.Cms.ssdl|res://*/Model.Cms.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=.\sqlexpress2012;initial catalog=SampleEFCMS;user id=cmsDev;password=yourpassword;MultipleActiveResultSets=True;App=SampleEFCMSBackEnd&quot;" providerName="System.Data.EntityClient" />
     <add name="DBConnString" connectionString="Data Source=.\sqlexpress2012;User ID=cmsDev;PWD=yourpassword;Initial Catalog=SampleEFCMS;Application Name=SampleEFCMSBackEnd;"/>
   </connectionStrings>
   <!--驗證碼圖片不用驗證-->
@@ -107,4 +110,14 @@
       <appender-ref ref="RollingFileAppender"/>
     </root>
   </log4net>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
+      <parameters>
+        <parameter value="mssqllocaldb" />
+      </parameters>
+    </defaultConnectionFactory>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
 </configuration>

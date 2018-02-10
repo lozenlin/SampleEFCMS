@@ -18,6 +18,8 @@
 /Source/Management/Bin/Common.LogicObject.dll
 /Source/Management/Bin/Common.Utility.dll
 /Source/Management/Bin/Common.DataAccess.dll
+/Source/Management/Bin/Common.DataAccess.EF.pdb
+/Source/Management/Bin/Common.DataAccess.EF.dll
 /Source/Management/UserFiles/*
 /Source/Management/Attachments/*
 /Source/Management/loop_routemap201606.pdf
@@ -29,3 +31,8 @@
 /Source/Root/Bin/Common.LogicObject.dll
 /Source/Root/Bin/Common.Utility.dll
 /Source/Root/Bin/Common.DataAccess.dll
+/Source/Root/Bin/Common.DataAccess.EF.dll
+/Source/Root/Bin/Common.DataAccess.EF.pdb
+/Source/Common/Common.DataAccess.EF/obj
+/Source/Common/Common.DataAccess.EF/bin
+/Source/packages
