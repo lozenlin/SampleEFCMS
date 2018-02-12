@@ -152,6 +152,15 @@ namespace Common.DataAccess.EF
             {
                 Logger.Error("", ex);
                 errMsg = ex.Message;
+                System.Data.SqlClient.SqlException sqlex = ex.GetBaseException() as System.Data.SqlClient.SqlException;
+
+                if (sqlex != null)
+                {
+                    errMsg = sqlex.Message;
+                    sqlErrNumber = sqlex.Number;
+                    sqlErrState = sqlex.State;
+                }
+
                 return false;
             }
 
@@ -168,6 +177,15 @@ namespace Common.DataAccess.EF
             {
                 Logger.Error("", ex);
                 errMsg = ex.Message;
+                System.Data.SqlClient.SqlException sqlex = ex.GetBaseException() as System.Data.SqlClient.SqlException;
+
+                if (sqlex != null)
+                {
+                    errMsg = sqlex.Message;
+                    sqlErrNumber = sqlex.Number;
+                    sqlErrState = sqlex.State;
+                }
+
                 return false;
             }
 
