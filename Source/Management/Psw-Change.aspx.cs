@@ -312,9 +312,9 @@ public partial class Psw_Change : System.Web.UI.Page
         empAuth.UpdateEmployeeLoginInfo(txtAccount.Text, c.GetClientIP());
 
         //確認可登入後,取得員工資料
-        DataSet dsEmp = empAuth.GetEmployeeData(txtAccount.Text);
+        EmployeeForBackend emp = empAuth.GetEmployeeData(txtAccount.Text);
 
-        if (dsEmp == null)
+        if (emp == null && empAuth.GetDbErrMsg() != "")
         {
             //異常錯誤
             Master.ShowErrorMsg(string.Format("{0}: {1}", Resources.Lang.ErrMsg_Exception, empAuth.GetDbErrMsg()));
@@ -328,10 +328,9 @@ public partial class Psw_Change : System.Web.UI.Page
             return;
         }
 
-        DataRow drEmp = dsEmp.Tables[0].Rows[0];
-        string empAccount = drEmp.ToSafeStr("EmpAccount");
-        string empName = drEmp.ToSafeStr("EmpName");
-        string email = drEmp.ToSafeStr("Email");
+        string empAccount = emp.EmpAccount;
+        string empName = emp.EmpName;
+        string email = emp.Email;
 
         bool result = empAuth.UpdateEmployeePassword(empAccount, HashUtility.GetPasswordHash(txtNewPsw.Text));
 

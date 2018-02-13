@@ -459,42 +459,33 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得員工資料
         /// </summary>
-        public DataSet GetEmployeeData(string empAccount)
+        public EmployeeForBackend GetEmployeeData(string empAccount)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_GetData cmdInfo = new spEmployee_GetData()
+            EmployeeForBackend entity = null;
+
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                EmpAccount = empAccount
-            };
+                entity = empAuthDao.GetEmployeeDataForBackend(empAccount);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-
-            return ds;
+            return entity;
         }
 
         /// <summary>
         /// 取得員工資料
         /// </summary>
-        public DataSet GetEmployeeData(int empId)
+        public EmployeeForBackend GetEmployeeData(int empId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_GetAccountOfId cmdInfo = new spEmployee_GetAccountOfId()
-            {
-                EmpId = empId
-            };
+            EmployeeForBackend entity = null;
 
-            string errCode = "-1";
-            string empAccount = cmd.ExecuteScalar<string>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
-
-            DataSet ds = null;
-            if (empAccount != errCode)
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                ds = GetEmployeeData(empAccount);
+                entity = empAuthDao.GetEmployeeDataForBackend(empId);
+                dbErrMsg = empAuthDao.GetErrMsg();
             }
 
-            return ds;
+            return entity;
         }
 
         /// <summary>

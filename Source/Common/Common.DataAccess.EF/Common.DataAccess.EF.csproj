@@ -120,6 +120,7 @@
     <Compile Include="Model\Employee.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\EmployeeForBackend.cs" />
     <Compile Include="Model\EmployeeRole.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>

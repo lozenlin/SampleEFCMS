@@ -186,9 +186,9 @@ public partial class Login : System.Web.UI.Page
         empAuth.UpdateEmployeeLoginInfo(txtAccount.Text, c.GetClientIP());
 
         //確認可登入後,取得員工資料
-        DataSet dsEmp = empAuth.GetEmployeeData(txtAccount.Text);
+        EmployeeForBackend emp = empAuth.GetEmployeeData(txtAccount.Text);
 
-        if (dsEmp == null)
+        if (emp == null && empAuth.GetDbErrMsg() != "")
         {
             //異常錯誤
             ShowErrorMsg(string.Format("{0}: {1}", Resources.Lang.ErrMsg_Exception, empAuth.GetDbErrMsg()));
@@ -207,35 +207,33 @@ public partial class Login : System.Web.UI.Page
         //清除登入失敗次數
         c.seLoginFailedCount = 0;
 
-        DataRow drEmp = dsEmp.Tables[0].Rows[0];
-
         DateTime 
             thisLoginTime = DateTime.MinValue,
             lastLoginTime = DateTime.MinValue;
 
-        if (!Convert.IsDBNull(drEmp["ThisLoginTime"]))
-            thisLoginTime = Convert.ToDateTime(drEmp["ThisLoginTime"]);
+        if (emp.ThisLoginTime.HasValue)
+            thisLoginTime = emp.ThisLoginTime.Value;
 
-        if (!Convert.IsDBNull(drEmp["LastLoginTime"]))
-            lastLoginTime = Convert.ToDateTime(drEmp["LastLoginTime"]);
+        if (emp.LastLoginTime.HasValue)
+            lastLoginTime = emp.LastLoginTime.Value;
 
         LoginEmployeeData loginEmpData = new LoginEmployeeData()
         {
-            EmpId = Convert.ToInt32(drEmp["EmpId"]),
-            EmpName = drEmp.ToSafeStr("EmpName"),
-            Email = drEmp.ToSafeStr("Email"),
-            DeptId = Convert.ToInt32(drEmp["DeptId"]),
-            DeptName = drEmp.ToSafeStr("DeptName"),
-            RoleId = Convert.ToInt32(drEmp["RoleId"]),
-            RoleName = drEmp.ToSafeStr("RoleName"),
-            RoleDisplayName = drEmp.ToSafeStr("RoleDisplayName"),
-            StartDate = Convert.ToDateTime(drEmp["StartDate"]),
-            EndDate = Convert.ToDateTime(drEmp["EndDate"]),
-            EmpAccount = drEmp.ToSafeStr("EmpAccount"),
+            EmpId = emp.EmpId,
+            EmpName = emp.EmpName,
+            Email = emp.Email,
+            DeptId = emp.DeptId,
+            DeptName = emp.DeptName,
+            RoleId = emp.RoleId,
+            RoleName = emp.RoleName,
+            RoleDisplayName = emp.RoleDisplayName,
+            StartDate = emp.StartDate.Value,
+            EndDate = emp.EndDate.Value,
+            EmpAccount = emp.EmpAccount,
             ThisLoginTime = thisLoginTime,
-            ThisLoginIP = drEmp.ToSafeStr("ThisLoginIP"),
+            ThisLoginIP = emp.ThisLoginIP,
             LastLoginTime = lastLoginTime,
-            LastLoginIP = drEmp.ToSafeStr("LastLoginIP")
+            LastLoginIP = emp.LastLoginIP
         };
         c.SaveLoginEmployeeDataIntoSession(loginEmpData);
 

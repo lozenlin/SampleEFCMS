@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace Common.DataAccess.EF
 {
@@ -31,11 +32,11 @@ namespace Common.DataAccess.EF
         /// </summary>
         public EmployeeToLogin GetEmployeeDataToLogin(string empAccount)
         {
-            EmployeeToLogin result = null;
+            EmployeeToLogin entity = null;
 
             try
             {
-                result = (from emp in cmsCtx.Employee
+                entity = (from emp in cmsCtx.Employee
                           from role in cmsCtx.EmployeeRole
                           where emp.RoleId == role.RoleId
                              && emp.EmpAccount == empAccount
@@ -56,7 +57,67 @@ namespace Common.DataAccess.EF
                 return null;
             }
 
-            return result;
+            return entity;
+        }
+
+        /// <summary>
+        /// 取得後台用員工資料
+        /// </summary>
+        public EmployeeForBackend GetEmployeeDataForBackend(string empAccount)
+        {
+            EmployeeForBackend entity = null;
+
+            try
+            {
+                Employee employee = cmsCtx.Employee
+                    .Include(emp => emp.EmployeeRole)
+                    .Include(emp => emp.Department)
+                    .Where(emp => emp.EmpAccount == empAccount)
+                    .FirstOrDefault();
+
+                entity = new EmployeeForBackend(employee);
+                entity.OwnerDeptId = cmsCtx.Employee.Where(emp => emp.EmpAccount == entity.OwnerAccount)
+                    .Select(emp => emp.DeptId)
+                    .FirstOrDefault() ?? 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
+        }
+
+        /// <summary>
+        /// 取得後台用員工資料
+        /// </summary>
+        public EmployeeForBackend GetEmployeeDataForBackend(int empId)
+        {
+            EmployeeForBackend entity = null;
+
+            try
+            {
+                Employee employee = cmsCtx.Employee
+                    .Include(emp => emp.EmployeeRole)
+                    .Include(emp => emp.Department)
+                    .Where(emp => emp.EmpId == empId)
+                    .FirstOrDefault();
+
+                entity = new EmployeeForBackend(employee);
+                entity.OwnerDeptId = cmsCtx.Employee.Where(emp => emp.EmpAccount == entity.OwnerAccount)
+                    .Select(emp => emp.DeptId)
+                    .FirstOrDefault() ?? 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -72,9 +73,9 @@ public partial class Psw_Require : System.Web.UI.Page
         txtEmail.Text = txtEmail.Text.Trim();
         
         // check account
-        DataSet dsEmp = empAuth.GetEmployeeData(txtAccount.Text);
+        EmployeeForBackend emp = empAuth.GetEmployeeData(txtAccount.Text);
 
-        if (dsEmp == null || dsEmp.Tables[0].Rows.Count == 0)
+        if (emp == null)
         {
             Master.ShowErrorMsg(ACCOUNT_FAILED_ERRMSG);
             //新增後端操作記錄
@@ -87,17 +88,15 @@ public partial class Psw_Require : System.Web.UI.Page
             return;
         }
 
-        DataRow drEmpVerify = dsEmp.Tables[0].Rows[0];
-
         //擋 role-guest
-        if (drEmpVerify.ToSafeStr("RoleName") == "guest")
+        if (emp.RoleName == "guest")
         {
             Master.ShowErrorMsg(Resources.Lang.ErrMsg_RoleGuestIsNotAllowedToUse);
             return;
         }
 
         //檢查是否停權
-        if (Convert.ToBoolean(drEmpVerify["IsAccessDenied"]))
+        if (emp.IsAccessDenied)
         {
             Master.ShowErrorMsg(Resources.Lang.ErrMsg_AccountUnavailable);
             //新增後端操作記錄
@@ -113,8 +112,8 @@ public partial class Psw_Require : System.Web.UI.Page
         //檢查上架日期
         if (string.Compare(txtAccount.Text, "admin", true) != 0)    // 不檢查帳號 admin
         {
-            DateTime startDate = Convert.ToDateTime(drEmpVerify["StartDate"]).Date;
-            DateTime endDate = Convert.ToDateTime(drEmpVerify["EndDate"]).Date;
+            DateTime startDate = emp.StartDate.Value.Date;
+            DateTime endDate = emp.EndDate.Value.Date;
             DateTime today = DateTime.Today;
 
             if (today < startDate || endDate < today)
@@ -131,10 +130,9 @@ public partial class Psw_Require : System.Web.UI.Page
             }
         }
 
-        DataRow drEmp = dsEmp.Tables[0].Rows[0];
-        string empAccount = drEmp.ToSafeStr("EmpAccount");
-        string empName = drEmp.ToSafeStr("EmpName");
-        string email = drEmp.ToSafeStr("Email");
+        string empAccount = emp.EmpAccount;
+        string empName = emp.EmpName;
+        string email = emp.Email;
 
         // check email
         if (string.Compare(txtEmail.Text, email, true) != 0)

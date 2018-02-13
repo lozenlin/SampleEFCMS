@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -151,39 +152,38 @@ public partial class Account_Config : System.Web.UI.Page
 
         if (c.qsAct == ConfigFormAction.edit)
         {
-            DataSet dsAccount = empAuth.GetEmployeeData(c.qsEmpId);
+            EmployeeForBackend account = empAuth.GetEmployeeData(c.qsEmpId);
 
-            if (dsAccount != null && dsAccount.Tables[0].Rows.Count > 0)
+            if (account != null)
             {
-                DataRow drFirst = dsAccount.Tables[0].Rows[0];
-                string empAccount = drFirst.ToSafeStr("EmpAccount");
+                string empAccount = account.EmpAccount;
 
                 //account
-                txtEmpAccount.Text = drFirst.ToSafeStr("EmpAccount");
+                txtEmpAccount.Text = account.EmpAccount;
                 txtEmpAccount.Enabled = false;
 
                 //name
-                txtEmpName.Text = drFirst.ToSafeStr("EmpName");
+                txtEmpName.Text = account.EmpName;
 
                 //password
                 rfvPsw.Enabled = false;
-                hidEmpPasswordOri.Text = drFirst.ToSafeStr("EmpPassword");
-                hidPasswordHashed.Text = drFirst.ToSafeStr("PasswordHashed");
-                hidDefaultRandomPassword.Text = drFirst.ToSafeStr("DefaultRandomPassword");
+                hidEmpPasswordOri.Text = account.EmpPassword;
+                hidPasswordHashed.Text = account.PasswordHashed.ToString();
+                hidDefaultRandomPassword.Text = account.DefaultRandomPassword;
 
                 //email
-                txtEmail.Text = drFirst.ToSafeStr("Email");
+                txtEmail.Text = account.Email;
 
                 //remarks
-                txtRemarks.Text = drFirst.ToSafeStr("Remarks");
+                txtRemarks.Text = account.Remarks;
 
                 // is access denied
-                chkIsAccessDenied.Checked = Convert.ToBoolean(drFirst["IsAccessDenied"]);
+                chkIsAccessDenied.Checked = account.IsAccessDenied;
                 ltrIsAccessDenied.Text = chkIsAccessDenied.Checked ? Resources.Lang.Account_IsAccessDenied_Checked : Resources.Lang.Account_IsAccessDenied_Unchecked;
 
                 //valid date
-                txtStartDate.Text = string.Format("{0:yyyy-MM-dd}", drFirst["StartDate"]);
-                txtEndDate.Text = string.Format("{0:yyyy-MM-dd}", drFirst["EndDate"]);
+                txtStartDate.Text = string.Format("{0:yyyy-MM-dd}", account.StartDate.Value);
+                txtEndDate.Text = string.Format("{0:yyyy-MM-dd}", account.EndDate.Value);
                 ltrDateRange.Text = txtStartDate.Text + " ~ " + txtEndDate.Text;
 
                 if (empAccount == "admin")
@@ -192,29 +192,29 @@ public partial class Account_Config : System.Web.UI.Page
                 }
 
                 //department
-                ddlDept.SelectedValue = drFirst.ToSafeStr("DeptId");
+                ddlDept.SelectedValue = account.DeptId.ToString();
                 if (ddlDept.SelectedItem != null)
                     ltrDept.Text = ddlDept.SelectedItem.Text;
 
                 //role
-                curRoleId = Convert.ToInt32(drFirst["RoleId"]);
+                curRoleId = account.RoleId;
                 ddlRoles.SelectedValue = curRoleId.ToString();
-                ltrRoles.Text = drFirst.ToSafeStr("RoleDisplayText");
+                ltrRoles.Text = account.RoleDisplayText;
 
                 //owner
-                txtOwnerAccount.Text = drFirst.ToSafeStr("OwnerAccount");
+                txtOwnerAccount.Text = account.OwnerAccount;
                 ltrOwnerAccount.Text = txtOwnerAccount.Text;
 
-                isOwner = empAuth.CanEditThisPage(false, drFirst.ToSafeStr("OwnerAccount"), Convert.ToInt32(drFirst["OwnerDeptId"]));
+                isOwner = empAuth.CanEditThisPage(false, account.OwnerAccount, account.OwnerDeptId);
 
                 //modification info
-                ltrPostAccount.Text = drFirst.ToSafeStr("PostAccount");
-                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["PostDate"]);
+                ltrPostAccount.Text = account.PostAccount;
+                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", account.PostDate.Value);
 
-                if (!Convert.IsDBNull(drFirst["MdfDate"]))
+                if (account.MdfDate.HasValue)
                 {
-                    ltrMdfAccount.Text = drFirst.ToSafeStr("MdfAccount");
-                    ltrMdfDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["MdfDate"]);
+                    ltrMdfAccount.Text = account.MdfAccount;
+                    ltrMdfDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", account.MdfDate.Value);
                 }
 
                 btnSave.Visible = true; 
