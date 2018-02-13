@@ -1,11 +1,11 @@
 ﻿// ===============================================================================
-// ArticlePublisherLogic of SampleCMS
-// https://github.com/lozenlin/SampleCMS
+// ArticlePublisherLogic of SampleEFCMS
+// https://github.com/lozenlin/SampleEFCMS
 //
 // ArticlePublisherLogic.cs
 //
 // ===============================================================================
-// Copyright (c) 2017 lozenlin
+// Copyright (c) 2018 lozenlin
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // ===============================================================================
 

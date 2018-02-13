@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -189,9 +190,9 @@ public partial class Psw_Change : System.Web.UI.Page
         if (string.IsNullOrEmpty(hidEmpAccountOfToken.Text))
         {
             //登入驗證
-            DataSet dsEmpVerify = empAuth.GetEmployeeDataToLogin(txtAccount.Text);
+            EmployeeToLogin empVerify = empAuth.GetEmployeeDataToLogin(txtAccount.Text);
 
-            if (dsEmpVerify == null)
+            if (empVerify == null && empAuth.GetDbErrMsg() != "")
             {
                 //異常錯誤
                 Master.ShowErrorMsg(string.Format("{0}: {1}", Resources.Lang.ErrMsg_Exception, empAuth.GetDbErrMsg()));
@@ -206,7 +207,7 @@ public partial class Psw_Change : System.Web.UI.Page
             }
 
             //判斷是否有資料
-            if (dsEmpVerify.Tables[0].Rows.Count == 0)
+            if (empVerify == null)
             {
                 //沒資料
                 Master.ShowErrorMsg(ACCOUNT_FAILED_ERRMSG);
@@ -221,10 +222,9 @@ public partial class Psw_Change : System.Web.UI.Page
             }
 
             //有資料
-            DataRow drEmpVerify = dsEmpVerify.Tables[0].Rows[0];
 
             //擋 role-guest
-            if (drEmpVerify.ToSafeStr("RoleName") == "guest")
+            if (empVerify.RoleName == "guest")
             {
                 Master.ShowErrorMsg(Resources.Lang.ErrMsg_RoleGuestIsNotAllowedToUse);
                 return;
@@ -232,10 +232,10 @@ public partial class Psw_Change : System.Web.UI.Page
 
             //檢查密碼
             string passwordHash = HashUtility.GetPasswordHash(txtPassword.Text);
-            string empPassword = drEmpVerify.ToSafeStr("EmpPassword");
+            string empPassword = empVerify.EmpPassword;
             bool isPasswordCorrect = false;
 
-            if (Convert.ToBoolean(drEmpVerify["PasswordHashed"]))
+            if (empVerify.PasswordHashed)
             {
                 isPasswordCorrect = (passwordHash == empPassword);
             }
@@ -258,7 +258,7 @@ public partial class Psw_Change : System.Web.UI.Page
             }
 
             //檢查是否停權
-            if (Convert.ToBoolean(drEmpVerify["IsAccessDenied"]))
+            if (empVerify.IsAccessDenied)
             {
                 Master.ShowErrorMsg(Resources.Lang.ErrMsg_AccountUnavailable);
                 //新增後端操作記錄
@@ -274,8 +274,8 @@ public partial class Psw_Change : System.Web.UI.Page
             //檢查上架日期
             if (string.Compare(txtAccount.Text, "admin", true) != 0)    // 不檢查帳號 admin
             {
-                DateTime startDate = Convert.ToDateTime(drEmpVerify["StartDate"]).Date;
-                DateTime endDate = Convert.ToDateTime(drEmpVerify["EndDate"]).Date;
+                DateTime startDate = empVerify.StartDate.Value.Date;
+                DateTime endDate = empVerify.EndDate.Value.Date;
                 DateTime today = DateTime.Today;
 
                 if (today < startDate || endDate < today)

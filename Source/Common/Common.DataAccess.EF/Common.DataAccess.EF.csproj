@@ -55,7 +55,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArticlePublisherDataAccess.cs" />
     <Compile Include="DataAccessBase.cs" />
+    <Compile Include="EmployeeAuthorityDataAccess.cs" />
+    <Compile Include="EntityRequiredPropValues\ArticleMultiLangRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\ArticlePictureMultiLangRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\ArticlePictureRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\ArticleRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\ArticleVideoMultiLangRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\ArticleVideoRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\AttachFileMultiLangRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\AttachFileRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\DepartmentRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\EmployeeRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\EmployeeRoleOperationsDescRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\EmployeeRoleRequiredPropValues.cs" />
+    <Compile Include="EntityRequiredPropValues\OperationsRequiredPropValues.cs" />
     <Compile Include="InsertResult.cs" />
     <Compile Include="Model\Article.cs">
       <DependentUpon>Cms.tt</DependentUpon>
@@ -111,6 +126,7 @@
     <Compile Include="Model\EmployeeRoleOperationsDesc.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\EmployeeToLogin.cs" />
     <Compile Include="Model\Interfaces.cs" />
     <Compile Include="Model\Keyword.cs">
       <DependentUpon>Cms.tt</DependentUpon>
@@ -134,7 +150,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="QueryParam\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Model\Cms.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

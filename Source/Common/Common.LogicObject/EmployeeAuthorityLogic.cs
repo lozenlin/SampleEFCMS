@@ -1,22 +1,25 @@
 ﻿// ===============================================================================
-// EmployeeAuthorityLogic of SampleCMS
-// https://github.com/lozenlin/SampleCMS
+// EmployeeAuthorityLogic of SampleEFCMS
+// https://github.com/lozenlin/SampleEFCMS
 //
 // EmployeeAuthorityLogic.cs
 //
 // ===============================================================================
-// Copyright (c) 2017 lozenlin
+// Copyright (c) 2018 lozenlin
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // ===============================================================================
 
 using Common.DataAccess;
 using Common.DataAccess.EmployeeAuthority;
+using Common.DataAccess.EF;
+using Common.DataAccess.EF.Model;
 using log4net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using Common.DataAccess.EF.EntityRequiredPropValues;
 
 namespace Common.LogicObject
 {
@@ -381,18 +384,23 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertBackEndLogData(BackEndLogData data)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spBackEndLog_InsertData cmdInfo = new spBackEndLog_InsertData()
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
+
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                EmpAccount = data.EmpAccount,
-                Description = data.Description,
-                IP = data.IP
-            };
+                insResult = empAuthDao.Insert<BackEndLog>(new BackEndLog()
+                {
+                    EmpAccount = data.EmpAccount,
+                    Description = data.Description,
+                    IP = data.IP,
+                    OpDate = DateTime.Now
+                });
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                dbErrMsg = empAuthDao.GetErrMsg();
 
-            return result;
+            }
+
+            return insResult.IsSuccess;
         }
 
         /// <summary>
@@ -435,18 +443,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得員工登入用資料
         /// </summary>
-        public DataSet GetEmployeeDataToLogin(string empAccount)
+        public EmployeeToLogin GetEmployeeDataToLogin(string empAccount)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_GetDataToLogin cmdInfo = new spEmployee_GetDataToLogin()
+            EmployeeToLogin entity = null;
+
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                EmpAccount = empAccount
-            };
+                entity = empAuthDao.GetEmployeeDataToLogin(empAccount);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-
-            return ds;
+            return entity;
         }
 
         /// <summary>
@@ -518,14 +525,21 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateEmployeeLoginInfo(string empAccount, string thisLoginIP)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_UpdateLoginInfo cmdInfo = new spEmployee_UpdateLoginInfo()
+            bool result = false;
+
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                EmpAccount = empAccount,
-                ThisLoginIP = thisLoginIP
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                Employee entity = empAuthDao.Get<Employee>(emp => emp.EmpAccount == empAccount);
+
+                //備份上次的登入資訊,記錄這次的
+                entity.LastLoginTime = entity.ThisLoginTime;
+                entity.LastLoginIP = entity.ThisLoginIP;
+                entity.ThisLoginTime = DateTime.Now;
+                entity.ThisLoginIP = thisLoginIP;
+
+                result = empAuthDao.Update();
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }

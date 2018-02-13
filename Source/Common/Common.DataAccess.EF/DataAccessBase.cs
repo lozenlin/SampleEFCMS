@@ -1,4 +1,15 @@
-﻿using System;
+﻿// ===============================================================================
+// DataAccessBase of SampleEFCMS
+// https://github.com/lozenlin/SampleEFCMS
+//
+// DataAccessBase.cs
+//
+// ===============================================================================
+// Copyright (c) 2018 lozenlin
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// ===============================================================================
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -168,17 +179,56 @@ namespace Common.DataAccess.EF
 
         public TEntity Get<TEntity>(params object[] pkValues) where TEntity :class
         {
-            return cmsCtx.Set<TEntity>().Find(pkValues);
+            TEntity entity = null;
+
+            try
+            {
+                entity = cmsCtx.Set<TEntity>().Find(pkValues);
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
         }
 
         public TEntity Get<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
-            return cmsCtx.Set<TEntity>().FirstOrDefault(predicate);
+            TEntity entity = null;
+
+            try
+            {
+                entity = cmsCtx.Set<TEntity>().FirstOrDefault(predicate);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
         }
 
         public List<TEntity> GetList<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
-            return cmsCtx.Set<TEntity>().Where(predicate).ToList();
+            List<TEntity> entities = new List<TEntity>();
+
+            try
+            {
+                entities = cmsCtx.Set<TEntity>().Where(predicate).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
         }
 
         public int GetCount<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
