@@ -133,6 +133,8 @@
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\ModelExtension.cs" />
+    <Compile Include="Model\OperationForBackend.cs" />
+    <Compile Include="Model\OperationOpInfo.cs" />
     <Compile Include="Model\Operations.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>

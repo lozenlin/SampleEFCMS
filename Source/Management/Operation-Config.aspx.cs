@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -104,20 +105,18 @@ public partial class Operation_Config : System.Web.UI.Page
     {
         if (c.qsAct == ConfigFormAction.edit)
         {
-            DataSet dsOp = empAuth.GetOperationData(c.qsId);
+            OperationForBackend op = empAuth.GetOperationData(c.qsId);
 
-            if (dsOp != null && dsOp.Tables[0].Rows.Count > 0)
+            if (op != null)
             {
-                DataRow drFirst = dsOp.Tables[0].Rows[0];
-
-                txtSortNo.Text = drFirst.ToSafeStr("SortNo");
-                txtOpSubject.Text = drFirst.ToSafeStr("OpSubject");
-                txtEnglishSubject.Text = drFirst.ToSafeStr("EnglishSubject");
-                txtIconImageFile.Text = drFirst.ToSafeStr("IconImageFile");
-                txtLinkUrl.Text = drFirst.ToSafeStr("LinkUrl");
-                chkIsNewWindow.Checked = Convert.ToBoolean(drFirst["IsNewWindow"]);
-                chkIsHideSelf.Checked = Convert.ToBoolean(drFirst["IsHideSelf"]);
-                txtCommonClass.Text = drFirst.ToSafeStr("CommonClass");
+                txtSortNo.Text = op.SortNo.Value.ToString();
+                txtOpSubject.Text = op.OpSubject;
+                txtEnglishSubject.Text = op.EnglishSubject;
+                txtIconImageFile.Text = op.IconImageFile;
+                txtLinkUrl.Text = op.LinkUrl;
+                chkIsNewWindow.Checked = op.IsNewWindow;
+                chkIsHideSelf.Checked = op.IsHideSelf;
+                txtCommonClass.Text = op.CommonClass;
 
                 if (txtCommonClass.Text != "")
                 {
@@ -125,13 +124,13 @@ public partial class Operation_Config : System.Web.UI.Page
                 }
 
                 //modification info
-                ltrPostAccount.Text = drFirst.ToSafeStr("PostAccount");
-                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["PostDate"]);
+                ltrPostAccount.Text = op.PostAccount;
+                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", op.PostDate.Value);
 
-                if (!Convert.IsDBNull(drFirst["MdfDate"]))
+                if (op.MdfDate.HasValue)
                 {
-                    ltrMdfAccount.Text = drFirst.ToSafeStr("MdfAccount");
-                    ltrMdfDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["MdfDate"]);
+                    ltrMdfAccount.Text = op.MdfAccount;
+                    ltrMdfDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", op.MdfDate.Value);
                 }
 
                 btnSave.Visible = true;

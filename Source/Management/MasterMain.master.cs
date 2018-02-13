@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -113,15 +114,12 @@ public partial class MasterMain : System.Web.UI.MasterPage
     private void DisplayOpMenu()
     {
         // get opId of article management
-        DataSet dsOpInfo = empAuth.GetOperationOpInfoByCommonClass("ArticleCommonOfBackend");
+        OperationOpInfo opInfo = empAuth.GetOperationOpInfoByCommonClass("ArticleCommonOfBackend");
 
-        if (dsOpInfo != null && dsOpInfo.Tables[0].Rows.Count > 0)
+        if (opInfo != null)
         {
-            DataRow drFirst = dsOpInfo.Tables[0].Rows[0];
-
-            opIdOfArticleMgmt = Convert.ToInt32(drFirst["OpId"]);
+            opIdOfArticleMgmt = opInfo.OpId;
         }
-
 
         DataSet dsTopList = empAuth.GetOperationsTopListWithRoleAuth(c.GetRoleName());
         DataSet dsSubList = empAuth.GetOperationsSubListWithRoleAuth(c.GetRoleName());

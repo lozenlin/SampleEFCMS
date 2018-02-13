@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -378,40 +379,38 @@ public partial class Operation_Node : BasePage
             PropertyDivider.Visible = false;
         }
 
-        DataSet dsOp = empAuth.GetOperationData(c.qsId);
+        OperationForBackend op = empAuth.GetOperationData(c.qsId);
 
-        if (dsOp != null && dsOp.Tables[0].Rows.Count > 0)
+        if (op != null)
         {
-            DataRow drFirst = dsOp.Tables[0].Rows[0];
-
-            string iconImageFile = drFirst.ToSafeStr("IconImageFile");
+            string iconImageFile = op.IconImageFile;
 
             if (iconImageFile != "")
             {
                 imgIcon.Src = "BPimages/icon/" + iconImageFile;
             }
 
-            ltrLinkUrl.Text = drFirst.ToSafeStr("LinkUrl");
+            ltrLinkUrl.Text = op.LinkUrl;
 
-            bool isNewWindow = Convert.ToBoolean(drFirst["IsNewWindow"]);
+            bool isNewWindow = op.IsNewWindow;
             ltrIsNewWindow.Text = isNewWindow ? Resources.Lang.IsNewWindow_Yes : Resources.Lang.IsNewWindow_No;
 
-            bool isHideSelf = Convert.ToBoolean(drFirst["IsHideSelf"]);
+            bool isHideSelf = op.IsHideSelf;
             ltrIsHideSelf.Text = isHideSelf ? Resources.Lang.IsHideSelf_Hide : Resources.Lang.IsHideSelf_Show;
 
-            ltrCommonClass.Text = drFirst.ToSafeStr("CommonClass");
+            ltrCommonClass.Text = op.CommonClass;
 
-            string mdfAccount = drFirst.ToSafeStr("mdfAccount");
+            string mdfAccount = op.MdfAccount;
             DateTime mdfDate;
 
-            if (Convert.IsDBNull(drFirst["MdfDate"]))
+            if (!op.MdfDate.HasValue)
             {
-                mdfAccount = drFirst.ToSafeStr("PostAccount");
-                mdfDate = Convert.ToDateTime(drFirst["PostDate"]);
+                mdfAccount = op.PostAccount;
+                mdfDate = op.PostDate.Value;
             }
             else
             {
-                mdfDate = Convert.ToDateTime(drFirst["MdfDate"]);
+                mdfDate = op.MdfDate.Value;
             }
 
             ltrMdfAccount.Text = mdfAccount;

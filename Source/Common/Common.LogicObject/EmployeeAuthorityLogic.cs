@@ -702,17 +702,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 用共用元件類別名稱取得後端作業選項資訊
         /// </summary>
-        public DataSet GetOperationOpInfoByCommonClass(string commonClass)
+        public OperationOpInfo GetOperationOpInfoByCommonClass(string commonClass)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_GetOpInfoByCommonClass cmdInfo = new spOperations_GetOpInfoByCommonClass()
-            {
-                CommonClass = commonClass
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            OperationOpInfo entity = null;
 
-            return ds;
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entity = empAuthDao.GetOperationOpInfoByCommonClass(commonClass);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
+
+            return entity;
         }
 
         /// <summary>
@@ -750,17 +750,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後端作業選項資料
         /// </summary>
-        public DataSet GetOperationData(int opId)
+        public OperationForBackend GetOperationData(int opId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_GetData cmdInfo = new spOperations_GetData()
-            {
-                OpId = opId
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            OperationForBackend entity = null;
 
-            return ds;
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entity = empAuthDao.GetOperationDataForBackend(opId);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
+
+            return entity;
         }
 
         /// <summary>
@@ -769,14 +769,12 @@ namespace Common.LogicObject
         public OperationHtmlAnchorData GetOperationHtmlAnchorData(int opId, bool useEnglishSubject)
         {
             OperationHtmlAnchorData result = null;
-            DataSet dsOp = GetOperationData(opId);
+            OperationForBackend op = GetOperationData(opId);
 
-            if (dsOp != null && dsOp.Tables[0].Rows.Count > 0)
+            if (op != null)
             {
-                DataRow drFirst = dsOp.Tables[0].Rows[0];
-
-                string opSubject = drFirst.ToSafeStr("OpSubject");
-                string englishSubject = drFirst.ToSafeStr("EnglishSubject");
+                string opSubject = op.OpSubject;
+                string englishSubject = op.EnglishSubject;
 
                 if (useEnglishSubject && !string.IsNullOrEmpty(englishSubject))
                 {
@@ -785,8 +783,8 @@ namespace Common.LogicObject
 
                 result = new OperationHtmlAnchorData();
                 result.Subject = opSubject;
-                result.LinkUrl = drFirst.ToSafeStr("LinkUrl");
-                result.IconImageFileUrl = drFirst.ToSafeStr("IconImageFile");
+                result.LinkUrl = op.LinkUrl;
+                result.IconImageFileUrl = op.IconImageFile;
                 result.Html = string.Format("<a href=\"{0}\">{1}</a>", result.LinkUrl, result.Subject);
             }
 
