@@ -131,14 +131,29 @@ namespace Common.DataAccess.EF
             return true;
         }
 
-        public TEntity Get<TEntity>(params object[] keyValues) where TEntity :class
+        public TEntity Get<TEntity>(params object[] pkValues) where TEntity :class
         {
-            return cmsCtx.Set<TEntity>().Find(keyValues);
+            return cmsCtx.Set<TEntity>().Find(pkValues);
         }
 
         public TEntity Get<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
             return cmsCtx.Set<TEntity>().FirstOrDefault(predicate);
+        }
+
+        public List<TEntity> GetList<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+        {
+            return cmsCtx.Set<TEntity>().Where(predicate).ToList();
+        }
+
+        public int GetCount<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+        {
+            return cmsCtx.Set<TEntity>().Count(predicate);
+        }
+
+        public bool Any<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+        {
+            return cmsCtx.Set<TEntity>().Any(predicate);
         }
 
         public bool UpdateAllCols<TEntity>(TEntity entity) where TEntity :class
