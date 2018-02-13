@@ -7,6 +7,7 @@ using System.Data.Entity;
 using Common.DataAccess.EF.Model;
 using log4net;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Common.DataAccess.EF
 {
@@ -131,6 +132,40 @@ namespace Common.DataAccess.EF
             return true;
         }
 
+        /// <summary>
+        /// generate an entity with required property values that state is unchanged
+        /// </summary>
+        public TEntity GetEmptyEntity<TEntity>(object requiredPropValues) where TEntity : class
+        {
+            TEntity entity = Activator.CreateInstance<TEntity>();
+
+            if (requiredPropValues != null)
+            {
+                //設定必要屬性
+                Dictionary<string, PropertyInfo> dicEntityProps = new Dictionary<string, PropertyInfo>();
+                PropertyInfo[] entityProps = entity.GetType().GetProperties();
+                
+                foreach (PropertyInfo entityProp in entityProps)
+                {
+                    dicEntityProps.Add(entityProp.Name, entityProp);
+                }
+
+                PropertyInfo[] initProps = requiredPropValues.GetType().GetProperties();
+
+                foreach (PropertyInfo initProp in initProps)
+                {
+                    string propertyName = initProp.Name;
+                    object propertyValue = initProp.GetValue(requiredPropValues);
+                    
+                    dicEntityProps[propertyName].SetValue(entity, propertyValue);
+                }
+            }
+
+            cmsCtx.Entry<TEntity>(entity).State = EntityState.Unchanged;
+
+            return entity;
+        }
+
         public TEntity Get<TEntity>(params object[] pkValues) where TEntity :class
         {
             return cmsCtx.Set<TEntity>().Find(pkValues);
@@ -182,6 +217,9 @@ namespace Common.DataAccess.EF
             return true;
         }
 
+        /// <summary>
+        /// context.SaveChanges()
+        /// </summary>
         public bool Update()
         {
             try
