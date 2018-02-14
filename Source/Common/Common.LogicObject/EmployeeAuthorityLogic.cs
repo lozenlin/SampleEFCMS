@@ -720,6 +720,13 @@ namespace Common.LogicObject
         /// </summary>
         public DataSet GetOperationsTopListWithRoleAuth(string roleName)
         {
+            // lozentest
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                empAuthDao.GetOperationsTopListWithRoleAuth(roleName);
+                empAuthDao.GetOperationsSubListWithRoleAuth(roleName);
+            }
+
             IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
             spOperations_GetTopListWithRoleAuth cmdInfo = new spOperations_GetTopListWithRoleAuth()
             {

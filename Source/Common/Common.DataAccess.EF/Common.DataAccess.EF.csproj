@@ -138,6 +138,7 @@
     <Compile Include="Model\Operations.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\OperationWithRoleAuth.cs" />
     <Compile Include="Model\SearchDataSource.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
