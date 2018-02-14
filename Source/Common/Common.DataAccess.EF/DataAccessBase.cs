@@ -95,6 +95,8 @@ namespace Common.DataAccess.EF
 
         public InsertResult Insert<TEntity>(TEntity entity) where TEntity : class
         {
+            Logger.DebugFormat("Insert<TEntity>(entity) - TEntity[{0}]", typeof(TEntity).Name);
+
             InsertResult insResult = new InsertResult() { IsSuccess = false };
 
             try
@@ -128,6 +130,8 @@ namespace Common.DataAccess.EF
 
         public bool Delete<TEntity>(TEntity entity) where TEntity : class
         {
+            Logger.DebugFormat("Delete<TEntity>(entity) - TEntity[{0}]", typeof(TEntity).Name);
+
             try
             {
                 cmsCtx.Entry<TEntity>(entity).State = EntityState.Deleted;
@@ -148,6 +152,8 @@ namespace Common.DataAccess.EF
         /// </summary>
         public TEntity GetEmptyEntity<TEntity>(object requiredPropValues) where TEntity : class
         {
+            Logger.DebugFormat("GetEmptyEntity<TEntity>(requiredPropValues) - TEntity[{0}]", typeof(TEntity).Name);
+
             TEntity entity = Activator.CreateInstance<TEntity>();
 
             if (requiredPropValues != null)
@@ -179,6 +185,8 @@ namespace Common.DataAccess.EF
 
         public TEntity Get<TEntity>(params object[] pkValues) where TEntity :class
         {
+            Logger.DebugFormat("Get<TEntity>(pkValues) - TEntity[{0}]", typeof(TEntity).Name);
+
             TEntity entity = null;
 
             try
@@ -197,6 +205,8 @@ namespace Common.DataAccess.EF
 
         public TEntity Get<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
+            Logger.DebugFormat("Get<TEntity>(predicate) - TEntity[{0}]", typeof(TEntity).Name);
+
             TEntity entity = null;
 
             try
@@ -215,6 +225,8 @@ namespace Common.DataAccess.EF
 
         public List<TEntity> GetList<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
+            Logger.DebugFormat("GetList<TEntity>(predicate) - TEntity[{0}]", typeof(TEntity).Name);
+
             List<TEntity> entities = new List<TEntity>();
 
             try
@@ -233,16 +245,22 @@ namespace Common.DataAccess.EF
 
         public int GetCount<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
+            Logger.DebugFormat("GetCount<TEntity>(predicate) - TEntity[{0}]", typeof(TEntity).Name);
+
             return cmsCtx.Set<TEntity>().Count(predicate);
         }
 
         public bool Any<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
+            Logger.DebugFormat("Any<TEntity>(predicate) - TEntity[{0}]", typeof(TEntity).Name);
+
             return cmsCtx.Set<TEntity>().Any(predicate);
         }
 
         public bool UpdateAllCols<TEntity>(TEntity entity) where TEntity :class
         {
+            Logger.DebugFormat("UpdateAllCols<TEntity>(entity) - TEntity[{0}]", typeof(TEntity).Name);
+
             try
             {
                 cmsCtx.Entry<TEntity>(entity).State = EntityState.Modified;
@@ -272,6 +290,8 @@ namespace Common.DataAccess.EF
         /// </summary>
         public bool Update()
         {
+            Logger.Debug("Update()");
+
             try
             {
                 cmsCtx.SaveChanges();

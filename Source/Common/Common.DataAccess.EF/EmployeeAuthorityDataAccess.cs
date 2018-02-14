@@ -32,6 +32,8 @@ namespace Common.DataAccess.EF
         /// </summary>
         public EmployeeToLogin GetEmployeeDataToLogin(string empAccount)
         {
+            Logger.Debug("GetEmployeeDataToLogin(empAccount)");
+
             EmployeeToLogin entity = null;
 
             try
@@ -65,6 +67,8 @@ namespace Common.DataAccess.EF
         /// </summary>
         public EmployeeForBackend GetEmployeeDataForBackend(string empAccount)
         {
+            Logger.Debug("GetEmployeeDataForBackend(empAccount)");
+
             EmployeeForBackend entity = null;
 
             try
@@ -95,6 +99,8 @@ namespace Common.DataAccess.EF
         /// </summary>
         public EmployeeForBackend GetEmployeeDataForBackend(int empId)
         {
+            Logger.Debug("GetEmployeeDataForBackend(empId)");
+
             EmployeeForBackend entity = null;
 
             try
@@ -129,6 +135,8 @@ namespace Common.DataAccess.EF
         /// </summary>
         public OperationForBackend GetOperationDataForBackend(int opId)
         {
+            Logger.Debug("GetOperationDataForBackend(opId)");
+
             OperationForBackend entity = null;
 
             try
@@ -172,6 +180,8 @@ namespace Common.DataAccess.EF
         /// </summary>
         public OperationOpInfo GetOperationOpInfoByCommonClass(string commonClass)
         {
+            Logger.Debug("GetOperationOpInfoByCommonClass(commonClass)");
+
             OperationOpInfo entity = null;
 
             try
