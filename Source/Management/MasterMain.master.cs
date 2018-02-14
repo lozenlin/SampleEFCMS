@@ -121,17 +121,20 @@ public partial class MasterMain : System.Web.UI.MasterPage
             opIdOfArticleMgmt = opInfo.OpId;
         }
 
-        DataSet dsTopList = empAuth.GetOperationsTopListWithRoleAuth(c.GetRoleName());
-        DataSet dsSubList = empAuth.GetOperationsSubListWithRoleAuth(c.GetRoleName());
+        List<OperationWithRoleAuth> topList = empAuth.GetOperationWithRoleAuthNestedList(c.GetRoleName());
 
         if (c.IsInRole("admin"))
         {
             //管理者可以看到全部
-            foreach (DataRow dr in dsTopList.Tables[0].Rows)
-                dr["CanRead"] = true;
+            foreach (OperationWithRoleAuth op in topList)
+            {
+                op.CanRead = true;
 
-            foreach (DataRow dr in dsSubList.Tables[0].Rows)
-                dr["CanRead"] = true;
+                foreach(OperationWithRoleAuth subOp in op.SubItems)
+                {
+                    subOp.CanRead = true;
+                }
+            }
         }
 
         if (c.seCultureNameOfBackend == "en")
@@ -139,17 +142,7 @@ public partial class MasterMain : System.Web.UI.MasterPage
             useEnglishSubject = true;
         }
 
-        // move sub list table into dsTopList to join
-        DataTable dtSubList = dsSubList.Tables[0];
-        dtSubList.TableName = "SubList";
-        dsSubList.Tables.Remove(dtSubList);
-        dsSubList.Dispose();
-        dsTopList.Tables.Add(dtSubList);
-
-        DataRelation dataRel = dsTopList.Relations.Add("JoinTopSub", dsTopList.Tables[0].Columns["OpId"], dtSubList.Columns["ParentId"]);
-        dataRel.Nested = true;
-
-        rptOpMenu.DataSource = dsTopList.Tables[0];
+        rptOpMenu.DataSource = topList;
         rptOpMenu.DataBind();
     }
 
@@ -158,13 +151,13 @@ public partial class MasterMain : System.Web.UI.MasterPage
         if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
             return;
 
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        OperationWithRoleAuth opAuth = (OperationWithRoleAuth)e.Item.DataItem;
 
-        int opId = Convert.ToInt32(drvTemp["OpId"]);
-        string opSubject = drvTemp.ToSafeStr("OpSubject");
-        string englishSubject = drvTemp.ToSafeStr("EnglishSubject");
-        bool isNewWindow = Convert.ToBoolean(drvTemp["IsNewWindow"]);
-        string encodedUrl = drvTemp.ToSafeStr("LinkUrl");
+        int opId = opAuth.OpId;
+        string opSubject = opAuth.OpSubject;
+        string englishSubject = opAuth.EnglishSubject;
+        bool isNewWindow = opAuth.IsNewWindow;
+        string encodedUrl = opAuth.LinkUrl;
         string linkUrl = c.DecodeUrlOfMenu(encodedUrl);
 
         if (useEnglishSubject && !string.IsNullOrEmpty(englishSubject))
@@ -204,7 +197,7 @@ public partial class MasterMain : System.Web.UI.MasterPage
         HtmlImage imgOpHeader = (HtmlImage)e.Item.FindControl("imgOpHeader");
         imgOpHeader.Alt = opSubject;
         imgOpHeader.Src = "~/BPimages/icon/data.gif";
-        string iconImageFile = drvTemp.ToSafeStr("IconImageFile");
+        string iconImageFile = opAuth.IconImageFile;
         if (!string.IsNullOrEmpty(iconImageFile))
             imgOpHeader.Src = string.Format("~/BPimages/icon/{0}", iconImageFile);
 
@@ -218,10 +211,7 @@ public partial class MasterMain : System.Web.UI.MasterPage
         }
 
         //檢查授權
-        bool canRead = false;
-
-        if (!Convert.IsDBNull(drvTemp["CanRead"]))
-            canRead = Convert.ToBoolean(drvTemp["CanRead"]);
+        bool canRead = opAuth.CanRead;
 
         OpHeaderArea.Visible = canRead;
         Repeater rptOpItems = (Repeater)e.Item.FindControl("rptOpItems");
@@ -244,8 +234,7 @@ public partial class MasterMain : System.Web.UI.MasterPage
         else
         {
             // sub-operations
-            DataView dvSubList = drvTemp.CreateChildView("JoinTopSub");
-            rptOpItems.DataSource = dvSubList;
+            rptOpItems.DataSource = opAuth.SubItems;
             rptOpItems.DataBind();
         }
     }
@@ -255,13 +244,13 @@ public partial class MasterMain : System.Web.UI.MasterPage
         if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
             return;
 
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        OperationWithRoleAuth opAuth = (OperationWithRoleAuth)e.Item.DataItem;
 
-        int opId = Convert.ToInt32(drvTemp["OpId"]);
-        string opSubject = drvTemp.ToSafeStr("OpSubject");
-        string englishSubject = drvTemp.ToSafeStr("EnglishSubject");
-        bool isNewWindow = Convert.ToBoolean(drvTemp["IsNewWindow"]);
-        string encodedUrl = drvTemp.ToSafeStr("LinkUrl");
+        int opId = opAuth.OpId;
+        string opSubject = opAuth.OpSubject;
+        string englishSubject = opAuth.EnglishSubject;
+        bool isNewWindow = opAuth.IsNewWindow;
+        string encodedUrl = opAuth.LinkUrl;
         string linkUrl = c.DecodeUrlOfMenu(encodedUrl);
 
         if (useEnglishSubject && !string.IsNullOrEmpty(englishSubject))
@@ -301,7 +290,7 @@ public partial class MasterMain : System.Web.UI.MasterPage
         HtmlImage imgOpItem = (HtmlImage)e.Item.FindControl("imgOpItem");
         imgOpItem.Alt = opSubject;
         imgOpItem.Src = "~/BPimages/icon/data.gif";
-        string iconImageFile = drvTemp.ToSafeStr("IconImageFile");
+        string iconImageFile = opAuth.IconImageFile;
         if (!string.IsNullOrEmpty(iconImageFile))
             imgOpItem.Src = string.Format("~/BPimages/icon/{0}", iconImageFile);
 
@@ -309,10 +298,7 @@ public partial class MasterMain : System.Web.UI.MasterPage
         ltrOpItemSubject.Text = opSubject;
 
         //檢查授權
-        bool canRead = false;
-
-        if (!Convert.IsDBNull(drvTemp["CanRead"]))
-            canRead = Convert.ToBoolean(drvTemp["CanRead"]);
+        bool canRead = opAuth.CanRead;
 
         OpItemArea.Visible = canRead;
     }

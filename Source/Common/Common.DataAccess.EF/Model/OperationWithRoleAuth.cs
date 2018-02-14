@@ -39,5 +39,36 @@ namespace Common.DataAccess.EF.Model
         {
             SubItems = new List<OperationWithRoleAuth>();
         }
+
+        public void ImportDataFrom(Operations op)
+        {
+            OpId = op.OpId;
+            ParentId = op.ParentId;
+            OpSubject = op.OpSubject;
+            LinkUrl = op.LinkUrl;
+            IsNewWindow = op.IsNewWindow;
+            IconImageFile = op.IconImageFile;
+            EnglishSubject = op.EnglishSubject;
+        }
+
+        public void ImportDataFrom(EmployeeRoleOperationsDesc roleAuthItem)
+        {
+            CanRead = roleAuthItem.CanRead;
+            CanEdit = roleAuthItem.CanEdit;
+            CanReadSubItemOfSelf = roleAuthItem.CanReadSubItemOfSelf;
+            CanEditSubItemOfSelf = roleAuthItem.CanEditSubItemOfSelf;
+            CanAddSubItemOfSelf = roleAuthItem.CanAddSubItemOfSelf;
+            CanDelSubItemOfSelf = roleAuthItem.CanDelSubItemOfSelf;
+            CanReadSubItemOfCrew = roleAuthItem.CanReadSubItemOfCrew;
+            CanEditSubItemOfCrew = roleAuthItem.CanEditSubItemOfCrew;
+            CanDelSubItemOfCrew = roleAuthItem.CanDelSubItemOfCrew;
+            CanReadSubItemOfOthers = roleAuthItem.CanReadSubItemOfOthers;
+            CanEditSubItemOfOthers = roleAuthItem.CanEditSubItemOfOthers;
+            CanDelSubItemOfOthers = roleAuthItem.CanDelSubItemOfOthers;
+            PostAccount = roleAuthItem.PostAccount;
+            PostDate = roleAuthItem.PostDate;
+            MdfAccount = roleAuthItem.MdfAccount;
+            MdfDate = roleAuthItem.MdfDate;
+        }
     }
 }

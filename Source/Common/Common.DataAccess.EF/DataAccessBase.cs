@@ -223,15 +223,15 @@ namespace Common.DataAccess.EF
             return entity;
         }
 
-        public List<TEntity> GetList<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+        public IQueryable<TEntity> GetList<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
             Logger.DebugFormat("GetList<TEntity>(predicate) - TEntity[{0}]", typeof(TEntity).Name);
 
-            List<TEntity> entities = new List<TEntity>();
+            IQueryable<TEntity> entities = null;
 
             try
             {
-                entities = cmsCtx.Set<TEntity>().Where(predicate).ToList();
+                entities = cmsCtx.Set<TEntity>().Where(predicate);
             }
             catch (Exception ex)
             {

@@ -716,17 +716,68 @@ namespace Common.LogicObject
         }
 
         /// <summary>
+        /// 取得後端作業選項身分授權的巢狀清單
+        /// </summary>
+        public List<OperationWithRoleAuth> GetOperationWithRoleAuthNestedList(string roleName)
+        {
+            List<OperationWithRoleAuth> entities = null;
+
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                List<Operations> topOps = empAuthDao.GetList<Operations>(op => op.ParentId == null && !op.IsHideSelf)
+                    .OrderBy(op => op.SortNo).ToList();
+                List<Operations> subOps = empAuthDao.GetList<Operations>(op => op.ParentId != null && !op.IsHideSelf)
+                    .OrderBy(op => op.SortNo).ToList();
+                List<EmployeeRoleOperationsDesc> roleAuthItems = empAuthDao.GetList<EmployeeRoleOperationsDesc>(ro => ro.RoleName == roleName)
+                    .ToList();
+
+                if(topOps != null && subOps != null && roleAuthItems != null)
+                {
+                    entities = topOps.ConvertAll<OperationWithRoleAuth>(op =>
+                    {
+                        // top item
+                        OperationWithRoleAuth opAuth = new OperationWithRoleAuth();
+                        opAuth.ImportDataFrom(op);
+
+                        EmployeeRoleOperationsDesc roleAuthItem = roleAuthItems.Find(ro => ro.OpId == op.OpId);
+
+                        if (roleAuthItem != null)
+                        {
+                            opAuth.ImportDataFrom(roleAuthItem);
+                        }
+
+                        // sub item
+                        opAuth.SubItems = subOps.Where(subOp => subOp.ParentId == op.OpId)
+                            .Select(subOp =>
+                            {
+                                OperationWithRoleAuth subOpAuth = new OperationWithRoleAuth();
+                                subOpAuth.ImportDataFrom(subOp);
+
+                                EmployeeRoleOperationsDesc subRoleAuthItem = roleAuthItems.Find(ro => ro.OpId == subOp.OpId);
+
+                                if (subRoleAuthItem != null)
+                                {
+                                    subOpAuth.ImportDataFrom(subRoleAuthItem);
+                                }
+
+                                return subOpAuth;
+                            }).ToList();
+
+                        return opAuth;
+                    });
+                }
+
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
+
+            return entities;
+        }
+
+        /// <summary>
         /// 取得後端作業選項第一層清單和身分授權
         /// </summary>
         public DataSet GetOperationsTopListWithRoleAuth(string roleName)
         {
-            // lozentest
-            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
-            {
-                empAuthDao.GetOperationsTopListWithRoleAuth(roleName);
-                empAuthDao.GetOperationsSubListWithRoleAuth(roleName);
-            }
-
             IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
             spOperations_GetTopListWithRoleAuth cmdInfo = new spOperations_GetTopListWithRoleAuth()
             {
