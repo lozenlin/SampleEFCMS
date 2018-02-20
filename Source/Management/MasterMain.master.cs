@@ -80,35 +80,11 @@ public partial class MasterMain : System.Web.UI.MasterPage
         }
     }
 
-    private DataSet GetSubitemsOfArticle(Guid articleId)
+    private List<ArticleMultiLangForOpMenu> GetSubitemsOfArticle(Guid articleId)
     {
-        ArticleListQueryParams param = new ArticleListQueryParams()
-        {
-            ParentId = articleId,
-            CultureName = c.seCultureNameOfBackend,
-            Kw = ""
-        };
+        List<ArticleMultiLangForOpMenu> subitems = artPub.GetArticleMultiLangListForOpMenu(articleId, c.seCultureNameOfBackend);
 
-        param.PagedParams = new PagedListQueryParams()
-        {
-            BeginNum = 1,
-            EndNum = 999999999,
-            SortField = "",
-            IsSortDesc = false
-        };
-
-        param.AuthParams = new AuthenticationQueryParams()
-        {
-            CanReadSubItemOfOthers = true,
-            CanReadSubItemOfCrew = true,
-            CanReadSubItemOfSelf = true,
-            MyAccount = c.GetEmpAccount(),
-            MyDeptId = c.GetDeptId()
-        };
-
-        DataSet dsSubitems = artPub.GetArticleMultiLangListForBackend(param);
-
-        return dsSubitems;
+        return subitems;
     }
 
     private void DisplayOpMenu()
@@ -222,12 +198,12 @@ public partial class MasterMain : System.Web.UI.MasterPage
             // articles
             rptOpItems.Visible = false;
 
-            DataSet dsSubitems = GetSubitemsOfArticle(Guid.Empty);  //Guid.Empty: root articleId
+            List<ArticleMultiLangForOpMenu> subitems = GetSubitemsOfArticle(Guid.Empty);  //Guid.Empty: root articleId
 
-            if (dsSubitems != null)
+            if (subitems != null)
             {
                 rptArticles.Visible = true;
-                rptArticles.DataSource = dsSubitems.Tables[0];
+                rptArticles.DataSource = subitems;
                 rptArticles.DataBind();
             }
         }
@@ -308,11 +284,11 @@ public partial class MasterMain : System.Web.UI.MasterPage
         if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
             return;
 
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticleMultiLangForOpMenu articleData = (ArticleMultiLangForOpMenu)e.Item.DataItem;
 
-        Guid articleId = (Guid)drvTemp["ArticleId"];
-        string articleSubject = drvTemp.ToSafeStr("ArticleSubject");
-        bool isHideSelf = Convert.ToBoolean(drvTemp["IsHideSelf"]);
+        Guid articleId = articleData.ArticleId;
+        string articleSubject = articleData.ArticleSubject;
+        bool isHideSelf = articleData.IsHideSelf;
 
         HtmlAnchor btnItem = (HtmlAnchor)e.Item.FindControl("btnItem");
         btnItem.HRef = string.Format("~/Article-Node.aspx?artid={0}", articleId);
@@ -331,11 +307,11 @@ public partial class MasterMain : System.Web.UI.MasterPage
         {
             Repeater rptSubitems = (Repeater)ctlSubitems;
 
-            DataSet dsSubitems = GetSubitemsOfArticle(articleId);
+            List<ArticleMultiLangForOpMenu> subitems = GetSubitemsOfArticle(articleId);
 
-            if (dsSubitems != null)
+            if (subitems != null)
             {
-                rptSubitems.DataSource = dsSubitems.Tables[0];
+                rptSubitems.DataSource = subitems;
                 rptSubitems.DataBind();
             }
         }

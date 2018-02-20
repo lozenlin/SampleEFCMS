@@ -11,6 +11,8 @@
 
 using Common.DataAccess;
 using Common.DataAccess.ArticlePublisher;
+using Common.DataAccess.EF;
+using Common.DataAccess.EF.Model;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -272,6 +274,22 @@ namespace Common.LogicObject
             dbErrMsg = cmd.GetErrMsg();
 
             return result;
+        }
+
+        /// <summary>
+        /// 取得作業選單用指定語系的網頁內容清單
+        /// </summary>
+        public List<ArticleMultiLangForOpMenu> GetArticleMultiLangListForOpMenu(Guid parentId, string cultureName)
+        {
+            List<ArticleMultiLangForOpMenu> entities = null;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entities = artPubDao.GetArticleMultiLangListForOpMenu(parentId, cultureName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entities;
         }
 
         /// <summary>
