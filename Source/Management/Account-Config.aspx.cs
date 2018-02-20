@@ -209,7 +209,7 @@ public partial class Account_Config : System.Web.UI.Page
 
                 //modification info
                 ltrPostAccount.Text = account.PostAccount;
-                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", account.PostDate.Value);
+                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", account.PostDate);
 
                 if (account.MdfDate.HasValue)
                 {

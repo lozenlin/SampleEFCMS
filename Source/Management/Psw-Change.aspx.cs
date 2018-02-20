@@ -86,12 +86,11 @@ public partial class Psw_Change : System.Web.UI.Page
             return;
 
         // check token
-        DataSet dsEmpInfo = empAuth.GetEmployeeDataToLoginByPasswordResetKey(c.qsToken);
+        Employee empInfo = empAuth.GetEmployeeDataToLoginByPasswordResetKey(c.qsToken);
 
-        if (dsEmpInfo != null && dsEmpInfo.Tables[0].Rows.Count > 0)
+        if (empInfo != null)
         {
-            DataRow drFirst = dsEmpInfo.Tables[0].Rows[0];
-            string empAccount = drFirst.ToSafeStr("EmpAccount");
+            string empAccount = empInfo.EmpAccount;
 
             bool resultCancel = false;
 
@@ -104,7 +103,7 @@ public partial class Psw_Change : System.Web.UI.Page
 
             if (!resultCancel)
             {
-                DateTime passwordResetKeyDate = Convert.ToDateTime(drFirst["PasswordResetKeyDate"]);
+                DateTime passwordResetKeyDate = empInfo.PasswordResetKeyDate.Value;
                 TimeSpan tsGap = DateTime.Now - passwordResetKeyDate;
 
                 if (tsGap.TotalHours >= 24)

@@ -652,14 +652,20 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateEmployeePassword(string empAccount, string empPassword)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_UpdatePassword cmdInfo = new spEmployee_UpdatePassword()
+            bool result = false;
+
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                EmpAccount = empAccount,
-                EmpPassword = empPassword
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                Employee entity = empAuthDao.Get<Employee>(emp => emp.EmpAccount == empAccount);
+
+                entity.EmpPassword = empPassword;
+                entity.PasswordHashed = true;
+                entity.MdfAccount = empAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = empAuthDao.Update();
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -669,14 +675,20 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateEmployeePasswordResetKey(string empAccount, string passwordResetKey)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_UpdatePasswordResetKey cmdInfo = new spEmployee_UpdatePasswordResetKey()
+            bool result = false;
+
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                EmpAccount = empAccount,
-                PasswordResetKey = passwordResetKey
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                Employee entity = empAuthDao.Get<Employee>(emp => emp.EmpAccount == empAccount);
+
+                entity.PasswordResetKey = passwordResetKey;
+                entity.PasswordResetKeyDate = DateTime.Now;
+                entity.MdfAccount = empAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = empAuthDao.Update();
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -684,15 +696,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 以重置密碼用唯一值取得員工登入用資料
         /// </summary>
-        public DataSet GetEmployeeDataToLoginByPasswordResetKey(string passwordResetKey)
+        public Employee GetEmployeeDataToLoginByPasswordResetKey(string passwordResetKey)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_GetDataToLoginByPasswordResetKey cmdInfo = new spEmployee_GetDataToLoginByPasswordResetKey() { PasswordResetKey = passwordResetKey };
+            Employee entity = null;
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entity = empAuthDao.Get<Employee>(emp => emp.PasswordResetKey == passwordResetKey);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
-            return ds;
+            return entity;
         }
 
         #endregion

@@ -125,7 +125,7 @@ public partial class Operation_Config : System.Web.UI.Page
 
                 //modification info
                 ltrPostAccount.Text = op.PostAccount;
-                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", op.PostDate.Value);
+                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", op.PostDate);
 
                 if (op.MdfDate.HasValue)
                 {
