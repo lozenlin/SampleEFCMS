@@ -190,10 +190,40 @@ namespace Common.DataAccess.EF
                           where op.CommonClass == commonClass
                           select new OperationOpInfo
                           {
-                              OpId = op.OpId
+                              OpId = op.OpId,
+                              IsNewWindow = op.IsNewWindow
                           }).FirstOrDefault();
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
+        }
+
+        /// <summary>
+        /// 用超連結網址取得後端作業選項資訊
+        /// </summary>
+        public OperationOpInfo GetOperationOpInfoByLinkUrl(string linkUrl)
+        {
+            Logger.Debug("GetOperationOpInfoByLinkUrl(linkUrl)");
+
+            OperationOpInfo entity = null;
+
+            try
+            {
+                entity = (from op in cmsCtx.Operations
+                          where op.LinkUrl == linkUrl
+                          select new OperationOpInfo
+                          {
+                              OpId = op.OpId,
+                              IsNewWindow = op.IsNewWindow
+                          }).FirstOrDefault();
+            }
+            catch (Exception ex)
             {
                 Logger.Error("", ex);
                 errMsg = ex.Message;

@@ -1439,37 +1439,32 @@ namespace Common.LogicObject
 
             do
             {
-                DataSet dsOpInfo = null;
-                IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
+                OperationOpInfo opInfo = null;
+                string dbErrMsg = "";
 
-                if (curParentId.HasValue)
+                using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
                 {
-                    // get opId by LinkUrl
-                    linkUrl = string.Format("Article-Node.aspx?artid={0}", curArticleId);
+                    if (curParentId.HasValue)
+                    {
+                        // get opId by LinkUrl
+                        linkUrl = string.Format("Article-Node.aspx?artid={0}", curArticleId);
+                        opInfo = empAuthDao.GetOperationOpInfoByLinkUrl(linkUrl);
+                    }
+                    else
+                    {
+                        // get opId of root
+                        opInfo = empAuthDao.GetOperationOpInfoByCommonClass("ArticleCommonOfBackend");
+                    }
 
-                    Common.DataAccess.EmployeeAuthority.spOperations_GetOpInfoByLinkUrl opCmdInfo = new DataAccess.EmployeeAuthority.spOperations_GetOpInfoByLinkUrl()
-                    {
-                        LinkUrl = linkUrl
-                    };
-                    dsOpInfo = cmd.ExecuteDataset(opCmdInfo);
-                }
-                else
-                {
-                    // get opId of root
-                    Common.DataAccess.EmployeeAuthority.spOperations_GetOpInfoByCommonClass opCmdInfo = new DataAccess.EmployeeAuthority.spOperations_GetOpInfoByCommonClass()
-                    {
-                        CommonClass = "ArticleCommonOfBackend"
-                    };
-                    dsOpInfo = cmd.ExecuteDataset(opCmdInfo);
+                    dbErrMsg = empAuthDao.GetErrMsg();
                 }
 
-                if (dsOpInfo != null && dsOpInfo.Tables[0].Rows.Count > 0)
+                if (opInfo != null)
                 {
-                    DataRow drOpInfo = dsOpInfo.Tables[0].Rows[0];
-                    int opId = Convert.ToInt32(drOpInfo["OpId"]);
+                    int opId = opInfo.OpId;
 
                     // get authorizations
-
+                    IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
                     Common.DataAccess.EmployeeAuthority.spEmployeeRoleOperationsDesc_GetDataOfOp cmdInfo = new DataAccess.EmployeeAuthority.spEmployeeRoleOperationsDesc_GetDataOfOp()
                     {
                         OpId = opId,

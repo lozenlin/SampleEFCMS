@@ -10,6 +10,8 @@
 // ===============================================================================
 
 using Common.DataAccess;
+using Common.DataAccess.EF;
+using Common.DataAccess.EF.Model;
 using Common.DataAccess.EmployeeAuthority;
 using System;
 using System.Collections.Generic;
@@ -270,18 +272,17 @@ namespace Common.LogicObject
             int opId = 0;
 
             //用共用元件類別名稱取得後端作業選項資訊
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_GetOpInfoByCommonClass cmdInfo = new spOperations_GetOpInfoByCommonClass()
-            {
-                CommonClass = commonClass
-            };
+            OperationOpInfo opInfo = null;
 
-            DataSet dsOp = cmd.ExecuteDataset(cmdInfo);
-
-            if (dsOp != null && dsOp.Tables[0].Rows.Count > 0)
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                DataRow drOp = dsOp.Tables[0].Rows[0];
-                opId = Convert.ToInt32(drOp["OpId"]);
+                opInfo = empAuthDao.GetOperationOpInfoByCommonClass(commonClass);
+                string dbErrMsg = empAuthDao.GetErrMsg();
+            }
+
+            if (opInfo != null)
+            {
+                opId = opInfo.OpId;
             }
 
             return opId;

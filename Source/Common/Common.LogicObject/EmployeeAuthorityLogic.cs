@@ -716,6 +716,22 @@ namespace Common.LogicObject
         }
 
         /// <summary>
+        /// 用超連結網址取得後端作業選項資訊
+        /// </summary>
+        public OperationOpInfo GetOperationOpInfoByLinkUrl(string linkUrl)
+        {
+            OperationOpInfo entity = null;
+
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entity = empAuthDao.GetOperationOpInfoByLinkUrl(linkUrl);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
+
+            return entity;
+        }
+
+        /// <summary>
         /// 取得後端作業選項身分授權的巢狀清單
         /// </summary>
         public List<OperationWithRoleAuth> GetOperationWithRoleAuthNestedList(string roleName)

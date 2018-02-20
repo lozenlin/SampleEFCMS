@@ -9,5 +9,6 @@ namespace Common.DataAccess.EF.Model
     public class OperationOpInfo
     {
         public int OpId { get; set; }
+        public bool IsNewWindow { get; set; }
     }
 }
