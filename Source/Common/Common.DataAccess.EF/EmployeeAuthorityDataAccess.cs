@@ -80,9 +80,19 @@ namespace Common.DataAccess.EF
                     .FirstOrDefault();
 
                 entity = new EmployeeForBackend(employee);
-                entity.OwnerDeptId = cmsCtx.Employee.Where(emp => emp.EmpAccount == entity.OwnerAccount)
-                    .Select(emp => emp.DeptId)
-                    .FirstOrDefault() ?? 0;
+
+                var ownerData = cmsCtx.Employee.Where(emp => emp.EmpAccount == entity.OwnerAccount)
+                    .Select(emp => new
+                    {
+                        DeptId = emp.DeptId ?? 0,
+                        OwnerName = emp.EmpName
+                    }).FirstOrDefault();
+
+                if (ownerData != null)
+                {
+                    entity.OwnerDeptId = ownerData.DeptId;
+                    entity.OwnerName = ownerData.OwnerName;
+                }
             }
             catch (Exception ex)
             {
@@ -112,9 +122,19 @@ namespace Common.DataAccess.EF
                     .FirstOrDefault();
 
                 entity = new EmployeeForBackend(employee);
-                entity.OwnerDeptId = cmsCtx.Employee.Where(emp => emp.EmpAccount == entity.OwnerAccount)
-                    .Select(emp => emp.DeptId)
-                    .FirstOrDefault() ?? 0;
+
+                var ownerData = cmsCtx.Employee.Where(emp => emp.EmpAccount == entity.OwnerAccount)
+                    .Select(emp => new
+                    {
+                        DeptId = emp.DeptId ?? 0,
+                        OwnerName = emp.EmpName
+                    }).FirstOrDefault();
+
+                if (ownerData != null)
+                {
+                    entity.OwnerDeptId = ownerData.DeptId;
+                    entity.OwnerName = ownerData.OwnerName;
+                }
             }
             catch (Exception ex)
             {
@@ -124,6 +144,89 @@ namespace Common.DataAccess.EF
             }
 
             return entity;
+        }
+
+        /// <summary>
+        /// 取得員工代碼的帳號
+        /// </summary>
+        public string GetEmployeeAccountOfId(int empId)
+        {
+            Logger.Debug("GetEmployeeAccountOfId(empId)");
+
+            string empAccount = null;
+
+            try
+            {
+                Employee entity = cmsCtx.Employee.Find(empId);
+
+                if(entity != null)
+                {
+                    empAccount = entity.EmpAccount;
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return empAccount;
+        }
+
+        public List<EmployeeForBackend> GetEmployeeListForBackend(AccountListQueryParamsDA param)
+        {
+            Logger.Debug("GetEmployeeListForBackend(param)");
+
+            List<EmployeeForBackend> entities = null;
+
+            try
+            {
+                //todo by lozen
+                var tempEntities = from e in cmsCtx.Employee.Include(emp => emp.EmployeeRole).Include(emp => emp.Department)
+                                   join oe in cmsCtx.Employee
+                                   on e.OwnerAccount equals oe.EmpAccount
+                                   into empGroup
+                                   from oe in empGroup.DefaultIfEmpty()
+                                   select new { e, oe, role = e.EmployeeRole, dept = e.Department };
+
+                                   //select new EmployeeForBackend(e)
+                                   //{
+                                   //    OwnerDeptId = oe.DeptId ?? 0,
+                                   //    OwnerName = oe.EmpName
+                                   //};
+
+                /*
+                Employee employee = cmsCtx.Employee
+                    .Include(emp => emp.EmployeeRole)
+                    .Include(emp => emp.Department)
+                    .Where(emp => emp.EmpId == empId)
+                    .FirstOrDefault();
+
+                entities = new EmployeeForBackend(employee);
+
+                var ownerData = cmsCtx.Employee.Where(emp => emp.EmpAccount == entities.OwnerAccount)
+                    .Select(emp => new
+                    {
+                        DeptId = emp.DeptId ?? 0,
+                        OwnerName = emp.EmpName
+                    }).FirstOrDefault();
+
+                if (ownerData != null)
+                {
+                    entities.OwnerDeptId = ownerData.DeptId;
+                    entities.OwnerName = ownerData.OwnerName;
+                }
+                */
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
         }
 
         #endregion
@@ -232,6 +335,11 @@ namespace Common.DataAccess.EF
 
             return entity;
         }
+
+        #endregion
+
+        #region 部門資料
+
 
         #endregion
     }

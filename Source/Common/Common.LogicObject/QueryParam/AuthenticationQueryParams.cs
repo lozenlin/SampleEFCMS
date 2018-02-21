@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.DataAccess.EF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,5 +22,19 @@ namespace Common.LogicObject
         public bool CanReadSubItemOfSelf = false;
         public string MyAccount = "";
         public int MyDeptId = 0;
+
+        public AuthenticationQueryParamsDA GenAuthenticationQueryParamsDA()
+        {
+            AuthenticationQueryParamsDA result = new AuthenticationQueryParamsDA()
+            {
+                CanReadSubItemOfOthers = CanReadSubItemOfOthers,
+                CanReadSubItemOfCrew = CanReadSubItemOfCrew,
+                CanReadSubItemOfSelf = CanReadSubItemOfSelf,
+                MyAccount = MyAccount,
+                MyDeptId = MyDeptId
+            };
+
+            return result;
+        }
     }
 }

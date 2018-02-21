@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -121,13 +122,13 @@ public partial class Account_List : BasePage
     private void LoadDeptUIData()
     {
         ddlDept.Items.Clear();
-        DataSet dsDept = empAuth.GetDepartmentListToSelect();
+        List<Department> depts = empAuth.GetDepartmentListToSelect();
 
-        if (dsDept != null)
+        if (depts != null)
         {
             ddlDept.DataTextField = "DeptName";
             ddlDept.DataValueField = "DeptId";
-            ddlDept.DataSource = dsDept.Tables[0];
+            ddlDept.DataSource = depts;
             ddlDept.DataBind();
         }
 

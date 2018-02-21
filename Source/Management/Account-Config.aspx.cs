@@ -104,13 +104,13 @@ public partial class Account_Config : System.Web.UI.Page
     private void LoadDeptUIData()
     {
         ddlDept.Items.Clear();
-        DataSet dsDept = empAuth.GetDepartmentListToSelect();
+        List<Department> depts = empAuth.GetDepartmentListToSelect();
 
-        if (dsDept != null)
+        if (depts != null)
         {
             ddlDept.DataTextField = "DeptName";
             ddlDept.DataValueField = "DeptId";
-            ddlDept.DataSource = dsDept.Tables[0];
+            ddlDept.DataSource = depts;
             ddlDept.DataBind();
         }
     }

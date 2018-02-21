@@ -631,34 +631,27 @@ namespace Common.LogicObject
             if (!isTopPageOfOperation)
             {
                 // get owner info for config-form
-                IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-                spEmployee_GetAccountOfId cmdInfo = new spEmployee_GetAccountOfId()
+                using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
                 {
-                    EmpId = qsEmpId
-                };
+                    string empAccount = empAuthDao.GetEmployeeAccountOfId(qsEmpId);
+                    string dbErrMsg = empAuthDao.GetErrMsg();
 
-                string errCode = "-1";
-                string empAccount = cmd.ExecuteScalar<string>(cmdInfo, errCode);
-                string dbErrMsg = cmd.GetErrMsg();
-
-                DataSet ds = null;
-                if (empAccount != errCode)
-                {
-                    accountOfData = empAccount;
-                    spEmployee_GetData cmdInfoGetData = new spEmployee_GetData()
+                    if (!string.IsNullOrEmpty(empAccount))
                     {
-                        EmpAccount = empAccount
-                    };
+                        accountOfData = empAccount;
+                        spEmployee_GetData cmdInfoGetData = new spEmployee_GetData()
+                        {
+                            EmpAccount = empAccount
+                        };
 
-                    ds = cmd.ExecuteDataset(cmdInfoGetData);
-                    dbErrMsg = cmd.GetErrMsg();
+                        EmployeeForBackend empData = empAuthDao.GetEmployeeDataForBackend(empAccount);
+                        dbErrMsg = empAuthDao.GetErrMsg();
 
-                    if (ds != null && ds.Tables[0].Rows.Count > 0)
-                    {
-                        DataRow drFirst = ds.Tables[0].Rows[0];
-
-                        authAndOwner.OwnerAccountOfDataExamined = drFirst.ToSafeStr("OwnerAccount");
-                        authAndOwner.OwnerDeptIdOfDataExamined = Convert.ToInt32(drFirst["OwnerDeptId"]);
+                        if (empData != null)
+                        {
+                            authAndOwner.OwnerAccountOfDataExamined = empData.OwnerAccount;
+                            authAndOwner.OwnerDeptIdOfDataExamined = empData.OwnerDeptId;
+                        }
                     }
                 }
             }

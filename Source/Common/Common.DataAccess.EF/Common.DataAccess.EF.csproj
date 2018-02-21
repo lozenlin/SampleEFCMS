@@ -144,6 +144,9 @@
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryParam\AccountListQueryParamsDA.cs" />
+    <Compile Include="QueryParam\AuthenticationQueryParamsDA.cs" />
+    <Compile Include="QueryParam\PagedListQueryParamsDA.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Model\Cms.edmx">
@@ -155,9 +158,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="QueryParam\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Model\Cms.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

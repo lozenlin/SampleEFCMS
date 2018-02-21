@@ -223,6 +223,26 @@ namespace Common.DataAccess.EF
             return entity;
         }
 
+        public IQueryable<TEntity> GetList<TEntity>() where TEntity : class
+        {
+            Logger.DebugFormat("GetList<TEntity>() - TEntity[{0}]", typeof(TEntity).Name);
+
+            IQueryable<TEntity> entities = null;
+
+            try
+            {
+                entities = cmsCtx.Set<TEntity>();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         public IQueryable<TEntity> GetList<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
             Logger.DebugFormat("GetList<TEntity>(predicate) - TEntity[{0}]", typeof(TEntity).Name);
@@ -241,6 +261,13 @@ namespace Common.DataAccess.EF
             }
 
             return entities;
+        }
+
+        public int GetCount<TEntity>() where TEntity : class
+        {
+            Logger.DebugFormat("GetCount<TEntity>() - TEntity[{0}]", typeof(TEntity).Name);
+
+            return cmsCtx.Set<TEntity>().Count();
         }
 
         public int GetCount<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class

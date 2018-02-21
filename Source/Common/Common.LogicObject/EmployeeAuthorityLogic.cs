@@ -540,6 +540,17 @@ namespace Common.LogicObject
         /// </summary>
         public DataSet GetAccountList(AccountListQueryParams param)
         {
+            //todo by lozen
+            List<EmployeeForBackend> entities = null;
+            AccountListQueryParamsDA paramDA = param.GenAccountListQueryParamsDA();
+
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entities = empAuthDao.GetEmployeeListForBackend(paramDA);
+                dbErrMsg = empAuthDao.GetErrMsg();
+                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
+            }
+
             IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
             spEmployee_GetList cmdInfo = new spEmployee_GetList()
             {
@@ -1219,15 +1230,18 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得選擇用部門清單
         /// </summary>
-        public DataSet GetDepartmentListToSelect()
+        public List<Department> GetDepartmentListToSelect()
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spDepartment_GetListToSelect cmdInfo = new spDepartment_GetListToSelect();
+            List<Department> entities = null;
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entities = empAuthDao.GetList<Department>()
+                    .OrderBy(dept => dept.SortNo).ToList();
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
-            return ds;
+            return entities;
         }
 
         /// <summary>

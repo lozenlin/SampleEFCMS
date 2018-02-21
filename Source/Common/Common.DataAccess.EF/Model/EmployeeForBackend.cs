@@ -35,9 +35,11 @@ namespace Common.DataAccess.EF.Model
         public int RoleId { get; set; }
         public string RoleName { get; set; }
         public string RoleDisplayName { get; set; }
+        public int? RoleSortNo { get; set; }
 
         public int OwnerDeptId { get; set; }
         public string RoleDisplayText { get; set; }
+        public string OwnerName { get; set; }
 
         public EmployeeForBackend(Employee emp)
         {
@@ -62,7 +64,7 @@ namespace Common.DataAccess.EF.Model
             PasswordHashed = emp.PasswordHashed;
             DefaultRandomPassword = emp.DefaultRandomPassword;
 
-            if(emp.Department != null)
+            if (emp.Department != null)
             {
                 Department dept = emp.Department;
 
@@ -70,7 +72,7 @@ namespace Common.DataAccess.EF.Model
                 DeptName = dept.DeptName;
             }
 
-            if(emp.EmployeeRole != null)
+            if (emp.EmployeeRole != null)
             {
                 EmployeeRole role = emp.EmployeeRole;
 
@@ -78,7 +80,8 @@ namespace Common.DataAccess.EF.Model
                 RoleName = role.RoleName;
                 RoleDisplayName = role.RoleDisplayName;
                 RoleDisplayText = string.Format("{0} ({1})", RoleDisplayName, RoleName);
+                RoleSortNo = role.SortNo;
             }
+        }
     }
-}
 }
