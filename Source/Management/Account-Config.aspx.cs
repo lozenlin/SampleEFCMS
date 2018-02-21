@@ -118,13 +118,13 @@ public partial class Account_Config : System.Web.UI.Page
     private void LoadRolesUIData()
     {
         ddlRoles.Items.Clear();
-        DataSet dsRoles = empAuth.GetEmployeeRoleListToSelect();
+        List<EmployeeRoleToSelect> roles = empAuth.GetEmployeeRoleListToSelect();
 
-        if (dsRoles != null)
+        if (roles != null)
         {
             ddlRoles.DataTextField = "DisplayText";
             ddlRoles.DataValueField = "RoleId";
-            ddlRoles.DataSource = dsRoles.Tables[0];
+            ddlRoles.DataSource = roles;
             ddlRoles.DataBind();
 
             // move admin to last

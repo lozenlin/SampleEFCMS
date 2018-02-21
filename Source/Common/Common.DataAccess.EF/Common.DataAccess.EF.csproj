@@ -129,6 +129,7 @@
     <Compile Include="Model\EmployeeRoleOperationsDesc.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\EmployeeRoleToSelect.cs" />
     <Compile Include="Model\EmployeeToLogin.cs" />
     <Compile Include="Model\Interfaces.cs" />
     <Compile Include="Model\Keyword.cs">

@@ -1049,15 +1049,27 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得選擇用員工身分清單
         /// </summary>
-        public DataSet GetEmployeeRoleListToSelect()
+        public List<EmployeeRoleToSelect> GetEmployeeRoleListToSelect()
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployeeRole_GetListToSelect cmdInfo = new spEmployeeRole_GetListToSelect();
+            List<EmployeeRoleToSelect> entities = null;
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entities = empAuthDao.GetList<EmployeeRole>()
+                    .OrderBy(r => r.SortNo)
+                    .AsEnumerable()
+                    .Select(r => new EmployeeRoleToSelect()
+                    {
+                        RoleId = r.RoleId,
+                        RoleName = r.RoleName,
+                        RoleDisplayName = r.RoleDisplayName,
+                        DisplayText = string.Format("{0} ({1})", r.RoleDisplayName, r.RoleName)
+                    }).ToList();
 
-            return ds;
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
+
+            return entities;
         }
 
         /// <summary>

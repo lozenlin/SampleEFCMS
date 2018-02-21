@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -58,17 +59,21 @@ public partial class Role_Config : System.Web.UI.Page
     private void LoadCopyPrivilegeFromUIData()
     {
         ddlCopyPrivilegeFrom.Items.Clear();
-        DataSet dsRoles = empAuth.GetEmployeeRoleListToSelect();
+        List<EmployeeRoleToSelect> roles = empAuth.GetEmployeeRoleListToSelect();
 
-        if (dsRoles != null)
+        if (roles != null)
         {
             // remove admin
-            DataView dvRoles = new DataView(dsRoles.Tables[0]);
-            dvRoles.RowFilter = "RoleName<>'admin'";
+            EmployeeRoleToSelect adminData = roles.Find(r => r.RoleName == "admin");
 
+            if(adminData != null)
+            {
+                roles.Remove(adminData);
+            }
+            
             ddlCopyPrivilegeFrom.DataTextField = "DisplayText";
             ddlCopyPrivilegeFrom.DataValueField = "RoleName";
-            ddlCopyPrivilegeFrom.DataSource = dvRoles;
+            ddlCopyPrivilegeFrom.DataSource = roles;
             ddlCopyPrivilegeFrom.DataBind();
         }
 
