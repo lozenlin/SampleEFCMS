@@ -1327,7 +1327,7 @@ namespace Common.LogicObject
         /// <summary>
         /// 從資料集載入身分的授權設定
         /// </summary>
-        protected EmployeeAuthorizations LoadRoleAuthorizationsFromDataSet(EmployeeAuthorizations authorizations, DataSet dsRoleOp, bool isRoleAdmin)
+        protected EmployeeAuthorizations LoadRoleAuthorizationsFromDataSet(EmployeeAuthorizations authorizations, EmployeeRoleOperationsDesc roleOp, bool isRoleAdmin)
         {
             if (isRoleAdmin)
             {
@@ -1350,7 +1350,7 @@ namespace Common.LogicObject
             }
             else
             {
-                if (dsRoleOp == null || dsRoleOp.Tables[0].Rows.Count == 0)
+                if (roleOp == null)
                 {
                     // no data, close all
                     authorizations.CanRead = false;
@@ -1371,24 +1371,8 @@ namespace Common.LogicObject
                 }
                 else
                 {
-                    DataRow drRoleOp = dsRoleOp.Tables[0].Rows[0];
-
                     // load settings
-                    authorizations.CanRead = Convert.ToBoolean(drRoleOp["CanRead"]);
-                    authorizations.CanEdit = Convert.ToBoolean(drRoleOp["CanEdit"]);
-
-                    authorizations.CanReadSubItemOfSelf = Convert.ToBoolean(drRoleOp["CanReadSubItemOfSelf"]);
-                    authorizations.CanEditSubItemOfSelf = Convert.ToBoolean(drRoleOp["CanEditSubItemOfSelf"]);
-                    authorizations.CanAddSubItemOfSelf = Convert.ToBoolean(drRoleOp["CanAddSubItemOfSelf"]);
-                    authorizations.CanDelSubItemOfSelf = Convert.ToBoolean(drRoleOp["CanDelSubItemOfSelf"]);
-
-                    authorizations.CanReadSubItemOfCrew = Convert.ToBoolean(drRoleOp["CanReadSubItemOfCrew"]);
-                    authorizations.CanEditSubItemOfCrew = Convert.ToBoolean(drRoleOp["CanEditSubItemOfCrew"]);
-                    authorizations.CanDelSubItemOfCrew = Convert.ToBoolean(drRoleOp["CanDelSubItemOfCrew"]);
-
-                    authorizations.CanReadSubItemOfOthers = Convert.ToBoolean(drRoleOp["CanReadSubItemOfOthers"]);
-                    authorizations.CanEditSubItemOfOthers = Convert.ToBoolean(drRoleOp["CanEditSubItemOfOthers"]);
-                    authorizations.CanDelSubItemOfOthers = Convert.ToBoolean(drRoleOp["CanDelSubItemOfOthers"]);
+                    authorizations.ImportDataFrom(roleOp);
                 }
             }
 
@@ -1464,25 +1448,19 @@ namespace Common.LogicObject
                     int opId = opInfo.OpId;
 
                     // get authorizations
-                    IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-                    Common.DataAccess.EmployeeAuthority.spEmployeeRoleOperationsDesc_GetDataOfOp cmdInfo = new DataAccess.EmployeeAuthority.spEmployeeRoleOperationsDesc_GetDataOfOp()
+                    using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
                     {
-                        OpId = opId,
-                        RoleName = authCondition.GetRoleName()
-                    };
-                    DataSet dsRoleOp = cmd.ExecuteDataset(cmdInfo);
+                        EmployeeRoleOperationsDesc roleOp = empAuthDao.GetEmployeeRoleOperationsDescDataOfOp(authCondition.GetRoleName(), opId);
 
-                    if (dsRoleOp != null && dsRoleOp.Tables[0].Rows.Count > 0)
-                    {
-                        //檢查權限, 只允許 CanRead=true
-
-                        DataRow drRoleOp = dsRoleOp.Tables[0].Rows[0];
-                        bool canRead = drRoleOp.To<bool>("CanRead", false);
-
-                        if (canRead)
+                        if (roleOp != null)
                         {
-                            authAndOwner = (EmployeeAuthorizationsWithOwnerInfoOfDataExamined)LoadRoleAuthorizationsFromDataSet(authAndOwner, dsRoleOp, isRoleAdmin);
-                            gotOpAuth = true;
+                            //檢查權限, 只允許 CanRead=true
+
+                            if (roleOp.CanRead)
+                            {
+                                authAndOwner = (EmployeeAuthorizationsWithOwnerInfoOfDataExamined)LoadRoleAuthorizationsFromDataSet(authAndOwner, roleOp, isRoleAdmin);
+                                gotOpAuth = true;
+                            }
                         }
                     }
                 }

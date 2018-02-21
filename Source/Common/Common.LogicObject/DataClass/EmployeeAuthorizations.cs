@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.DataAccess.EF.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -64,6 +65,25 @@ namespace Common.LogicObject
         /// </summary>
         public EmployeeAuthorizations()
         {
+        }
+
+        public void ImportDataFrom(EmployeeRoleOperationsDesc roleOp)
+        {
+            CanRead = roleOp.CanRead;
+            CanEdit = roleOp.CanEdit;
+
+            CanReadSubItemOfSelf = roleOp.CanReadSubItemOfSelf;
+            CanEditSubItemOfSelf = roleOp.CanEditSubItemOfSelf;
+            CanAddSubItemOfSelf = roleOp.CanAddSubItemOfSelf;
+            CanDelSubItemOfSelf = roleOp.CanDelSubItemOfSelf;
+
+            CanReadSubItemOfCrew = roleOp.CanReadSubItemOfCrew;
+            CanEditSubItemOfCrew = roleOp.CanEditSubItemOfCrew;
+            CanDelSubItemOfCrew = roleOp.CanDelSubItemOfCrew;
+
+            CanReadSubItemOfOthers = roleOp.CanReadSubItemOfOthers;
+            CanEditSubItemOfOthers = roleOp.CanEditSubItemOfOthers;
+            CanDelSubItemOfOthers = roleOp.CanDelSubItemOfOthers;
         }
     }
 

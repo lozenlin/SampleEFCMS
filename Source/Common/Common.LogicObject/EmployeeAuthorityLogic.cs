@@ -123,18 +123,14 @@ namespace Common.LogicObject
         {
             this.isTopPageOfOperation = isTopPageOfOperation;
 
-            //取得指定作業代碼的後端身分可使用權限
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployeeRoleOperationsDesc_GetDataOfOp cmdInfo = new spEmployeeRoleOperationsDesc_GetDataOfOp()
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                OpId = opIdOfPage,
-                RoleName = roleName
-            };
+                //取得指定作業代碼的後端身分可使用權限
+                EmployeeRoleOperationsDesc roleOp = empAuthDao.GetEmployeeRoleOperationsDescDataOfOp(roleName, opIdOfPage);
 
-            DataSet dsRoleOp = cmd.ExecuteDataset(cmdInfo);
-
-            //從資料集載入身分的授權設定
-            LoadRoleAuthorizationsFrom(dsRoleOp);
+                //從資料集載入身分的授權設定
+                LoadRoleAuthorizationsFrom(roleOp);
+            }
 
             if (custEmpAuthResult != null)
             {
@@ -156,7 +152,7 @@ namespace Common.LogicObject
         /// <summary>
         /// 從資料集載入身分的授權設定
         /// </summary>
-        public bool LoadRoleAuthorizationsFrom(DataSet dsRoleOp)
+        public bool LoadRoleAuthorizationsFrom(EmployeeRoleOperationsDesc roleOp)
         {
             if (isRoleAdmin)
             {
@@ -179,30 +175,14 @@ namespace Common.LogicObject
             }
             else
             {
-                if (dsRoleOp == null || dsRoleOp.Tables[0].Rows.Count == 0)
+                if (roleOp == null)
                 {
                     logger.Info("parameter of LoadRoleAuthorizationsFrom() is empty.");
                     return false;
                 }
 
-                DataRow drRoleOp = dsRoleOp.Tables[0].Rows[0];
-
                 // load settings
-                authorizations.CanRead = Convert.ToBoolean(drRoleOp["CanRead"]);
-                authorizations.CanEdit = Convert.ToBoolean(drRoleOp["CanEdit"]);
-
-                authorizations.CanReadSubItemOfSelf = Convert.ToBoolean(drRoleOp["CanReadSubItemOfSelf"]);
-                authorizations.CanEditSubItemOfSelf = Convert.ToBoolean(drRoleOp["CanEditSubItemOfSelf"]);
-                authorizations.CanAddSubItemOfSelf = Convert.ToBoolean(drRoleOp["CanAddSubItemOfSelf"]);
-                authorizations.CanDelSubItemOfSelf = Convert.ToBoolean(drRoleOp["CanDelSubItemOfSelf"]);
-
-                authorizations.CanReadSubItemOfCrew = Convert.ToBoolean(drRoleOp["CanReadSubItemOfCrew"]);
-                authorizations.CanEditSubItemOfCrew = Convert.ToBoolean(drRoleOp["CanEditSubItemOfCrew"]);
-                authorizations.CanDelSubItemOfCrew = Convert.ToBoolean(drRoleOp["CanDelSubItemOfCrew"]);
-
-                authorizations.CanReadSubItemOfOthers = Convert.ToBoolean(drRoleOp["CanReadSubItemOfOthers"]);
-                authorizations.CanEditSubItemOfOthers = Convert.ToBoolean(drRoleOp["CanEditSubItemOfOthers"]);
-                authorizations.CanDelSubItemOfOthers = Convert.ToBoolean(drRoleOp["CanDelSubItemOfOthers"]);
+                authorizations.ImportDataFrom(roleOp);
             }
 
             return true;

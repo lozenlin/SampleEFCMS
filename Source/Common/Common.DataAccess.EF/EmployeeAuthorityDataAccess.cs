@@ -456,6 +456,34 @@ namespace Common.DataAccess.EF
 
         #endregion
 
+        #region 員工身分後端作業授權相關
+
+        /// <summary>
+        /// 取得指定作業代碼的後端身分可使用權限
+        /// </summary>
+        public EmployeeRoleOperationsDesc GetEmployeeRoleOperationsDescDataOfOp(string roleName, int opId)
+        {
+            Logger.Debug("GetEmployeeRoleOperationsDescDataOfOp(roleName, opId)");
+
+            EmployeeRoleOperationsDesc entity = null;
+
+            try
+            {
+                entity = cmsCtx.EmployeeRoleOperationsDesc.Where(ro => ro.RoleName == roleName && ro.OpId == opId)
+                    .FirstOrDefault();
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
+        }
+
+        #endregion
+
         #region 部門資料
 
 
