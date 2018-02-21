@@ -581,37 +581,42 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertEmployeeData(AccountParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_InsertData cmdInfo = new spEmployee_InsertData()
-            {
-                EmpAccount = param.EmpAccount,
-                EmpPassword = param.EmpPassword,
-                EmpName = param.EmpName,
-                Email = param.Email,
-                Remarks = param.Remarks,
-                DeptId = param.DeptId,
-                RoleId = param.RoleId,
-                IsAccessDenied = param.IsAccessDenied,
-                StartDate = param.StartDate,
-                EndDate = param.EndDate,
-                OwnerAccount = param.OwnerAccount,
-                PasswordHashed = param.PasswordHashed,
-                DefaultRandomPassword = param.DefaultRandomPassword,
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            if (result)
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                param.EmpId = cmdInfo.EmpId;
-            }
-            else if (cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 2)
-            {
-                param.HasAccountBeenUsed = true;
+                insResult = empAuthDao.Insert<Employee>(new Employee()
+                {
+                    EmpAccount = param.EmpAccount,
+                    EmpPassword = param.EmpPassword,
+                    EmpName = param.EmpName,
+                    Email = param.Email,
+                    Remarks = param.Remarks,
+                    DeptId = param.DeptId,
+                    RoleId = param.RoleId,
+                    IsAccessDenied = param.IsAccessDenied,
+                    StartDate = param.StartDate,
+                    EndDate = param.EndDate,
+                    OwnerAccount = param.OwnerAccount,
+                    PasswordHashed = param.PasswordHashed,
+                    DefaultRandomPassword = param.DefaultRandomPassword,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                });
+
+                dbErrMsg = empAuthDao.GetErrMsg();
+
+                if (insResult.IsSuccess)
+                {
+                    param.EmpId = (int)insResult.NewId;
+                }
+                else if (empAuthDao.GetSqlErrNumber() == 2601)
+                {
+                    param.HasAccountBeenUsed = true;
+                }
             }
 
-            return result;
+            return insResult.IsSuccess;
         }
 
         /// <summary>
@@ -619,26 +624,35 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateEmployeeData(AccountParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_UpdateData cmdInfo = new spEmployee_UpdateData()
+            bool result = false;
+
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                EmpId = param.EmpId,
-                EmpPassword = param.EmpPassword,
-                EmpName = param.EmpName,
-                Email = param.Email,
-                Remarks = param.Remarks,
-                DeptId = param.DeptId,
-                RoleId = param.RoleId,
-                IsAccessDenied = param.IsAccessDenied,
-                StartDate = param.StartDate,
-                EndDate = param.EndDate,
-                OwnerAccount = param.OwnerAccount,
-                PasswordHashed = param.PasswordHashed,
-                DefaultRandomPassword = param.DefaultRandomPassword,
-                MdfAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                Employee entity = empAuthDao.GetEmptyEntity<Employee>(new EmployeeRequiredPropValues()
+                {
+                    EmpId = param.EmpId,
+                    EmpAccount = "",
+                    EmpPassword = ""
+                });
+
+                entity.EmpPassword = param.EmpPassword;
+                entity.EmpName = param.EmpName;
+                entity.Email = param.Email;
+                entity.Remarks = param.Remarks;
+                entity.DeptId = param.DeptId;
+                entity.RoleId = param.RoleId;
+                entity.IsAccessDenied = param.IsAccessDenied;
+                entity.StartDate = param.StartDate;
+                entity.EndDate = param.EndDate;
+                entity.OwnerAccount = param.OwnerAccount;
+                entity.PasswordHashed = param.PasswordHashed;
+                entity.DefaultRandomPassword = param.DefaultRandomPassword;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = empAuthDao.Update();
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
