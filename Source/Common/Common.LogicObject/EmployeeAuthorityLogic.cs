@@ -558,13 +558,20 @@ namespace Common.LogicObject
         /// </summary>
         public bool DeleteEmployeeData(int empId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_DeleteData cmdInfo = new spEmployee_DeleteData()
+            bool result = false;
+
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                EmpId = empId
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                Employee entity = empAuthDao.GetEmptyEntity<Employee>(new EmployeeRequiredPropValues()
+                {
+                    EmpId = empId,
+                    EmpAccount = "",
+                    EmpPassword = ""
+                });
+
+                result = empAuthDao.Delete<Employee>(entity);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
