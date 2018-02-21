@@ -538,9 +538,8 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得帳號名單
         /// </summary>
-        public DataSet GetAccountList(AccountListQueryParams param)
+        public List<EmployeeForBackend> GetAccountList(AccountListQueryParams param)
         {
-            //todo by lozen
             List<EmployeeForBackend> entities = null;
             AccountListQueryParamsDA paramDA = param.GenAccountListQueryParamsDA();
 
@@ -551,28 +550,7 @@ namespace Common.LogicObject
                 param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_GetList cmdInfo = new spEmployee_GetList()
-            {
-                DeptId = param.DeptId,
-                Kw = param.Kw,
-                ListMode = param.ListMode,
-                BeginNum = param.PagedParams.BeginNum,
-                EndNum = param.PagedParams.EndNum,
-                SortField = param.PagedParams.SortField,
-                IsSortDesc = param.PagedParams.IsSortDesc,
-                CanReadSubItemOfOthers = param.AuthParams.CanReadSubItemOfOthers,
-                CanReadSubItemOfCrew = param.AuthParams.CanReadSubItemOfCrew,
-                CanReadSubItemOfSelf = param.AuthParams.CanReadSubItemOfSelf,
-                MyAccount = param.AuthParams.MyAccount,
-                MyDeptId = param.AuthParams.MyDeptId,
-                RowCount = param.PagedParams.RowCount
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-            param.PagedParams.RowCount = cmdInfo.RowCount;
-
-            return ds;
+            return entities;
         }
 
         /// <summary>

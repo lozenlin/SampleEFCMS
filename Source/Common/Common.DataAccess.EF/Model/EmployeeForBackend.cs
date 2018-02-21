@@ -40,6 +40,11 @@ namespace Common.DataAccess.EF.Model
         public int OwnerDeptId { get; set; }
         public string RoleDisplayText { get; set; }
         public string OwnerName { get; set; }
+        public int RowNum { get; set; }
+
+        public EmployeeForBackend()
+        {
+        }
 
         public EmployeeForBackend(Employee emp)
         {

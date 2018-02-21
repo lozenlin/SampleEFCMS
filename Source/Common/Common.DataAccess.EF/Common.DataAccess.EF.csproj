@@ -71,6 +71,7 @@
     <Compile Include="EntityRequiredPropValues\EmployeeRoleOperationsDescRequiredPropValues.cs" />
     <Compile Include="EntityRequiredPropValues\EmployeeRoleRequiredPropValues.cs" />
     <Compile Include="EntityRequiredPropValues\OperationsRequiredPropValues.cs" />
+    <Compile Include="ExtensionMethods\OrderingExtensions.cs" />
     <Compile Include="InsertResult.cs" />
     <Compile Include="Model\Article.cs">
       <DependentUpon>Cms.tt</DependentUpon>

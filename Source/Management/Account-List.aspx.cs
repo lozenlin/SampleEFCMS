@@ -178,11 +178,11 @@ public partial class Account_List : BasePage
             IsSortDesc = c.qsIsSortDesc
         };
 
-        DataSet dsAccounts = empAuth.GetAccountList(param);
+        List< EmployeeForBackend> accounts = empAuth.GetAccountList(param);
 
-        if (dsAccounts != null)
+        if (accounts != null)
         {
-            rptAccounts.DataSource = dsAccounts.Tables[0];
+            rptAccounts.DataSource = accounts;
             rptAccounts.DataBind();
         }
 
@@ -194,18 +194,18 @@ public partial class Account_List : BasePage
 
     protected void rptAccounts_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        EmployeeForBackend empData = (EmployeeForBackend)e.Item.DataItem;
 
-        int empId = Convert.ToInt32(drvTemp["EmpId"]);
-        string empAccount = drvTemp.ToSafeStr("EmpAccount");
-        string roleName = drvTemp.ToSafeStr("RoleName");
-        bool isAccessDenied = Convert.ToBoolean(drvTemp["IsAccessDenied"]);
-        DateTime startDate = Convert.ToDateTime(drvTemp["StartDate"]);
-        DateTime endDate = Convert.ToDateTime(drvTemp["EndDate"]);
-        string remarks = drvTemp.ToSafeStr("Remarks").Trim();
+        int empId = empData.EmpId;
+        string empAccount = empData.EmpAccount;
+        string roleName = empData.RoleName;
+        bool isAccessDenied = empData.IsAccessDenied;
+        DateTime startDate = empData.StartDate.Value;
+        DateTime endDate = empData.EndDate.Value;
+        string remarks = (empData.Remarks ?? "").Trim();
 
         HtmlGenericControl ctlRoleDisplayName = (HtmlGenericControl)e.Item.FindControl("ctlRoleDisplayName");
-        ctlRoleDisplayName.InnerHtml = drvTemp.ToSafeStr("RoleDisplayName");
+        ctlRoleDisplayName.InnerHtml = empData.RoleDisplayName;
         ctlRoleDisplayName.Attributes["class"] = "RoleDisplay-" + roleName;
 
         HtmlTableRow EmpArea = (HtmlTableRow)e.Item.FindControl("EmpArea");
@@ -262,10 +262,10 @@ public partial class Account_List : BasePage
         btnDelete.Text = "<i class='fa fa-trash-o'></i> " + Resources.Lang.Main_btnDelete;
         btnDelete.ToolTip = Resources.Lang.Main_btnDelete_Hint;
         btnDelete.OnClientClick = string.Format("return confirm('" + Resources.Lang.Account_ConfirmDelete_Format + "');",
-            drvTemp.ToSafeStr("EmpName"), drvTemp.ToSafeStr("EmpAccount"));
+            empData.EmpName, empData.EmpAccount);
 
-        string ownerAccount = drvTemp.ToSafeStr("OwnerAccount");
-        int ownerDeptId = Convert.ToInt32(drvTemp["OwnerDeptId"]);
+        string ownerAccount = empData.OwnerAccount;
+        int ownerDeptId = empData.OwnerDeptId;
 
         btnEdit.Visible = (empAuth.CanEditThisPage(false, ownerAccount, ownerDeptId) || c.IsMyAccount(empAccount));
 
