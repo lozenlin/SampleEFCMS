@@ -191,7 +191,38 @@ namespace Common.DataAccess.EF
                                    on e.OwnerAccount equals oe.EmpAccount
                                    into empGroup
                                    from oe in empGroup.DefaultIfEmpty()
-                                   select new { e, oe, role = e.EmployeeRole, dept = e.Department };
+                                   select new EmployeeForBackend()
+                                   {
+                                       EmpId = e.EmpId,
+                                       EmpAccount = e.EmpAccount,
+                                       EmpPassword = e.EmpPassword,
+                                       EmpName = e.EmpName,
+                                       Email = e.Email,
+                                       Remarks = e.Remarks,
+                                       IsAccessDenied = e.IsAccessDenied,
+                                       PostAccount = e.PostAccount,
+                                       PostDate = e.PostDate,
+                                       MdfAccount = e.MdfAccount,
+                                       MdfDate = e.MdfDate,
+                                       StartDate = e.StartDate,
+                                       EndDate = e.EndDate,
+                                       OwnerAccount = e.OwnerAccount,
+                                       ThisLoginTime = e.ThisLoginTime,
+                                       ThisLoginIP = e.ThisLoginIP,
+                                       LastLoginTime = e.LastLoginTime,
+                                       LastLoginIP = e.LastLoginIP,
+                                       PasswordHashed = e.PasswordHashed,
+                                       DefaultRandomPassword = e.DefaultRandomPassword,
+                                       DeptId = e.DeptId ?? 0,
+                                       DeptName = e.Department.DeptName,
+                                       RoleId = e.EmployeeRole.RoleId,
+                                       RoleName = e.EmployeeRole.RoleName,
+                                       RoleDisplayName = e.EmployeeRole.RoleDisplayName,
+                                       RoleDisplayText = e.EmployeeRole.RoleDisplayName, //string.Format("{0} ({1})", role.RoleDisplayName, role.RoleName),
+                                       RoleSortNo = e.EmployeeRole.SortNo,
+                                       OwnerDeptId = oe.DeptId ?? 0,
+                                       OwnerName = oe.EmpName ?? ""
+                                   };
 
                 // Query conditions
 
@@ -204,21 +235,21 @@ namespace Common.DataAccess.EF
                 if (!param.AuthParams.CanReadSubItemOfOthers)
                 {
                     tempEntities = tempEntities.Where(obj =>
-                        param.AuthParams.CanReadSubItemOfCrew && obj.e.DeptId == param.AuthParams.MyDeptId
-                        || param.AuthParams.CanReadSubItemOfSelf && obj.e.OwnerAccount == param.AuthParams.MyAccount
-                        || obj.e.EmpAccount == param.AuthParams.MyAccount);
+                        param.AuthParams.CanReadSubItemOfCrew && obj.DeptId == param.AuthParams.MyDeptId
+                        || param.AuthParams.CanReadSubItemOfSelf && obj.OwnerAccount == param.AuthParams.MyAccount
+                        || obj.EmpAccount == param.AuthParams.MyAccount);
                 }
 
                 if (param.DeptId != 0) // 0:all
                 {
-                    tempEntities = tempEntities.Where(obj => obj.e.DeptId == param.DeptId);
+                    tempEntities = tempEntities.Where(obj => obj.DeptId == param.DeptId);
                 }
 
                 if (param.Kw != "")
                 {
                     tempEntities = tempEntities.Where(obj =>
-                        obj.e.EmpAccount.Contains(param.Kw)
-                        || obj.e.EmpName.Contains(param.Kw));
+                        obj.EmpAccount.Contains(param.Kw)
+                        || obj.EmpName.Contains(param.Kw));
                 }
 
                 //清單內容模式(0:all, 1:normal, 2:access is denied)
@@ -226,63 +257,30 @@ namespace Common.DataAccess.EF
                 {
                     case 1:
                         tempEntities = tempEntities.Where(obj =>
-                            !obj.e.IsAccessDenied
-                            && (obj.role.RoleName == "admin"
-                                || obj.e.StartDate <= DateTime.Now && DateTime.Now < DbFunctions.AddDays(obj.e.EndDate, 1)));
+                            !obj.IsAccessDenied
+                            && (obj.RoleName == "admin"
+                                || obj.StartDate <= DateTime.Now && DateTime.Now < DbFunctions.AddDays(obj.EndDate, 1)));
                         break;
                     case 2:
                         tempEntities = tempEntities.Where(obj =>
-                            obj.e.IsAccessDenied
-                            || !(obj.role.RoleName == "admin"
-                                || obj.e.StartDate <= DateTime.Now && DateTime.Now < DbFunctions.AddDays(obj.e.EndDate, 1)));
+                            obj.IsAccessDenied
+                            || !(obj.RoleName == "admin"
+                                || obj.StartDate <= DateTime.Now && DateTime.Now < DbFunctions.AddDays(obj.EndDate, 1)));
                         break;
                 }
 
                 // sorting
-                switch (param.PagedParams.SortField)
+                if (param.PagedParams.SortField != "")
                 {
-                    case "DeptName":
-                        if (param.PagedParams.IsSortDesc)
-                            tempEntities = tempEntities.OrderByDescending(obj => obj.dept.DeptName);
-                        else
-                            tempEntities = tempEntities.OrderBy(obj => obj.dept.DeptName);
-                        break;
-                    case "RoleSortNo":
-                        if (param.PagedParams.IsSortDesc)
-                            tempEntities = tempEntities.OrderByDescending(obj => obj.role.SortNo);
-                        else
-                            tempEntities = tempEntities.OrderBy(obj => obj.role.SortNo);
-                        break;
-                    case "EmpName":
-                        if (param.PagedParams.IsSortDesc)
-                            tempEntities = tempEntities.OrderByDescending(obj => obj.e.EmpName);
-                        else
-                            tempEntities = tempEntities.OrderBy(obj => obj.e.EmpName);
-                        break;
-                    case "EmpAccount":
-                        if (param.PagedParams.IsSortDesc)
-                            tempEntities = tempEntities.OrderByDescending(obj => obj.e.EmpAccount);
-                        else
-                            tempEntities = tempEntities.OrderBy(obj => obj.e.EmpAccount);
-                        break;
-                    case "StartDate":
-                        if (param.PagedParams.IsSortDesc)
-                            tempEntities = tempEntities.OrderByDescending(obj => obj.e.StartDate);
-                        else
-                            tempEntities = tempEntities.OrderBy(obj => obj.e.StartDate);
-                        break;
-                    case "OwnerName":
-                        if (param.PagedParams.IsSortDesc)
-                            tempEntities = tempEntities.OrderByDescending(obj => obj.oe.EmpName);
-                        else
-                            tempEntities = tempEntities.OrderBy(obj => obj.oe.EmpName);
-                        break;
-                    default:
-                        tempEntities = tempEntities
-                            .OrderBy(obj => obj.e.DeptId)
-                            .ThenBy(obj => obj.role.SortNo)
-                            .ThenBy(obj => obj.e.EmpName);
-                        break;
+                    tempEntities = tempEntities.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempEntities = tempEntities
+                        .OrderBy(obj => obj.DeptId)
+                        .ThenBy(obj => obj.RoleSortNo)
+                        .ThenBy(obj => obj.EmpName);
                 }
 
                 // total
@@ -303,38 +301,7 @@ namespace Common.DataAccess.EF
                 }
 
                 // result
-                entities = tempEntities.Select(obj => new EmployeeForBackend()
-                {
-                    EmpId = obj.e.EmpId,
-                    EmpAccount = obj.e.EmpAccount,
-                    EmpPassword = obj.e.EmpPassword,
-                    EmpName = obj.e.EmpName,
-                    Email = obj.e.Email,
-                    Remarks = obj.e.Remarks,
-                    IsAccessDenied = obj.e.IsAccessDenied,
-                    PostAccount = obj.e.PostAccount,
-                    PostDate = obj.e.PostDate,
-                    MdfAccount = obj.e.MdfAccount,
-                    MdfDate = obj.e.MdfDate,
-                    StartDate = obj.e.StartDate,
-                    EndDate = obj.e.EndDate,
-                    OwnerAccount = obj.e.OwnerAccount,
-                    ThisLoginTime = obj.e.ThisLoginTime,
-                    ThisLoginIP = obj.e.ThisLoginIP,
-                    LastLoginTime = obj.e.LastLoginTime,
-                    LastLoginIP = obj.e.LastLoginIP,
-                    PasswordHashed = obj.e.PasswordHashed,
-                    DefaultRandomPassword = obj.e.DefaultRandomPassword,
-                    DeptId = obj.dept.DeptId,
-                    DeptName = obj.dept.DeptName,
-                    RoleId = obj.role.RoleId,
-                    RoleName = obj.role.RoleName,
-                    RoleDisplayName = obj.role.RoleDisplayName,
-                    RoleDisplayText = obj.role.RoleDisplayName, //string.Format("{0} ({1})", obj.role.RoleDisplayName, obj.role.RoleName),
-                    RoleSortNo = obj.role.SortNo,
-                    OwnerDeptId = (obj.oe == null) ? 0 : obj.oe.DeptId ?? 0,
-                    OwnerName = (obj.oe == null) ? "" : obj.oe.EmpName
-                }).ToList();
+                entities = tempEntities.ToList();
 
                 for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
                 {
