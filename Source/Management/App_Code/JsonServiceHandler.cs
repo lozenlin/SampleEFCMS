@@ -8,6 +8,7 @@ using Common.Utility;
 using System.Configuration;
 using Newtonsoft.Json;
 using System.Data;
+using Common.DataAccess.EF.Model;
 
 namespace JsonService
 {
@@ -177,16 +178,14 @@ namespace JsonService
             if (!isTopPageOfOperation)
             {
                 // get owner info for config-form
-                DataSet ds = empAuth.GetEmployeeRoleData(roleId);
+                EmployeeRoleForBackend empRole = empAuth.GetEmployeeRoleData(roleId);
 
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                if (empRole != null)
                 {
-                    DataRow drFirst = ds.Tables[0].Rows[0];
-
-                    if (drFirst.ToSafeStr("RoleName") == roleName)
+                    if (empRole.RoleName == roleName)
                     {
-                        authAndOwner.OwnerAccountOfDataExamined = drFirst.ToSafeStr("PostAccount");
-                        authAndOwner.OwnerDeptIdOfDataExamined = Convert.ToInt32(drFirst["PostDeptId"]);
+                        authAndOwner.OwnerAccountOfDataExamined = empRole.PostAccount;
+                        authAndOwner.OwnerDeptIdOfDataExamined = empRole.PostDeptId.Value;
                     }
                 }
             }

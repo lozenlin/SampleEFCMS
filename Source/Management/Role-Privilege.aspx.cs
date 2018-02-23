@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -103,14 +104,12 @@ public partial class Role_Privilege : System.Web.UI.Page
 
     private void LoadRoleInfoUIData()
     {
-        DataSet dsRole = empAuth.GetEmployeeRoleData(c.qsRoleId);
+        EmployeeRoleForBackend role = empAuth.GetEmployeeRoleData(c.qsRoleId);
 
-        if (dsRole != null && dsRole.Tables[0].Rows.Count > 0)
+        if (role != null)
         {
-            DataRow drFirst = dsRole.Tables[0].Rows[0];
-
-            ltrRoleDisplayName.Text = drFirst.ToSafeStr("RoleDisplayName");
-            ltrRoleName.Text = drFirst.ToSafeStr("RoleName");
+            ltrRoleDisplayName.Text = role.RoleDisplayName;
+            ltrRoleName.Text = role.RoleName;
             hidRoleId.Value = c.qsRoleId.ToString();
         }
     }

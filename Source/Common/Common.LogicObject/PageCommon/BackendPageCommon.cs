@@ -745,20 +745,18 @@ namespace Common.LogicObject
             if (!isTopPageOfOperation)
             {
                 // get owner info for config-form
-                IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-                spEmployeeRole_GetData cmdInfo = new spEmployeeRole_GetData()
-                {
-                    RoleId = qsRoleId
-                };
-                DataSet ds = cmd.ExecuteDataset(cmdInfo);
-                string dbErrMsg = cmd.GetErrMsg();
+                EmployeeRoleForBackend empRole = null;
 
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
                 {
-                    DataRow drFirst = ds.Tables[0].Rows[0];
+                    empRole = empAuthDao.GetEmployeeRoleDataForBackend(qsRoleId);
+                    string dbErrMsg = empAuthDao.GetErrMsg();
+                }
 
-                    authAndOwner.OwnerAccountOfDataExamined = drFirst.ToSafeStr("PostAccount");
-                    authAndOwner.OwnerDeptIdOfDataExamined = Convert.ToInt32(drFirst["PostDeptId"]);
+                if (empRole != null)
+                {
+                    authAndOwner.OwnerAccountOfDataExamined = empRole.PostAccount;
+                    authAndOwner.OwnerDeptIdOfDataExamined = empRole.PostDeptId.Value;
                 }
             }
 

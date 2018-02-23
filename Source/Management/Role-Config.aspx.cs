@@ -92,26 +92,24 @@ public partial class Role_Config : System.Web.UI.Page
     {
         if (c.qsAct == ConfigFormAction.edit)
         {
-            DataSet dsRole = empAuth.GetEmployeeRoleData(c.qsRoleId);
+            EmployeeRoleForBackend role = empAuth.GetEmployeeRoleData(c.qsRoleId);
 
-            if (dsRole != null && dsRole.Tables[0].Rows.Count > 0)
+            if (role != null)
             {
-                DataRow drFirst = dsRole.Tables[0].Rows[0];
-
-                txtSortNo.Text = drFirst.ToSafeStr("SortNo");
-                txtRoleName.Text = drFirst.ToSafeStr("RoleName");
+                txtSortNo.Text = role.SortNo.ToString();
+                txtRoleName.Text = role.RoleName;
                 txtRoleName.Enabled = false;
-                txtRoleDisplayName.Text = drFirst.ToSafeStr("RoleDisplayName");
+                txtRoleDisplayName.Text = role.RoleDisplayName;
                 CopyPrivilegeArea.Visible = false;
 
                 //modification info
-                ltrPostAccount.Text = drFirst.ToSafeStr("PostAccount");
-                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["PostDate"]);
+                ltrPostAccount.Text = role.PostAccount;
+                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", role.PostDate);
 
-                if (!Convert.IsDBNull(drFirst["MdfDate"]))
+                if (role.MdfDate.HasValue)
                 {
-                    ltrMdfAccount.Text = drFirst.ToSafeStr("MdfAccount");
-                    ltrMdfDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["MdfDate"]);
+                    ltrMdfAccount.Text = role.MdfAccount;
+                    ltrMdfDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", role.MdfDate);
                 }
 
                 btnSave.Visible = true;

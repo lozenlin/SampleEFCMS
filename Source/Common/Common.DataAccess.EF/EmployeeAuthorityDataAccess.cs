@@ -484,8 +484,47 @@ namespace Common.DataAccess.EF
 
         #endregion
 
-        #region 部門資料
+        #region 員工身分
 
+        /// <summary>
+        /// 取得後台用員工身分資料
+        /// </summary>
+        public EmployeeRoleForBackend GetEmployeeRoleDataForBackend(int roleId)
+        {
+            Logger.Debug("GetEmployeeRoleDataForBackend(roleId)");
+
+            EmployeeRoleForBackend entity = null;
+
+            try
+            {
+                entity = (from r in cmsCtx.EmployeeRole
+                          join e in cmsCtx.Employee
+                          on r.PostAccount equals e.EmpAccount
+                          into roleGroup
+                          from e in roleGroup.DefaultIfEmpty()
+                          where r.RoleId == roleId
+                          select new EmployeeRoleForBackend()
+                          {
+                              RoleId = r.RoleId,
+                              RoleName = r.RoleName,
+                              RoleDisplayName = r.RoleDisplayName,
+                              SortNo = r.SortNo,
+                              PostAccount = r.PostAccount ?? "",
+                              PostDate = r.PostDate,
+                              MdfAccount = r.MdfAccount,
+                              MdfDate = r.MdfDate,
+                              PostDeptId = e.DeptId ?? 0
+                          }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
+        }
 
         #endregion
     }

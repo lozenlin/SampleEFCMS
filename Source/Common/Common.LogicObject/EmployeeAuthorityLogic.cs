@@ -1131,17 +1131,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得員工身分資料
         /// </summary>
-        public DataSet GetEmployeeRoleData(int roleId)
+        public EmployeeRoleForBackend GetEmployeeRoleData(int roleId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployeeRole_GetData cmdInfo = new spEmployeeRole_GetData()
-            {
-                RoleId = roleId
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            EmployeeRoleForBackend entity = null;
 
-            return ds;
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entity = empAuthDao.GetEmployeeRoleDataForBackend(roleId);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
+
+            return entity;
         }
 
         /// <summary>
