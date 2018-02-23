@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using Common.DataAccess.EF.EntityRequiredPropValues;
 
 namespace Common.DataAccess.EF
 {
@@ -587,6 +588,64 @@ namespace Common.DataAccess.EF
             }
 
             return entities;
+        }
+
+        /// <summary>
+        /// 刪除員工身分
+        /// </summary>
+        public bool DeleteEmployeeRoleData(int roleId)
+        {
+            Logger.Debug("DeleteEmployeeRoleData(roleId)");
+
+            bool result = false;
+            DbContextTransaction tran = null;
+
+            try
+            {
+                // 檢查關聯帳號
+                if (cmsCtx.Employee.Any(emp => emp.RoleId == roleId))
+                {
+                    sqlErrNumber = 50000;
+                    sqlErrState = 2;
+                    return false;
+                }
+
+                tran = cmsCtx.Database.BeginTransaction();
+
+                // 先刪除授權設定
+                string roleName = cmsCtx.EmployeeRole.Where(role => role.RoleId == roleId)
+                    .Select(role => role.RoleName)
+                    .FirstOrDefault();
+
+                cmsCtx.Database.ExecuteSqlCommand("delete from dbo.EmployeeRoleOperationsDesc where RoleName=@p0", roleName);
+
+                // main data
+                EmployeeRole entity = new EmployeeRole()
+                {
+                    RoleId = roleId
+                };
+
+                cmsCtx.Entry<EmployeeRole>(entity).State = EntityState.Deleted;
+                cmsCtx.SaveChanges();
+
+                tran.Commit();
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+
+                tran.Rollback();
+                return false;
+            }
+            finally
+            {
+                if (tran != null)
+                    tran.Dispose();
+            }
+
+            return result;
         }
 
         #endregion

@@ -542,12 +542,10 @@ namespace Common.LogicObject
 
             using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                Employee entity = empAuthDao.GetEmptyEntity<Employee>(new EmployeeRequiredPropValues()
+                Employee entity = new Employee()
                 {
-                    EmpId = empId,
-                    EmpAccount = "",
-                    EmpPassword = ""
-                });
+                    EmpId = empId
+                };
 
                 result = empAuthDao.Delete<Employee>(entity);
                 dbErrMsg = empAuthDao.GetErrMsg();
@@ -1089,17 +1087,17 @@ namespace Common.LogicObject
         /// </summary>
         public bool DeleteEmployeeRoleData(RoleParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployeeRole_DeleteData cmdInfo = new spEmployeeRole_DeleteData()
-            {
-                RoleId = param.RoleId
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            bool result = false;
 
-            if (!result && cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 2)
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                param.IsThereAccountsOfRole = true;
+                result = empAuthDao.DeleteEmployeeRoleData(param.RoleId);
+                dbErrMsg = empAuthDao.GetErrMsg();
+
+                if (!result && empAuthDao.GetSqlErrNumber() == 50000 && empAuthDao.GetSqlErrState() == 2)
+                {
+                    param.IsThereAccountsOfRole = true;
+                }
             }
 
             return result;
