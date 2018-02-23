@@ -197,7 +197,7 @@ namespace Common.DataAccess.EF
 	                or @CanReadSubItemOfSelf=1 and e.OwnerAccount=@MyAccount
 	                or e.EmpAccount=@MyAccount)
                  */
-                if (!param.AuthParams.CanReadSubItemOfCrew)
+                if (!param.AuthParams.CanReadSubItemOfOthers)
                 {
                     tempEntities = tempEntities.Where(obj =>
                         obj.e.DeptId == param.DeptId && param.AuthParams.CanReadSubItemOfCrew
