@@ -18,6 +18,8 @@ namespace Common.DataAccess.EF.Model
         public Nullable<System.DateTime> MdfDate { get; set; }
 
         public Nullable<int> PostDeptId { get; set; }
+        public int EmpTotal { get; set; }
+        public int RowNum { get; set; }
 
         public EmployeeRoleForBackend()
         {

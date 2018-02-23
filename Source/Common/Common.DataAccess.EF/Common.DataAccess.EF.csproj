@@ -150,6 +150,7 @@
     <Compile Include="QueryParam\AccountListQueryParamsDA.cs" />
     <Compile Include="QueryParam\AuthenticationQueryParamsDA.cs" />
     <Compile Include="QueryParam\PagedListQueryParamsDA.cs" />
+    <Compile Include="QueryParam\RoleListQueryParamsDA.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Model\Cms.edmx">

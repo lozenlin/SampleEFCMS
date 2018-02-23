@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -143,11 +144,11 @@ public partial class Role_List : BasePage
             IsSortDesc = c.qsIsSortDesc
         };
 
-        DataSet dsRoles = empAuth.GetEmployeeRoleList(param);
+        List<EmployeeRoleForBackend> roles = empAuth.GetEmployeeRoleList(param);
 
-        if (dsRoles != null)
+        if (roles != null)
         {
-            rptRoles.DataSource = dsRoles.Tables[0];
+            rptRoles.DataSource = roles;
             rptRoles.DataBind();
         }
 
@@ -159,12 +160,12 @@ public partial class Role_List : BasePage
 
     protected void rptRoles_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        EmployeeRoleForBackend role = (EmployeeRoleForBackend)e.Item.DataItem;
 
-        int roleId = Convert.ToInt32(drvTemp["RoleId"]);
-        string roleName = drvTemp.ToSafeStr("RoleName");
-        string roleDisplayName = drvTemp.ToSafeStr("RoleDisplayName");
-        int empTotal = Convert.ToInt32(drvTemp["EmpTotal"]);
+        int roleId = role.RoleId;
+        string roleName = role.RoleName;
+        string roleDisplayName = role.RoleDisplayName;
+        int empTotal = role.EmpTotal;
 
         HtmlGenericControl ctlRoleName = (HtmlGenericControl)e.Item.FindControl("ctlRoleName");
         ctlRoleName.InnerHtml = roleName;
@@ -195,8 +196,8 @@ public partial class Role_List : BasePage
         btnDelete.OnClientClick = string.Format("return confirm('" + Resources.Lang.Role_ConfirmDelete_Format + "');",
             roleName, roleDisplayName);
 
-        string ownerAccount = drvTemp.ToSafeStr("PostAccount");
-        int ownerDeptId = Convert.ToInt32(drvTemp["PostDeptId"]);
+        string ownerAccount = role.PostAccount;
+        int ownerDeptId = role.PostDeptId.Value;
 
         btnEdit.Visible = empAuth.CanEditThisPage(false, ownerAccount, ownerDeptId);
         btnGrant.Visible = btnEdit.Visible && (roleName != "admin");

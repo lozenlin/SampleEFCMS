@@ -1069,27 +1069,19 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得員工身分清單
         /// </summary>
-        public DataSet GetEmployeeRoleList(RoleListQueryParams param)
+        public List<EmployeeRoleForBackend> GetEmployeeRoleList(RoleListQueryParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployeeRole_GetList cmdInfo = new spEmployeeRole_GetList()
-            {
-                Kw = param.Kw,
-                BeginNum = param.PagedParams.BeginNum,
-                EndNum = param.PagedParams.EndNum,
-                SortField = param.PagedParams.SortField,
-                IsSortDesc = param.PagedParams.IsSortDesc,
-                CanReadSubItemOfOthers = param.AuthParams.CanReadSubItemOfOthers,
-                CanReadSubItemOfCrew = param.AuthParams.CanReadSubItemOfCrew,
-                CanReadSubItemOfSelf = param.AuthParams.CanReadSubItemOfSelf,
-                MyAccount = param.AuthParams.MyAccount,
-                MyDeptId = param.AuthParams.MyDeptId,
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-            param.PagedParams.RowCount = cmdInfo.RowCount;
+            List<EmployeeRoleForBackend> entities = null;
+            RoleListQueryParamsDA paramDA = param.GenRoleListQueryParamsDA();
 
-            return ds;
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entities = empAuthDao.GetEmployeeRoleListForBackend(paramDA);
+                dbErrMsg = empAuthDao.GetErrMsg();
+                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
+            }
+
+            return entities;
         }
 
         /// <summary>

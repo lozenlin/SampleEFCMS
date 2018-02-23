@@ -10,6 +10,7 @@
 // ===============================================================================
 
 using Common.DataAccess.EF.Model;
+using Common.DataAccess.EF.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -174,6 +175,9 @@ namespace Common.DataAccess.EF
             return empAccount;
         }
 
+        /// <summary>
+        /// 取得後台用帳號名單
+        /// </summary>
         public List<EmployeeForBackend> GetEmployeeListForBackend(AccountListQueryParamsDA param)
         {
             Logger.Debug("GetEmployeeListForBackend(param)");
@@ -200,8 +204,8 @@ namespace Common.DataAccess.EF
                 if (!param.AuthParams.CanReadSubItemOfOthers)
                 {
                     tempEntities = tempEntities.Where(obj =>
-                        obj.e.DeptId == param.DeptId && param.AuthParams.CanReadSubItemOfCrew
-                        || obj.e.OwnerAccount == param.AuthParams.MyAccount && param.AuthParams.CanReadSubItemOfSelf
+                        param.AuthParams.CanReadSubItemOfCrew && obj.e.DeptId == param.AuthParams.MyDeptId
+                        || param.AuthParams.CanReadSubItemOfSelf && obj.e.OwnerAccount == param.AuthParams.MyAccount
                         || obj.e.EmpAccount == param.AuthParams.MyAccount);
                 }
 
@@ -524,6 +528,98 @@ namespace Common.DataAccess.EF
             }
 
             return entity;
+        }
+
+        /// <summary>
+        /// 取得後台用員工身分清單
+        /// </summary>
+        public List<EmployeeRoleForBackend> GetEmployeeRoleListForBackend(RoleListQueryParamsDA param)
+        {
+            Logger.Debug("GetEmployeeRoleListForBackend(param)");
+
+            List<EmployeeRoleForBackend> entities = null;
+
+            try
+            {
+                var tempEntities = from r in cmsCtx.EmployeeRole
+                                   join e in cmsCtx.Employee
+                                   on r.PostAccount equals e.EmpAccount
+                                   into roleGroup
+                                   from e in roleGroup.DefaultIfEmpty()
+                                   select new EmployeeRoleForBackend()
+                                   {
+                                       RoleId = r.RoleId,
+                                       RoleName = r.RoleName,
+                                       RoleDisplayName = r.RoleDisplayName,
+                                       SortNo = r.SortNo,
+                                       PostAccount = r.PostAccount ?? "",
+                                       PostDate = r.PostDate,
+                                       MdfAccount = r.MdfAccount,
+                                       MdfDate = r.MdfDate,
+                                       PostDeptId = e.DeptId ?? 0,
+                                       EmpTotal = cmsCtx.Employee.Where(emp => emp.RoleId == r.RoleId).Count()
+                                   };
+
+                // Qeury conditions
+
+                if (!param.AuthParams.CanReadSubItemOfOthers)
+                {
+                    tempEntities = tempEntities.Where(obj =>
+                        param.AuthParams.CanReadSubItemOfCrew && obj.PostDeptId == param.AuthParams.MyDeptId
+                        || param.AuthParams.CanReadSubItemOfSelf && obj.PostAccount == param.AuthParams.MyAccount);
+                }
+
+                if (param.Kw != "")
+                {
+                    tempEntities = tempEntities.Where(obj =>
+                        obj.RoleName.Contains(param.Kw)
+                        || obj.RoleDisplayName.Contains(param.Kw));
+                }
+
+                // sorting
+                if (param.PagedParams.SortField != "")
+                {
+                    tempEntities = tempEntities.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempEntities = tempEntities.OrderBy(obj => obj.SortNo);
+                }
+
+                // total
+                param.PagedParams.RowCount = tempEntities.Count();
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if (skipCount > 0)
+                {
+                    tempEntities = tempEntities.Skip(skipCount);
+                }
+
+                if (takeCount >= 0)
+                {
+                    tempEntities = tempEntities.Take(takeCount);
+                }
+
+                // result
+                entities = tempEntities.ToList();
+
+                for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
+                {
+                    entities[rowIndex].RowNum = skipCount + rowIndex + 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
         }
 
         #endregion
