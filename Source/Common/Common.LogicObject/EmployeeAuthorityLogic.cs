@@ -1209,27 +1209,19 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得部門清單
         /// </summary>
-        public DataSet GetDepartmentList(DeptListQueryParams param)
+        public List<DepartmentForBackend> GetDepartmentList(DeptListQueryParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spDepartment_GetList cmdInfo = new spDepartment_GetList()
-            {
-                Kw = param.Kw,
-                BeginNum = param.PagedParams.BeginNum,
-                EndNum = param.PagedParams.EndNum,
-                SortField = param.PagedParams.SortField,
-                IsSortDesc = param.PagedParams.IsSortDesc,
-                CanReadSubItemOfOthers = param.AuthParams.CanReadSubItemOfOthers,
-                CanReadSubItemOfCrew = param.AuthParams.CanReadSubItemOfCrew,
-                CanReadSubItemOfSelf = param.AuthParams.CanReadSubItemOfSelf,
-                MyAccount = param.AuthParams.MyAccount,
-                MyDeptId = param.AuthParams.MyDeptId
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-            param.PagedParams.RowCount = cmdInfo.RowCount;
+            List<DepartmentForBackend> entities = null;
 
-            return ds;
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                DeptListQueryParamsDA paramDA = param.GenDeptListQueryParamsDA();
+                entities = empAuthDao.GetDepartmentListForBackend(paramDA);
+                dbErrMsg = empAuthDao.GetErrMsg();
+                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
+            }
+
+            return entities;
         }
 
         /// <summary>

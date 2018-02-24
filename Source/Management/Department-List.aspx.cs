@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -139,11 +140,11 @@ public partial class Department_List : BasePage
             IsSortDesc = c.qsIsSortDesc
         };
 
-        DataSet dsRoles = empAuth.GetDepartmentList(param);
+        List<DepartmentForBackend> depts = empAuth.GetDepartmentList(param);
 
-        if (dsRoles != null)
+        if (depts != null)
         {
-            rptDepartments.DataSource = dsRoles.Tables[0];
+            rptDepartments.DataSource = depts;
             rptDepartments.DataBind();
         }
 
@@ -155,11 +156,11 @@ public partial class Department_List : BasePage
 
     protected void rptDepartments_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        DepartmentForBackend deptData = (DepartmentForBackend)e.Item.DataItem;
 
-        int deptId = Convert.ToInt32(drvTemp["DeptId"]);
-        string deptName = drvTemp.ToSafeStr("DeptName");
-        int empTotal = Convert.ToInt32(drvTemp["EmpTotal"]);
+        int deptId = deptData.DeptId;
+        string deptName = deptData.DeptName;
+        int empTotal = deptData.EmpTotal;
 
         HtmlAnchor btnEdit = (HtmlAnchor)e.Item.FindControl("btnEdit");
         btnEdit.Attributes["onclick"] = string.Format("popWin('Department-Config.aspx?act={0}&id={1}', 700, 600); return false;", ConfigFormAction.edit, deptId);
@@ -175,8 +176,8 @@ public partial class Department_List : BasePage
         btnDelete.OnClientClick = string.Format("return confirm('" + Resources.Lang.Dept_ConfirmDelete_Format + "');",
             deptId, deptName);
 
-        string ownerAccount = drvTemp.ToSafeStr("PostAccount");
-        int ownerDeptId = Convert.ToInt32(drvTemp["PostDeptId"]);
+        string ownerAccount = deptData.PostAccount;
+        int ownerDeptId = deptData.PostDeptId;
 
         btnEdit.Visible = empAuth.CanEditThisPage(false, ownerAccount, ownerDeptId);
 

@@ -848,6 +848,93 @@ namespace Common.DataAccess.EF
             return entity;
         }
 
+        /// <summary>
+        /// 取得後台用部門清單
+        /// </summary>
+        public List<DepartmentForBackend> GetDepartmentListForBackend(DeptListQueryParamsDA param)
+        {
+            Logger.Debug("GetDepartmentListForBackend(param)");
+            List<DepartmentForBackend> entities = null;
+
+            try
+            {
+                var tempQuery = from d in cmsCtx.Department
+                                join e in cmsCtx.Employee on d.PostAccount equals e.EmpAccount
+                                into deptGroup
+                                from e in deptGroup.DefaultIfEmpty()
+                                select new DepartmentForBackend()
+                                {
+                                    DeptId = d.DeptId,
+                                    DeptName = d.DeptName,
+                                    SortNo = d.SortNo,
+                                    PostAccount = d.PostAccount,
+                                    PostDate = d.PostDate,
+                                    MdfAccount = d.MdfAccount,
+                                    MdfDate = d.MdfDate,
+                                    PostDeptId = e.DeptId ?? 0,
+                                    EmpTotal = cmsCtx.Employee.Where(emp => emp.DeptId == d.DeptId).Count()
+                                };
+
+                // Query conditions
+
+                if (!param.AuthParams.CanReadSubItemOfOthers)
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                        param.AuthParams.CanReadSubItemOfCrew && obj.PostDeptId == param.AuthParams.MyDeptId
+                        || param.AuthParams.CanReadSubItemOfSelf && obj.PostAccount == param.AuthParams.MyAccount);
+                }
+
+                if (param.Kw != "")
+                {
+                    tempQuery = tempQuery.Where(obj => obj.DeptName.Contains(param.Kw));
+                }
+
+                // sorting
+                if(param.PagedParams.SortField != "")
+                {
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempQuery = tempQuery.OrderBy(obj => obj.SortNo);
+                }
+
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if(skipCount>0)
+                {
+                    tempQuery = tempQuery.Skip(skipCount);
+                }
+
+                if (takeCount >= 0)
+                {
+                    tempQuery = tempQuery.Take(takeCount);
+                }
+
+                // result
+                entities = tempQuery.ToList();
+
+                for(int rowIndex=0; rowIndex<entities.Count; rowIndex++)
+                {
+                    entities[rowIndex].RowNum = skipCount + rowIndex + 1;
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
     }
 }
