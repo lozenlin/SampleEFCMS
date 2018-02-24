@@ -188,42 +188,42 @@ namespace Common.DataAccess.EF
             try
             {
                 var tempQuery = from e in cmsCtx.Employee.Include(emp => emp.EmployeeRole).Include(emp => emp.Department)
-                                   join oe in cmsCtx.Employee
-                                   on e.OwnerAccount equals oe.EmpAccount
-                                   into empGroup
-                                   from oe in empGroup.DefaultIfEmpty()
-                                   select new EmployeeForBackend()
-                                   {
-                                       EmpId = e.EmpId,
-                                       EmpAccount = e.EmpAccount,
-                                       EmpPassword = e.EmpPassword,
-                                       EmpName = e.EmpName,
-                                       Email = e.Email,
-                                       Remarks = e.Remarks,
-                                       IsAccessDenied = e.IsAccessDenied,
-                                       PostAccount = e.PostAccount,
-                                       PostDate = e.PostDate,
-                                       MdfAccount = e.MdfAccount,
-                                       MdfDate = e.MdfDate,
-                                       StartDate = e.StartDate,
-                                       EndDate = e.EndDate,
-                                       OwnerAccount = e.OwnerAccount,
-                                       ThisLoginTime = e.ThisLoginTime,
-                                       ThisLoginIP = e.ThisLoginIP,
-                                       LastLoginTime = e.LastLoginTime,
-                                       LastLoginIP = e.LastLoginIP,
-                                       PasswordHashed = e.PasswordHashed,
-                                       DefaultRandomPassword = e.DefaultRandomPassword,
-                                       DeptId = e.DeptId ?? 0,
-                                       DeptName = e.Department.DeptName,
-                                       RoleId = e.EmployeeRole.RoleId,
-                                       RoleName = e.EmployeeRole.RoleName,
-                                       RoleDisplayName = e.EmployeeRole.RoleDisplayName,
-                                       RoleDisplayText = e.EmployeeRole.RoleDisplayName, //string.Format("{0} ({1})", role.RoleDisplayName, role.RoleName),
-                                       RoleSortNo = e.EmployeeRole.SortNo,
-                                       OwnerDeptId = oe.DeptId ?? 0,
-                                       OwnerName = oe.EmpName ?? ""
-                                   };
+                                join oe in cmsCtx.Employee
+                                on e.OwnerAccount equals oe.EmpAccount
+                                into empGroup
+                                from oe in empGroup.DefaultIfEmpty()
+                                select new EmployeeForBackend()
+                                {
+                                    EmpId = e.EmpId,
+                                    EmpAccount = e.EmpAccount,
+                                    EmpPassword = e.EmpPassword,
+                                    EmpName = e.EmpName,
+                                    Email = e.Email,
+                                    Remarks = e.Remarks,
+                                    IsAccessDenied = e.IsAccessDenied,
+                                    PostAccount = e.PostAccount,
+                                    PostDate = e.PostDate,
+                                    MdfAccount = e.MdfAccount,
+                                    MdfDate = e.MdfDate,
+                                    StartDate = e.StartDate,
+                                    EndDate = e.EndDate,
+                                    OwnerAccount = e.OwnerAccount,
+                                    ThisLoginTime = e.ThisLoginTime,
+                                    ThisLoginIP = e.ThisLoginIP,
+                                    LastLoginTime = e.LastLoginTime,
+                                    LastLoginIP = e.LastLoginIP,
+                                    PasswordHashed = e.PasswordHashed,
+                                    DefaultRandomPassword = e.DefaultRandomPassword,
+                                    DeptId = e.DeptId ?? 0,
+                                    DeptName = e.Department.DeptName,
+                                    RoleId = e.EmployeeRole.RoleId,
+                                    RoleName = e.EmployeeRole.RoleName,
+                                    RoleDisplayName = e.EmployeeRole.RoleDisplayName,
+                                    RoleDisplayText = e.EmployeeRole.RoleDisplayName, //string.Format("{0} ({1})", role.RoleDisplayName, role.RoleName),
+                                    RoleSortNo = e.EmployeeRole.SortNo,
+                                    OwnerDeptId = oe.DeptId ?? 0,
+                                    OwnerName = oe.EmpName ?? ""
+                                };
 
                 // Query conditions
 
@@ -510,23 +510,23 @@ namespace Common.DataAccess.EF
             try
             {
                 var tempQuery = from r in cmsCtx.EmployeeRole
-                                   join e in cmsCtx.Employee
-                                   on r.PostAccount equals e.EmpAccount
-                                   into roleGroup
-                                   from e in roleGroup.DefaultIfEmpty()
-                                   select new EmployeeRoleForBackend()
-                                   {
-                                       RoleId = r.RoleId,
-                                       RoleName = r.RoleName,
-                                       RoleDisplayName = r.RoleDisplayName,
-                                       SortNo = r.SortNo,
-                                       PostAccount = r.PostAccount ?? "",
-                                       PostDate = r.PostDate,
-                                       MdfAccount = r.MdfAccount,
-                                       MdfDate = r.MdfDate,
-                                       PostDeptId = e.DeptId ?? 0,
-                                       EmpTotal = cmsCtx.Employee.Where(emp => emp.RoleId == r.RoleId).Count()
-                                   };
+                                join e in cmsCtx.Employee
+                                on r.PostAccount equals e.EmpAccount
+                                into roleGroup
+                                from e in roleGroup.DefaultIfEmpty()
+                                select new EmployeeRoleForBackend()
+                                {
+                                    RoleId = r.RoleId,
+                                    RoleName = r.RoleName,
+                                    RoleDisplayName = r.RoleDisplayName,
+                                    SortNo = r.SortNo,
+                                    PostAccount = r.PostAccount ?? "",
+                                    PostDate = r.PostDate,
+                                    MdfAccount = r.MdfAccount,
+                                    MdfDate = r.MdfDate,
+                                    PostDeptId = e.DeptId ?? 0,
+                                    EmpTotal = cmsCtx.Employee.Where(emp => emp.RoleId == r.RoleId).Count()
+                                };
 
                 // Qeury conditions
 
@@ -646,6 +646,101 @@ namespace Common.DataAccess.EF
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 取得員工身分最大排序編號
+        /// </summary>
+        public int GetEmployeeRoleMaxSortNo()
+        {
+            Logger.Debug("GetEmployeeRoleMaxSortNo()");
+
+            int result = 0;
+
+            try
+            {
+                result = cmsCtx.EmployeeRole.Max(emp => emp.SortNo) ?? 0;
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return -1;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 新增員工身分資料
+        /// </summary>
+        public InsertResult InsertEmployeeRoleData(EmployeeRole entity, string copyPrivilegeFromRoleName)
+        {
+            Logger.Debug("InsertEmployeeRoleData(entity, copyPrivilegeFromRoleName)");
+
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
+            DbContextTransaction tran = null;
+
+            try
+            {
+                // check role name
+                if(cmsCtx.EmployeeRole.Any(role=> role.RoleName == entity.RoleName))
+                {
+                    sqlErrNumber = 50000;
+                    sqlErrState = 2;
+                    return insResult;
+                }
+
+                tran = cmsCtx.Database.BeginTransaction();
+
+                cmsCtx.EmployeeRole.Add(entity);
+                cmsCtx.SaveChanges();
+                insResult.NewId = entity.GetIdentityColValue();
+
+                // copy privilege
+                var empRoleOps = cmsCtx.EmployeeRoleOperationsDesc.Where(ro => ro.RoleName == copyPrivilegeFromRoleName)
+                    .AsEnumerable()
+                    .Select(ro => new EmployeeRoleOperationsDesc()
+                    {
+                        RoleName = entity.RoleName,
+                        OpId = ro.OpId,
+                        CanRead = ro.CanRead,
+                        CanEdit = ro.CanEdit,
+                        CanReadSubItemOfSelf = ro.CanReadSubItemOfSelf,
+                        CanEditSubItemOfSelf = ro.CanEditSubItemOfSelf,
+                        CanAddSubItemOfSelf = ro.CanAddSubItemOfSelf,
+                        CanDelSubItemOfSelf = ro.CanDelSubItemOfSelf,
+                        CanReadSubItemOfCrew = ro.CanReadSubItemOfCrew,
+                        CanEditSubItemOfCrew = ro.CanEditSubItemOfCrew,
+                        CanDelSubItemOfCrew = ro.CanDelSubItemOfCrew,
+                        CanReadSubItemOfOthers = ro.CanReadSubItemOfOthers,
+                        CanEditSubItemOfOthers = ro.CanEditSubItemOfOthers,
+                        CanDelSubItemOfOthers = ro.CanDelSubItemOfOthers,
+                        PostAccount = entity.PostAccount,
+                        PostDate = DateTime.Now
+                    });
+
+                cmsCtx.EmployeeRoleOperationsDesc.AddRange(empRoleOps);
+                cmsCtx.SaveChanges();
+
+                tran.Commit();
+                insResult.IsSuccess = true;
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+
+                tran.Rollback();
+                return insResult;
+            }
+            finally
+            {
+                if (tran != null)
+                    tran.Dispose();
+            }
+
+            return insResult;
         }
 
         #endregion

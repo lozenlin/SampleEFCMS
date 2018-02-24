@@ -1108,12 +1108,13 @@ namespace Common.LogicObject
         /// </summary>
         public int GetEmployeeRoleMaxSortNo()
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployeeRole_GetMaxSortNo cmdInfo = new spEmployeeRole_GetMaxSortNo();
+            int result = 0;
 
-            int errCode = -1;
-            int result = cmd.ExecuteScalar<int>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                result = empAuthDao.GetEmployeeRoleMaxSortNo();
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -1139,28 +1140,33 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertEmployeeRoleData(RoleParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployeeRole_InsertData cmdInfo = new spEmployeeRole_InsertData()
-            {
-                RoleName = param.RoleName,
-                RoleDisplayName = param.RoleDisplayName,
-                SortNo = param.SortNo,
-                CopyPrivilegeFromRoleName = param.CopyPrivilegeFromRoleName,
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            if (result)
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                param.RoleId = cmdInfo.RoleId;
-            }
-            else if (cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 2)
-            {
-                param.HasRoleBeenUsed = true;
+                EmployeeRole entity = new EmployeeRole()
+                {
+                    RoleName = param.RoleName,
+                    RoleDisplayName = param.RoleDisplayName,
+                    SortNo = param.SortNo,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = empAuthDao.InsertEmployeeRoleData(entity, param.CopyPrivilegeFromRoleName);
+                dbErrMsg = empAuthDao.GetErrMsg();
+
+                if (insResult.IsSuccess)
+                {
+                    param.RoleId = entity.RoleId;
+                }
+                else if (empAuthDao.GetSqlErrNumber() == 50000 && empAuthDao.GetSqlErrState() == 2)
+                {
+                    param.HasRoleBeenUsed = true;
+                }
             }
 
-            return result;
+            return insResult.IsSuccess;
         }
 
         /// <summary>
