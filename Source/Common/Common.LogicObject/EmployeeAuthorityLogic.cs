@@ -1174,16 +1174,24 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateEmployeeRoleData(RoleParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployeeRole_UpdateData cmdInfo = new spEmployeeRole_UpdateData()
+            bool result = false;
+
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                RoleId = param.RoleId,
-                RoleDisplayName = param.RoleDisplayName,
-                SortNo = param.SortNo,
-                MdfAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                EmployeeRole entity = empAuthDao.GetEmptyEntity<EmployeeRole>(new EmployeeRoleRequiredPropValues()
+                {
+                    RoleId = param.RoleId,
+                    RoleName = ""
+                });
+
+                entity.RoleDisplayName = param.RoleDisplayName;
+                entity.SortNo = param.SortNo;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = empAuthDao.Update();
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
