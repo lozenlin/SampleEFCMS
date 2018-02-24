@@ -1256,17 +1256,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得部門資料
         /// </summary>
-        public DataSet GetDepartmentData(int deptId)
+        public DepartmentForBackend GetDepartmentData(int deptId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spDepartment_GetData cmdInfo = new spDepartment_GetData()
-            {
-                DeptId = deptId
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            DepartmentForBackend entity = null;
 
-            return ds;
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entity = empAuthDao.GetDepartmentDataForBackend(deptId);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
+
+            return entity;
         }
 
         /// <summary>

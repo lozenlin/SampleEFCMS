@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -63,23 +64,21 @@ public partial class Department_Config : System.Web.UI.Page
     {
         if (c.qsAct == ConfigFormAction.edit)
         {
-            DataSet dsDept = empAuth.GetDepartmentData(c.qsId);
+            DepartmentForBackend dept = empAuth.GetDepartmentData(c.qsId);
 
-            if (dsDept != null && dsDept.Tables[0].Rows.Count > 0)
+            if (dept != null)
             {
-                DataRow drFirst = dsDept.Tables[0].Rows[0];
-
-                txtSortNo.Text = drFirst.ToSafeStr("SortNo");
-                txtDeptName.Text = drFirst.ToSafeStr("DeptName");
+                txtSortNo.Text = dept.SortNo.ToString();
+                txtDeptName.Text = dept.DeptName;
 
                 //modification info
-                ltrPostAccount.Text = drFirst.ToSafeStr("PostAccount");
-                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["PostDate"]);
+                ltrPostAccount.Text = dept.PostAccount;
+                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", dept.PostDate);
 
-                if (!Convert.IsDBNull(drFirst["MdfDate"]))
+                if (dept.MdfDate.HasValue)
                 {
-                    ltrMdfAccount.Text = drFirst.ToSafeStr("MdfAccount");
-                    ltrMdfDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["MdfDate"]);
+                    ltrMdfAccount.Text = dept.MdfAccount;
+                    ltrMdfDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", dept.MdfDate);
                 }
 
                 btnSave.Visible = true;

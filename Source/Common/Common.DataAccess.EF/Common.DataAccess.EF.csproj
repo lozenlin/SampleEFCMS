@@ -119,6 +119,7 @@
     <Compile Include="Model\Department.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\DepartmentForBackend.cs" />
     <Compile Include="Model\Employee.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>

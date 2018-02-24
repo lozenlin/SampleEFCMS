@@ -808,5 +808,46 @@ namespace Common.DataAccess.EF
         }
 
         #endregion
+
+        #region 部門資料
+
+        /// <summary>
+        /// 取得後台用部門資料
+        /// </summary>
+        public DepartmentForBackend GetDepartmentDataForBackend(int deptId)
+        {
+            Logger.Debug("GetDepartmentDataForBackend(int deptId)");
+            DepartmentForBackend entity = null;
+
+            try
+            {
+                entity = (from d in cmsCtx.Department
+                          join e in cmsCtx.Employee on d.PostAccount equals e.EmpAccount
+                          into deptGroup
+                          from e in deptGroup.DefaultIfEmpty()
+                          where d.DeptId == deptId
+                          select new DepartmentForBackend()
+                          {
+                              DeptId = d.DeptId,
+                              DeptName = d.DeptName,
+                              SortNo = d.SortNo,
+                              PostAccount = d.PostAccount,
+                              PostDate = d.PostDate,
+                              MdfAccount = d.MdfAccount,
+                              MdfDate = d.MdfDate,
+                              PostDeptId = e.DeptId ?? 0
+                          }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
+        }
+
+        #endregion
     }
 }
