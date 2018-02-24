@@ -636,7 +636,9 @@ namespace Common.DataAccess.EF
                 Logger.Error("", ex);
                 errMsg = ex.Message;
 
-                tran.Rollback();
+                if (tran != null)
+                    tran.Rollback();
+
                 return false;
             }
             finally
@@ -731,7 +733,9 @@ namespace Common.DataAccess.EF
                 Logger.Error("", ex);
                 errMsg = ex.Message;
 
-                tran.Rollback();
+                if (tran != null)
+                    tran.Rollback();
+
                 return insResult;
             }
             finally
@@ -741,6 +745,66 @@ namespace Common.DataAccess.EF
             }
 
             return insResult;
+        }
+
+        /// <summary>
+        /// 儲存員工身分後端作業授權清單
+        /// </summary>
+        public bool SaveListOfEmployeeRolePrivileges(List<EmployeeRoleOperationsDesc> empRoleOps)
+        {
+            Logger.Debug("SaveListOfEmployeeRolePrivileges(empRoleOps)");
+
+            bool result = false;
+
+            try
+            {
+                // divide into insert or update
+                empRoleOps.ForEach(ro =>
+                {
+                    if (cmsCtx.EmployeeRoleOperationsDesc.Any(obj => obj.RoleName == ro.RoleName && obj.OpId == ro.OpId))
+                    {
+                        // update
+                        var entry = cmsCtx.Entry<EmployeeRoleOperationsDesc>(ro);
+                        entry.State = EntityState.Unchanged;
+
+                        entry.Property(obj => obj.CanRead).IsModified = true;
+                        entry.Property(obj => obj.CanEdit).IsModified = true;
+                        entry.Property(obj => obj.CanReadSubItemOfSelf).IsModified = true;
+                        entry.Property(obj => obj.CanEditSubItemOfSelf).IsModified = true;
+                        entry.Property(obj => obj.CanAddSubItemOfSelf).IsModified = true;
+                        entry.Property(obj => obj.CanDelSubItemOfSelf).IsModified = true;
+                        entry.Property(obj => obj.CanReadSubItemOfCrew).IsModified = true;
+                        entry.Property(obj => obj.CanEditSubItemOfCrew).IsModified = true;
+                        entry.Property(obj => obj.CanDelSubItemOfCrew).IsModified = true;
+                        entry.Property(obj => obj.CanReadSubItemOfOthers).IsModified = true;
+                        entry.Property(obj => obj.CanEditSubItemOfOthers).IsModified = true;
+                        entry.Property(obj => obj.CanDelSubItemOfOthers).IsModified = true;
+                        ro.MdfAccount = ro.PostAccount;
+                        ro.MdfDate = ro.PostDate;
+                        entry.Property(obj => obj.MdfAccount).IsModified = true;
+                        entry.Property(obj => obj.MdfDate).IsModified = true;
+                    }
+                    else
+                    {
+                        // insert
+                        ro.MdfAccount = null;
+                        ro.MdfDate = null;
+                        cmsCtx.EmployeeRoleOperationsDesc.Add(ro);
+                    }
+                });
+
+                cmsCtx.SaveChanges();
+                result = true;
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+
+                return false;
+            }
+
+            return result;
         }
 
         #endregion

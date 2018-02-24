@@ -121,20 +121,9 @@ public partial class Role_Privilege : System.Web.UI.Page
 
     private void DisplayOperations()
     {
-        DataSet dsTopList = empAuth.GetOperationsTopListWithRoleAuth(ltrRoleName.Text);
-        DataSet dsSubList = empAuth.GetOperationsSubListWithRoleAuth(ltrRoleName.Text);
+        List<OperationWithRoleAuth> topList = empAuth.GetOperationWithRoleAuthNestedList(ltrRoleName.Text);
 
-        // move sub list table into dsTopList to join
-        DataTable dtSubList = dsSubList.Tables[0];
-        dtSubList.TableName = "SubList";
-        dsSubList.Tables.Remove(dtSubList);
-        dsSubList.Dispose();
-        dsTopList.Tables.Add(dtSubList);
-
-        DataRelation dataRel = dsTopList.Relations.Add("JoinTopSub", dsTopList.Tables[0].Columns["OpId"], dtSubList.Columns["ParentId"]);
-        dataRel.Nested = true;
-
-        rptOperations.DataSource = dsTopList.Tables[0];
+        rptOperations.DataSource = topList;
         rptOperations.DataBind();
 
         btnSave.Visible = true;
@@ -142,35 +131,35 @@ public partial class Role_Privilege : System.Web.UI.Page
 
     protected void rptOperations_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        OperationWithRoleAuth opAuth = (OperationWithRoleAuth)e.Item.DataItem;
 
-        int opId = Convert.ToInt32(drvTemp["OpId"]);
-        string opSubject = drvTemp.ToSafeStr("OpSubject");
-        bool canRead = drvTemp.To<bool>("CanRead", false);
-        bool canEdit = drvTemp.To<bool>("CanEdit", false);
-        bool canReadSubItemOfSelf = drvTemp.To<bool>("CanReadSubItemOfSelf", false);
-        bool canEditSubItemOfSelf = drvTemp.To<bool>("CanEditSubItemOfSelf", false);
-        bool canAddSubItemOfSelf = drvTemp.To<bool>("CanAddSubItemOfSelf", false);
-        bool canDelSubItemOfSelf = drvTemp.To<bool>("CanDelSubItemOfSelf", false);
-        bool canReadSubItemOfCrew = drvTemp.To<bool>("CanReadSubItemOfCrew", false);
-        bool canEditSubItemOfCrew = drvTemp.To<bool>("CanEditSubItemOfCrew", false);
-        bool canDelSubItemOfCrew = drvTemp.To<bool>("CanDelSubItemOfCrew", false);
-        bool canReadSubItemOfOthers = drvTemp.To<bool>("CanReadSubItemOfOthers", false);
-        bool canEditSubItemOfOthers = drvTemp.To<bool>("CanEditSubItemOfOthers", false);
-        bool canDelSubItemOfOthers = drvTemp.To<bool>("CanDelSubItemOfOthers", false);
+        int opId = opAuth.OpId;
+        string opSubject = opAuth.OpSubject;
+        bool canRead = opAuth.CanRead;
+        bool canEdit = opAuth.CanEdit;
+        bool canReadSubItemOfSelf = opAuth.CanReadSubItemOfSelf;
+        bool canEditSubItemOfSelf = opAuth.CanEditSubItemOfSelf;
+        bool canAddSubItemOfSelf = opAuth.CanAddSubItemOfSelf;
+        bool canDelSubItemOfSelf = opAuth.CanDelSubItemOfSelf;
+        bool canReadSubItemOfCrew = opAuth.CanReadSubItemOfCrew;
+        bool canEditSubItemOfCrew = opAuth.CanEditSubItemOfCrew;
+        bool canDelSubItemOfCrew = opAuth.CanDelSubItemOfCrew;
+        bool canReadSubItemOfOthers = opAuth.CanReadSubItemOfOthers;
+        bool canEditSubItemOfOthers = opAuth.CanEditSubItemOfOthers;
+        bool canDelSubItemOfOthers = opAuth.CanDelSubItemOfOthers;
 
         string lastMdfAccount = "";
         DateTime? lastMdfDate = null;
 
-        if (!Convert.IsDBNull(drvTemp["MdfDate"]))
+        if (opAuth.MdfDate.HasValue)
         {
-            lastMdfAccount = drvTemp.ToSafeStr("MdfAccount");
-            lastMdfDate = Convert.ToDateTime(drvTemp["MdfDate"]);
+            lastMdfAccount = opAuth.MdfAccount;
+            lastMdfDate = opAuth.MdfDate;
         }
-        else if (!Convert.IsDBNull(drvTemp["PostDate"]))
+        else if (opAuth.PostDate.HasValue)
         {
-            lastMdfAccount = drvTemp.ToSafeStr("PostAccount");
-            lastMdfDate = Convert.ToDateTime(drvTemp["PostDate"]);
+            lastMdfAccount = opAuth.PostAccount;
+            lastMdfDate = opAuth.PostDate;
         }
 
         HtmlTableRow OpArea = (HtmlTableRow)e.Item.FindControl("OpArea");
@@ -193,7 +182,7 @@ public partial class Role_Privilege : System.Web.UI.Page
         HtmlImage imgOpItem = (HtmlImage)e.Item.FindControl("imgOpItem");
         imgOpItem.Alt = opSubject;
         imgOpItem.Src = "~/BPimages/icon/data.gif";
-        string iconImageFile = drvTemp.ToSafeStr("IconImageFile");
+        string iconImageFile = opAuth.IconImageFile;
         if (!string.IsNullOrEmpty(iconImageFile))
             imgOpItem.Src = string.Format("~/BPimages/icon/{0}", iconImageFile);
 
@@ -334,8 +323,7 @@ public partial class Role_Privilege : System.Web.UI.Page
 
         if (rptSubOperations != null)
         {
-            DataView dvSubList = drvTemp.CreateChildView("JoinTopSub");
-            rptSubOperations.DataSource = dvSubList;
+            rptSubOperations.DataSource = opAuth.SubItems;
             rptSubOperations.DataBind();
         }
     }

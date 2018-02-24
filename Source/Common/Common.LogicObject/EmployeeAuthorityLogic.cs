@@ -1205,15 +1205,14 @@ namespace Common.LogicObject
         /// </summary>
         public bool SaveListOfEmployeeRolePrivileges(RolePrivilegeParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            SaveListOfEmployeeRoleOperationsDesc cmdInfo = new SaveListOfEmployeeRoleOperationsDesc()
+            bool result = false;
+
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                RoleName = param.RoleName,
-                roleOps = param.GetRoleOpsOfDA(),
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                List<EmployeeRoleOperationsDesc> empRoleOps = param.GenEmpRoleOps();
+                result = empAuthDao.SaveListOfEmployeeRolePrivileges(empRoleOps);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
