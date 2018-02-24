@@ -187,7 +187,7 @@ namespace Common.DataAccess.EF
 
             try
             {
-                var tempEntities = from e in cmsCtx.Employee.Include(emp => emp.EmployeeRole).Include(emp => emp.Department)
+                var tempQuery = from e in cmsCtx.Employee.Include(emp => emp.EmployeeRole).Include(emp => emp.Department)
                                    join oe in cmsCtx.Employee
                                    on e.OwnerAccount equals oe.EmpAccount
                                    into empGroup
@@ -235,7 +235,7 @@ namespace Common.DataAccess.EF
                  */
                 if (!param.AuthParams.CanReadSubItemOfOthers)
                 {
-                    tempEntities = tempEntities.Where(obj =>
+                    tempQuery = tempQuery.Where(obj =>
                         param.AuthParams.CanReadSubItemOfCrew && obj.DeptId == param.AuthParams.MyDeptId
                         || param.AuthParams.CanReadSubItemOfSelf && obj.OwnerAccount == param.AuthParams.MyAccount
                         || obj.EmpAccount == param.AuthParams.MyAccount);
@@ -243,12 +243,12 @@ namespace Common.DataAccess.EF
 
                 if (param.DeptId != 0) // 0:all
                 {
-                    tempEntities = tempEntities.Where(obj => obj.DeptId == param.DeptId);
+                    tempQuery = tempQuery.Where(obj => obj.DeptId == param.DeptId);
                 }
 
                 if (param.Kw != "")
                 {
-                    tempEntities = tempEntities.Where(obj =>
+                    tempQuery = tempQuery.Where(obj =>
                         obj.EmpAccount.Contains(param.Kw)
                         || obj.EmpName.Contains(param.Kw));
                 }
@@ -257,13 +257,13 @@ namespace Common.DataAccess.EF
                 switch (param.ListMode)
                 {
                     case 1:
-                        tempEntities = tempEntities.Where(obj =>
+                        tempQuery = tempQuery.Where(obj =>
                             !obj.IsAccessDenied
                             && (obj.RoleName == "admin"
                                 || obj.StartDate <= DateTime.Now && DateTime.Now < DbFunctions.AddDays(obj.EndDate, 1)));
                         break;
                     case 2:
-                        tempEntities = tempEntities.Where(obj =>
+                        tempQuery = tempQuery.Where(obj =>
                             obj.IsAccessDenied
                             || !(obj.RoleName == "admin"
                                 || obj.StartDate <= DateTime.Now && DateTime.Now < DbFunctions.AddDays(obj.EndDate, 1)));
@@ -273,19 +273,19 @@ namespace Common.DataAccess.EF
                 // sorting
                 if (param.PagedParams.SortField != "")
                 {
-                    tempEntities = tempEntities.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
                 }
                 else
                 {
                     // default
-                    tempEntities = tempEntities
+                    tempQuery = tempQuery
                         .OrderBy(obj => obj.DeptId)
                         .ThenBy(obj => obj.RoleSortNo)
                         .ThenBy(obj => obj.EmpName);
                 }
 
                 // total
-                param.PagedParams.RowCount = tempEntities.Count();
+                param.PagedParams.RowCount = tempQuery.Count();
 
                 // paging
                 int skipCount = param.PagedParams.GetSkipCount();
@@ -293,16 +293,16 @@ namespace Common.DataAccess.EF
 
                 if (skipCount > 0)
                 {
-                    tempEntities = tempEntities.Skip(skipCount);
+                    tempQuery = tempQuery.Skip(skipCount);
                 }
 
                 if (takeCount >= 0)
                 {
-                    tempEntities = tempEntities.Take(takeCount);
+                    tempQuery = tempQuery.Take(takeCount);
                 }
 
                 // result
-                entities = tempEntities.ToList();
+                entities = tempQuery.ToList();
 
                 for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
                 {
@@ -509,7 +509,7 @@ namespace Common.DataAccess.EF
 
             try
             {
-                var tempEntities = from r in cmsCtx.EmployeeRole
+                var tempQuery = from r in cmsCtx.EmployeeRole
                                    join e in cmsCtx.Employee
                                    on r.PostAccount equals e.EmpAccount
                                    into roleGroup
@@ -532,14 +532,14 @@ namespace Common.DataAccess.EF
 
                 if (!param.AuthParams.CanReadSubItemOfOthers)
                 {
-                    tempEntities = tempEntities.Where(obj =>
+                    tempQuery = tempQuery.Where(obj =>
                         param.AuthParams.CanReadSubItemOfCrew && obj.PostDeptId == param.AuthParams.MyDeptId
                         || param.AuthParams.CanReadSubItemOfSelf && obj.PostAccount == param.AuthParams.MyAccount);
                 }
 
                 if (param.Kw != "")
                 {
-                    tempEntities = tempEntities.Where(obj =>
+                    tempQuery = tempQuery.Where(obj =>
                         obj.RoleName.Contains(param.Kw)
                         || obj.RoleDisplayName.Contains(param.Kw));
                 }
@@ -547,16 +547,16 @@ namespace Common.DataAccess.EF
                 // sorting
                 if (param.PagedParams.SortField != "")
                 {
-                    tempEntities = tempEntities.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
                 }
                 else
                 {
                     // default
-                    tempEntities = tempEntities.OrderBy(obj => obj.SortNo);
+                    tempQuery = tempQuery.OrderBy(obj => obj.SortNo);
                 }
 
                 // total
-                param.PagedParams.RowCount = tempEntities.Count();
+                param.PagedParams.RowCount = tempQuery.Count();
 
                 // paging
                 int skipCount = param.PagedParams.GetSkipCount();
@@ -564,16 +564,16 @@ namespace Common.DataAccess.EF
 
                 if (skipCount > 0)
                 {
-                    tempEntities = tempEntities.Skip(skipCount);
+                    tempQuery = tempQuery.Skip(skipCount);
                 }
 
                 if (takeCount >= 0)
                 {
-                    tempEntities = tempEntities.Take(takeCount);
+                    tempQuery = tempQuery.Take(takeCount);
                 }
 
                 // result
-                entities = tempEntities.ToList();
+                entities = tempQuery.ToList();
 
                 for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
                 {
