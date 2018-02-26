@@ -1266,12 +1266,13 @@ namespace Common.LogicObject
         /// </summary>
         public int GetDepartmentMaxSortNo()
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spDepartment_GetMaxSortNo cmdInfo = new spDepartment_GetMaxSortNo();
+            int result = 0;
 
-            int errCode = -1;
-            int result = cmd.ExecuteScalar<int>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                result = empAuthDao.GetDepartmentMaxSortNo();
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -1281,26 +1282,32 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertDepartmentData(DeptParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spDepartment_InsertData cmdInfo = new spDepartment_InsertData()
-            {
-                DeptName = param.DeptName,
-                SortNo = param.SortNo,
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            if (result)
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                param.DeptId = cmdInfo.DeptId;
-            }
-            else if (cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 2)
-            {
-                param.HasDeptNameBeenUsed = true;
+                Department entity = new Department()
+                {
+                    DeptName = param.DeptName,
+                    SortNo = param.SortNo,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = empAuthDao.InsertDepartmentData(entity);
+                dbErrMsg = empAuthDao.GetErrMsg();
+
+                if (insResult.IsSuccess)
+                {
+                    param.DeptId = (int)insResult.NewId;
+                }
+                else if (empAuthDao.GetSqlErrNumber() == 50000 && empAuthDao.GetSqlErrState() == 2)
+                {
+                    param.HasDeptNameBeenUsed = true;
+                }
             }
 
-            return result;
+            return insResult.IsSuccess;
         }
 
         /// <summary>
@@ -1308,20 +1315,28 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateDepartmentData(DeptParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spDepartment_UpdateData cmdInfo = new spDepartment_UpdateData()
-            {
-                DeptId = param.DeptId,
-                DeptName = param.DeptName,
-                SortNo = param.SortNo,
-                MdfAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            bool result = false;
 
-            if (!result && cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 2)
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                param.HasDeptNameBeenUsed = true;
+                Department entity = empAuthDao.GetEmptyEntity<Department>(new DepartmentRequiredPropValues()
+                {
+                    DeptId = param.DeptId,
+                    DeptName = ""
+                });
+
+                entity.DeptName = param.DeptName;
+                entity.SortNo = param.SortNo;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = empAuthDao.UpdateDepartmentData(entity);
+                dbErrMsg = empAuthDao.GetErrMsg();
+
+                if (!result && empAuthDao.GetSqlErrNumber() == 50000 && empAuthDao.GetSqlErrState() == 2)
+                {
+                    param.HasDeptNameBeenUsed = true;
+                }
             }
 
             return result;

@@ -963,6 +963,91 @@ namespace Common.DataAccess.EF
             return true;
         }
 
+        /// <summary>
+        /// 取得部門最大排序編號
+        /// </summary>
+        public int GetDepartmentMaxSortNo()
+        {
+            Logger.Debug("GetDepartmentMaxSortNo()");
+            int result = 0;
+
+            try
+            {
+                result = cmsCtx.Department.Max(dept => dept.SortNo) ?? 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return -1;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 新增部門資料
+        /// </summary>
+        public InsertResult InsertDepartmentData(Department entity)
+        {
+            Logger.Debug("InsertDepartmentData(entity)");
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
+
+            try
+            {
+                // check department name
+                if(cmsCtx.Department.Any(dept=>dept.DeptName == entity.DeptName))
+                {
+                    sqlErrNumber = 50000;
+                    sqlErrState = 2;
+                    return insResult;
+                }
+
+                cmsCtx.Department.Add(entity);
+                cmsCtx.SaveChanges();
+                insResult.NewId = entity.GetIdentityColValue();
+
+                insResult.IsSuccess = true;
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return insResult;
+            }
+
+            return insResult;
+        }
+
+        /// <summary>
+        /// 更新部門資料
+        /// </summary>
+        public bool UpdateDepartmentData(Department entity)
+        {
+            Logger.Debug("UpdateDepartmentData(entity)");
+
+            try
+            {
+                // check department name
+                if (cmsCtx.Department.Any(dept => dept.DeptName == entity.DeptName))
+                {
+                    sqlErrNumber = 50000;
+                    sqlErrState = 2;
+                    return false;
+                }
+
+                cmsCtx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
     }
 }
