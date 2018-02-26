@@ -19,6 +19,7 @@ public partial class Operation_Node : BasePage
     private bool useEnglishSubject = false;
     private int levelNumOfThis = 0;
     private int maxLevelNum = 2;
+    private int totalSubitems = 0;
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -217,25 +218,26 @@ public partial class Operation_Node : BasePage
             IsSortDesc = c.qsIsSortDesc
         };
 
-        DataSet dsSubitems = empAuth.GetOperationList(param);
+        List<OperationForBackend> subitems = empAuth.GetOperationList(param);
 
-        if (dsSubitems != null)
+        if (subitems != null)
         {
-            rptSubitems.DataSource = dsSubitems.Tables[0];
+            totalSubitems = subitems.Count;
+            rptSubitems.DataSource = subitems;
             rptSubitems.DataBind();
         }
     }
 
     protected void rptSubitems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        OperationForBackend opData = (OperationForBackend)e.Item.DataItem;
 
-        int opId = Convert.ToInt32(drvTemp["opId"]);
-        string subject = drvTemp.ToSafeStr("Subject");
-        bool isNewWindow = Convert.ToBoolean(drvTemp["IsNewWindow"]);
-        string iconImageFile = drvTemp.ToSafeStr("IconImageFile");
-        bool isHideSelf = Convert.ToBoolean(drvTemp["IsHideSelf"]);
-        string commonClass = drvTemp.ToSafeStr("CommonClass");
+        int opId = opData.OpId;
+        string subject = opData.Subject;
+        bool isNewWindow = opData.IsNewWindow;
+        string iconImageFile = opData.IconImageFile;
+        bool isHideSelf = opData.IsHideSelf;
+        string commonClass = opData.CommonClass;
 
         HtmlTableRow ItemArea = (HtmlTableRow)e.Item.FindControl("ItemArea");
 
@@ -250,7 +252,6 @@ public partial class Operation_Node : BasePage
         LinkButton btnMoveUp = (LinkButton)e.Item.FindControl("btnMoveUp");
         btnMoveUp.ToolTip = Resources.Lang.btnMoveUp;
 
-        int total = drvTemp.DataView.Count;
         int itemNum = e.Item.ItemIndex + 1;
 
         if (itemNum == 1)
@@ -258,7 +259,7 @@ public partial class Operation_Node : BasePage
             btnMoveUp.Visible = false;
         }
 
-        if (itemNum == total)
+        if (itemNum == totalSubitems)
         {
             btnMoveDown.Visible = false;
         }

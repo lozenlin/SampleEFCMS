@@ -823,29 +823,19 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後端作業選項清單
         /// </summary>
-        public DataSet GetOperationList(OpListQueryParams param)
+        public List<OperationForBackend> GetOperationList(OpListQueryParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_GetList cmdInfo = new spOperations_GetList()
-            {
-                ParentId = param.ParentId,
-                CultureName = param.CultureName,
-                Kw = param.Kw,
-                BeginNum = param.PagedParams.BeginNum,
-                EndNum = param.PagedParams.EndNum,
-                SortField = param.PagedParams.SortField,
-                IsSortDesc = param.PagedParams.IsSortDesc,
-                CanReadSubItemOfOthers = true,
-                CanReadSubItemOfCrew = true,
-                CanReadSubItemOfSelf = true,
-                MyAccount = "",
-                MyDeptId = 0
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-            param.PagedParams.RowCount = cmdInfo.RowCount;
+            List<OperationForBackend> entities = null;
 
-            return ds;
+            using(EmployeeAuthorityDataAccess empAuthDao=new EmployeeAuthorityDataAccess())
+            {
+                OpListQueryParamsDA paramDA = param.GenOpListQueryParamsDA();
+                entities = empAuthDao.GetOperationListForBackend(paramDA);
+                dbErrMsg = empAuthDao.GetErrMsg();
+                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
+            }
+
+            return entities;
         }
 
         /// <summary>

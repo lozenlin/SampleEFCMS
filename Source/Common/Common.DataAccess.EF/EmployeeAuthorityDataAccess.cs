@@ -303,10 +303,12 @@ namespace Common.DataAccess.EF
 
                 // result
                 entities = tempQuery.ToList();
+                int rowIndex = 0;
 
-                for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
+                foreach (var entity in entities)
                 {
-                    entities[rowIndex].RowNum = skipCount + rowIndex + 1;
+                    entity.RowNum = skipCount + rowIndex + 1;
+                    rowIndex++;
                 }
             }
             catch (Exception ex)
@@ -335,8 +337,9 @@ namespace Common.DataAccess.EF
             try
             {
                 entity = (from op in cmsCtx.Operations
-                          join emp in cmsCtx.Employee.Include(emp => emp.Department)
-                          on op.PostAccount equals emp.EmpAccount
+                          join emp in cmsCtx.Employee.Include(emp => emp.Department) on op.PostAccount equals emp.EmpAccount
+                          into opGroup
+                          from emp in opGroup.DefaultIfEmpty()
                           where op.OpId == opId
                           select new OperationForBackend()
                           {
@@ -355,7 +358,8 @@ namespace Common.DataAccess.EF
                               MdfDate = op.MdfDate,
                               EnglishSubject = op.EnglishSubject,
                               PostName = emp.EmpName,
-                              PostDeptName = (emp.Department == null) ? null : emp.Department.DeptName
+                              PostDeptName = emp.Department.DeptName,
+                              PostDeptId = emp.DeptId ?? 0
                           }).FirstOrDefault();
             }
             catch(Exception ex)
@@ -366,6 +370,121 @@ namespace Common.DataAccess.EF
             }
 
             return entity;
+        }
+
+        /// <summary>
+        /// 取得後台用後端作業選項清單
+        /// </summary>
+        public List<OperationForBackend> GetOperationListForBackend(OpListQueryParamsDA param)
+        {
+            Logger.Debug("GetOperationListForBackend(param)");
+            List<OperationForBackend> entities = null;
+
+            try
+            {
+                var tempQuery = from op in cmsCtx.Operations
+                                join emp in cmsCtx.Employee.Include(emp => emp.Department) on op.PostAccount equals emp.EmpAccount
+                                into opGroup
+                                from emp in opGroup.DefaultIfEmpty()
+                                select new OperationForBackend()
+                                {
+                                    OpId = op.OpId,
+                                    ParentId = op.ParentId,
+                                    OpSubject = op.OpSubject,
+                                    LinkUrl = op.LinkUrl,
+                                    IsNewWindow = op.IsNewWindow,
+                                    IconImageFile = op.IconImageFile,
+                                    SortNo = op.SortNo,
+                                    IsHideSelf = op.IsHideSelf,
+                                    CommonClass = op.CommonClass,
+                                    PostAccount = op.PostAccount,
+                                    PostDate = op.PostDate,
+                                    MdfAccount = op.MdfAccount,
+                                    MdfDate = op.MdfDate,
+                                    EnglishSubject = op.EnglishSubject,
+                                    PostName = emp.EmpName,
+                                    PostDeptName = emp.Department.DeptName,
+                                    PostDeptId = emp.DeptId ?? 0,
+                                    Subject = op.OpSubject
+                                };
+
+                // Query conditions
+
+                if (param.ParentId == 0)
+                {
+                    tempQuery = tempQuery.Where(obj => obj.ParentId == null);
+                }
+                else
+                {
+                    tempQuery = tempQuery.Where(obj => obj.ParentId == param.ParentId);
+                }
+
+                if (!param.AuthParams.CanReadSubItemOfOthers)
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                        param.AuthParams.CanReadSubItemOfCrew && obj.PostDeptId == param.AuthParams.MyDeptId
+                        || param.AuthParams.CanReadSubItemOfSelf && obj.PostAccount == param.AuthParams.MyAccount);
+                }
+
+                if (param.Kw != "")
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                        obj.OpSubject.Contains(param.Kw)
+                        || obj.EnglishSubject.Contains(param.Kw));
+                }
+
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
+                // sorting
+                if (param.PagedParams.SortField != "")
+                {
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempQuery = tempQuery.OrderBy(obj => obj.SortNo);
+                }
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if (skipCount > 0)
+                {
+                    tempQuery = tempQuery.Skip(skipCount);
+                }
+
+                if (takeCount >= 0)
+                {
+                    tempQuery = tempQuery.Take(takeCount);
+                }
+
+                // result
+                entities = tempQuery.ToList();
+                int rowIndex = 0;
+
+                foreach (var entity in entities)
+                {
+                    entity.RowNum = skipCount + rowIndex + 1;
+
+                    if (param.CultureName == "en")
+                    {
+                        entity.Subject = entity.EnglishSubject;
+                    }
+
+                    rowIndex++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
         }
 
         /// <summary>
@@ -633,10 +752,12 @@ namespace Common.DataAccess.EF
 
                 // result
                 entities = tempQuery.ToList();
+                int rowIndex = 0;
 
-                for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
+                foreach (var entity in entities)
                 {
-                    entities[rowIndex].RowNum = skipCount + rowIndex + 1;
+                    entity.RowNum = skipCount + rowIndex + 1;
+                    rowIndex++;
                 }
             }
             catch (Exception ex)
@@ -973,13 +1094,15 @@ namespace Common.DataAccess.EF
 
                 // result
                 entities = tempQuery.ToList();
+                int rowIndex = 0;
 
-                for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
+                foreach (var entity in entities)
                 {
-                    entities[rowIndex].RowNum = skipCount + rowIndex + 1;
+                    entity.RowNum = skipCount + rowIndex + 1;
+                    rowIndex++;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Error("", ex);
                 errMsg = ex.Message;
@@ -1229,10 +1352,12 @@ namespace Common.DataAccess.EF
 
                 // result
                 entities = tempQuery.ToList();
+                int rowIndex = 0;
 
-                for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
+                foreach (var entity in entities)
                 {
-                    entities[rowIndex].RowNum = skipCount + rowIndex + 1;
+                    entity.RowNum = skipCount + rowIndex + 1;
+                    rowIndex++;
                 }
             }
             catch (Exception ex)

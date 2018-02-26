@@ -25,5 +25,8 @@ namespace Common.DataAccess.EF.Model
 
         public string PostName { get; set; }
         public string PostDeptName { get; set; }
+        public int PostDeptId { get; set; }
+        public string Subject { get; set; }
+        public int RowNum { get; set; }
     }
 }
