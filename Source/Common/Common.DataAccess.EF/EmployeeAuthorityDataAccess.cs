@@ -597,7 +597,6 @@ namespace Common.DataAccess.EF
         {
             Logger.Debug("DeleteEmployeeRoleData(roleId)");
 
-            bool result = false;
             DbContextTransaction tran = null;
 
             try
@@ -629,7 +628,6 @@ namespace Common.DataAccess.EF
                 cmsCtx.SaveChanges();
 
                 tran.Commit();
-                result = true;
             }
             catch (Exception ex)
             {
@@ -647,7 +645,7 @@ namespace Common.DataAccess.EF
                     tran.Dispose();
             }
 
-            return result;
+            return true;
         }
 
         /// <summary>
@@ -794,7 +792,6 @@ namespace Common.DataAccess.EF
                 });
 
                 cmsCtx.SaveChanges();
-                result = true;
             }
             catch(Exception ex)
             {
@@ -804,7 +801,7 @@ namespace Common.DataAccess.EF
                 return false;
             }
 
-            return result;
+            return true;
         }
 
         #endregion
@@ -933,6 +930,37 @@ namespace Common.DataAccess.EF
             }
 
             return entities;
+        }
+
+        /// <summary>
+        /// 刪除部門資料
+        /// </summary>
+        public bool DeleteDepartmentData(int deptId)
+        {
+            Logger.Debug("DeleteDepartmentData(deptId)");
+
+            try
+            {
+                // check employee
+                if(cmsCtx.Employee.Any(emp=>emp.DeptId == deptId))
+                {
+                    sqlErrNumber = 50000;
+                    sqlErrState = 2;
+                    return false;
+                }
+
+                Department entity = new Department() { DeptId = deptId };
+                cmsCtx.Entry<Department>(entity).State = EntityState.Deleted;
+                cmsCtx.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
         }
 
         #endregion

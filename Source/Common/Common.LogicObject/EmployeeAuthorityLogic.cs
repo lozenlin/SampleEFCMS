@@ -1229,17 +1229,17 @@ namespace Common.LogicObject
         /// </summary>
         public bool DeleteDepartmentData(DeptParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spDepartment_DeleteData cmdInfo = new spDepartment_DeleteData()
-            {
-                DeptId = param.DeptId
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            bool result = false;
 
-            if (!result && cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 2)
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                param.IsThereAccountsOfDept = true;
+                result = empAuthDao.DeleteDepartmentData(param.DeptId);
+                dbErrMsg = empAuthDao.GetErrMsg();
+
+                if (!result && empAuthDao.GetSqlErrNumber() == 50000 && empAuthDao.GetSqlErrState() == 2)
+                {
+                    param.IsThereAccountsOfDept = true;
+                }
             }
 
             return result;
