@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.DataAccess.EF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,25 @@ namespace Common.LogicObject
         {
             PagedParams = new PagedListQueryParams();
             AuthParams = new AuthenticationQueryParams();
+        }
+
+        public BackEndLogListQueryParamsDA GenBackEndLogListQueryParamsDA()
+        {
+            BackEndLogListQueryParamsDA result = new BackEndLogListQueryParamsDA()
+            {
+                StartDate = StartDate,
+                EndDate = EndDate,
+                Account = Account,
+                IsAccKw = IsAccKw,
+                IP = IP,
+                IsIpHeadKw = IsIpHeadKw,
+                DescKw = DescKw,
+                RangeMode = RangeMode,
+                PagedParams = PagedParams.GenPagedListQueryParamsDA(),
+                AuthParams = AuthParams.GenAuthenticationQueryParamsDA()
+            };
+
+            return result;
         }
     }
 }

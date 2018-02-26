@@ -917,7 +917,7 @@ namespace Common.DataAccess.EF
                 // result
                 entities = tempQuery.ToList();
 
-                for(int rowIndex=0; rowIndex<entities.Count; rowIndex++)
+                for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
                 {
                     entities[rowIndex].RowNum = skipCount + rowIndex + 1;
                 }
@@ -1046,6 +1046,146 @@ namespace Common.DataAccess.EF
             }
 
             return true;
+        }
+
+        #endregion
+
+        #region 後端操作記錄
+
+        /// <summary>
+        /// 取得後端操作記錄清單
+        /// </summary>
+        public List<BackEndLogForBackend> GetBackEndLogList(BackEndLogListQueryParamsDA param)
+        {
+            Logger.Debug("GetBackEndLogList(param)");
+            List<BackEndLogForBackend> entities = null;
+
+            try
+            {
+                var tempQuery = from l in cmsCtx.BackEndLog
+                                join e in cmsCtx.Employee on l.EmpAccount equals e.EmpAccount
+                                into logGroup
+                                from e in logGroup.DefaultIfEmpty()
+                                where l.OpDate >= param.StartDate && l.OpDate <= param.EndDate
+                                select new BackEndLogForBackend()
+                                {
+                                    Seqno = l.Seqno,
+                                    EmpAccount = l.EmpAccount,
+                                    Description = l.Description,
+                                    OpDate = l.OpDate,
+                                    IP = l.IP,
+
+                                    EmpName = e.EmpName,
+                                    DeptId = e.DeptId
+                                };
+
+                // Query conditions
+
+                if (!param.AuthParams.CanReadSubItemOfOthers)
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                        param.AuthParams.CanReadSubItemOfCrew && obj.DeptId == param.AuthParams.MyDeptId
+                        || param.AuthParams.CanReadSubItemOfSelf && obj.EmpAccount == param.AuthParams.MyAccount);
+                }
+
+                if(param.Account != "")
+                {
+                    if (param.IsAccKw)
+                    {
+                        // like
+                        tempQuery = tempQuery.Where(obj => obj.EmpAccount.Contains(param.Account));
+                    }
+                    else
+                    {
+                        tempQuery = tempQuery.Where(obj => obj.EmpAccount == param.Account);
+                    }
+                }
+
+                if(param.IP != "")
+                {
+                    if (param.IsIpHeadKw)
+                    {
+                        tempQuery = tempQuery.Where(obj => obj.IP.StartsWith(param.IP));
+                    }
+                    else
+                    {
+                        tempQuery = tempQuery.Where(obj => obj.IP == param.IP);
+                    }
+                }
+
+                if (param.DescKw != "")
+                {
+                    tempQuery = tempQuery.Where(obj => obj.Description.Contains(param.DescKw));
+                }
+
+                if (param.RangeMode == 1)
+                {
+                    /*
+                    and (l.Description like N''%Logged in%''
+                    or l.Description like N''%Logged out%''
+                    or l.Description like N''%帳號登入驗證時發生異常錯誤%''
+                    or l.Description like N''%帳號不存在%''
+                    or l.Description like N''%密碼錯誤%''
+                    or l.Description like N''%帳號停用%''
+                    or l.Description like N''%帳號超出有效範圍%''
+                    or l.Description like N''%帳號登入取得使用者資料時發生異常錯誤%'')
+                     */
+                    tempQuery = tempQuery.Where(obj =>
+                        obj.Description.Contains("Logged in")
+                        || obj.Description.Contains("Logged out")
+                        || obj.Description.Contains("帳號登入驗證時發生異常錯誤")
+                        || obj.Description.Contains("帳號不存在")
+                        || obj.Description.Contains("密碼錯誤")
+                        || obj.Description.Contains("帳號停用")
+                        || obj.Description.Contains("帳號超出有效範圍")
+                        || obj.Description.Contains("帳號登入取得使用者資料時發生異常錯誤")
+                        );
+                }
+
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
+                // sorting
+                if (param.PagedParams.SortField != "")
+                {
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempQuery = tempQuery.OrderByDescending(obj => obj.OpDate);
+                }
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if (skipCount > 0)
+                {
+                    tempQuery = tempQuery.Skip(skipCount);
+                }
+
+                if (takeCount > 0)
+                {
+                    tempQuery = tempQuery.Take(takeCount);
+                }
+
+                // result
+                entities = tempQuery.ToList();
+
+                for (int rowIndex = 0; rowIndex < entities.Count; rowIndex++)
+                {
+                    entities[rowIndex].RowNum = skipCount + rowIndex + 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
         }
 
         #endregion

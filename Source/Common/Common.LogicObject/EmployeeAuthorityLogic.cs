@@ -386,34 +386,19 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後端操作記錄清單
         /// </summary>
-        public DataSet GetBackEndLogList(BackEndLogListQueryParams param)
+        public List<BackEndLogForBackend> GetBackEndLogList(BackEndLogListQueryParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spBackEndLog_GetList cmdInfo = new spBackEndLog_GetList()
-            {
-                StartDate = param.StartDate,
-                EndDate = param.EndDate,
-                Account = param.Account,
-                IsAccKw = param.IsAccKw,
-                IP = param.IP,
-                IsIpHeadKw = param.IsIpHeadKw,
-                DescKw = param.DescKw,
-                RangeMode = param.RangeMode,
-                BeginNum = param.PagedParams.BeginNum,
-                EndNum = param.PagedParams.EndNum,
-                SortField = param.PagedParams.SortField,
-                IsSortDesc = param.PagedParams.IsSortDesc,
-                CanReadSubItemOfOthers = param.AuthParams.CanReadSubItemOfOthers,
-                CanReadSubItemOfCrew = param.AuthParams.CanReadSubItemOfCrew,
-                CanReadSubItemOfSelf = param.AuthParams.CanReadSubItemOfSelf,
-                MyAccount = param.AuthParams.MyAccount,
-                MyDeptId = param.AuthParams.MyDeptId
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-            param.PagedParams.RowCount = cmdInfo.RowCount;
+            List<BackEndLogForBackend> entities = null;
 
-            return ds;
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                BackEndLogListQueryParamsDA paramDA = param.GenBackEndLogListQueryParamsDA();
+                entities = empAuthDao.GetBackEndLogList(paramDA);
+                dbErrMsg = empAuthDao.GetErrMsg();
+                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
+            }
+
+            return entities;
         }
 
         #endregion

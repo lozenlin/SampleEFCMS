@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -182,11 +183,11 @@ public partial class Back_End_Log : BasePage
             IsSortDesc = c.qsIsSortDesc
         };
 
-        DataSet dsLogs = empAuth.GetBackEndLogList(param);
+        List<BackEndLogForBackend> logs = empAuth.GetBackEndLogList(param);
 
-        if (dsLogs != null)
+        if (logs != null)
         {
-            rptLogs.DataSource = dsLogs.Tables[0];
+            rptLogs.DataSource = logs;
             rptLogs.DataBind();
         }
 
@@ -198,16 +199,16 @@ public partial class Back_End_Log : BasePage
 
     protected void rptLogs_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        BackEndLogForBackend log = (BackEndLogForBackend)e.Item.DataItem;
 
-        string empAccount = drvTemp.ToSafeStr("EmpAccount");
-        string empName = drvTemp.ToSafeStr("EmpName");
+        string empAccount = log.EmpAccount;
+        string empName = log.EmpName;
 
         Literal ltrEmpName = (Literal)e.Item.FindControl("ltrEmpName");
         ltrEmpName.Text = string.Format("{0}({1})", empName, empAccount);
 
         Literal ltrDescription = (Literal)e.Item.FindControl("ltrDescription");
-        ltrDescription.Text = drvTemp.ToSafeStr("Description").Replace("　．", "<br>．");
+        ltrDescription.Text = (log.Description ?? "").Replace("　．", "<br>．");
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)
