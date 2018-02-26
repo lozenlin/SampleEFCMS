@@ -270,6 +270,9 @@ namespace Common.DataAccess.EF
                         break;
                 }
 
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
                 // sorting
                 if (param.PagedParams.SortField != "")
                 {
@@ -283,9 +286,6 @@ namespace Common.DataAccess.EF
                         .ThenBy(obj => obj.RoleSortNo)
                         .ThenBy(obj => obj.EmpName);
                 }
-
-                // total
-                param.PagedParams.RowCount = tempQuery.Count();
 
                 // paging
                 int skipCount = param.PagedParams.GetSkipCount();
@@ -544,6 +544,9 @@ namespace Common.DataAccess.EF
                         || obj.RoleDisplayName.Contains(param.Kw));
                 }
 
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
                 // sorting
                 if (param.PagedParams.SortField != "")
                 {
@@ -554,9 +557,6 @@ namespace Common.DataAccess.EF
                     // default
                     tempQuery = tempQuery.OrderBy(obj => obj.SortNo);
                 }
-
-                // total
-                param.PagedParams.RowCount = tempQuery.Count();
 
                 // paging
                 int skipCount = param.PagedParams.GetSkipCount();
@@ -886,8 +886,11 @@ namespace Common.DataAccess.EF
                     tempQuery = tempQuery.Where(obj => obj.DeptName.Contains(param.Kw));
                 }
 
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
                 // sorting
-                if(param.PagedParams.SortField != "")
+                if (param.PagedParams.SortField != "")
                 {
                     tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
                 }
@@ -896,9 +899,6 @@ namespace Common.DataAccess.EF
                     // default
                     tempQuery = tempQuery.OrderBy(obj => obj.SortNo);
                 }
-
-                // total
-                param.PagedParams.RowCount = tempQuery.Count();
 
                 // paging
                 int skipCount = param.PagedParams.GetSkipCount();
