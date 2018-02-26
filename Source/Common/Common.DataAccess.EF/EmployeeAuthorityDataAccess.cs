@@ -426,6 +426,65 @@ namespace Common.DataAccess.EF
             return entity;
         }
 
+        /// <summary>
+        /// 取得後端作業選項階層資訊
+        /// </summary>
+        public List<OperationLevelInfo> GetOperationLevelInfo(int opId)
+        {
+            Logger.Debug("GetOperationLevelInfo(opId)");
+            List<OperationLevelInfo> entities = null;
+
+            try
+            {
+                entities = new List<OperationLevelInfo>();
+                Operations entity = null;
+                int levelNum = 0;
+                int curOpId = opId;
+
+                do
+                {
+                    entity = cmsCtx.Operations.Find(curOpId);
+
+                    if(entity == null)
+                    {
+                        throw new Exception("there is no data of opId.");
+                    }
+
+                    OperationLevelInfo levelInfo = new OperationLevelInfo()
+                    {
+                        OpId = entity.OpId,
+                        OpSubject = entity.OpSubject,
+                        IconImageFile = entity.IconImageFile,
+                        EnglishSubject = entity.EnglishSubject,
+                        LevelNum = --levelNum
+                    };
+
+                    entities.Add(levelInfo);
+
+                    if(entity.ParentId.HasValue)
+                    {
+                        curOpId = entity.ParentId.Value;
+                    }
+
+                } while (entity.ParentId.HasValue);
+
+                int total = entities.Count;
+
+                entities.ForEach(obj =>
+                {
+                    obj.LevelNum = total + obj.LevelNum + 1;
+                });
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
 
         #region 員工身分後端作業授權相關
@@ -751,8 +810,6 @@ namespace Common.DataAccess.EF
         public bool SaveListOfEmployeeRolePrivileges(List<EmployeeRoleOperationsDesc> empRoleOps)
         {
             Logger.Debug("SaveListOfEmployeeRolePrivileges(empRoleOps)");
-
-            bool result = false;
 
             try
             {

@@ -95,21 +95,22 @@ public partial class Operation_Node : BasePage
             // set url of BackToParent button
             hud.SetButtonAttribute(HudButtonNameEnum.BackToParent, HudButtonAttributeEnum.NavigateUrl, "~/" + pageUrl);
 
-            DataSet dsLevelInfo = empAuth.GetOperationLevelInfo(c.qsId);
+            List<OperationLevelInfo> levelInfos = empAuth.GetOperationLevelInfo(c.qsId);
 
-            if (dsLevelInfo != null && dsLevelInfo.Tables[0].Rows.Count > 0)
+            if (levelInfos != null)
             {
-                int total = dsLevelInfo.Tables[0].Rows.Count;
+                int total = levelInfos.Count;
 
                 for (int itemNum = total; itemNum >= 1; itemNum--)
                 {
-                    DataRow drOp = dsLevelInfo.Tables[0].Rows[itemNum - 1];
-                    string opSubject = drOp.ToSafeStr("OpSubject");
-                    string englishSubject = drOp.ToSafeStr("EnglishSubject");
-                    int opId = Convert.ToInt32(drOp["OpId"]);
+
+                    OperationLevelInfo opData = levelInfos[itemNum - 1];
+                    string opSubject = opData.OpSubject;
+                    string englishSubject = opData.EnglishSubject;
+                    int opId = opData.OpId;
                     string url = string.Format("{0}?id={1}", pageUrl, opId);
-                    int levelNum = Convert.ToInt32(drOp["LevelNum"]);
-                    string iconImageFile = drOp.ToSafeStr("IconImageFile");
+                    int levelNum = opData.LevelNum;
+                    string iconImageFile = opData.IconImageFile;
 
                     if (useEnglishSubject && !string.IsNullOrEmpty(englishSubject))
                     {

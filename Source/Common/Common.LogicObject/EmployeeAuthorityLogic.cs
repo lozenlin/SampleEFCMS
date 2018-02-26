@@ -906,15 +906,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後端作業選項階層資訊
         /// </summary>
-        public DataSet GetOperationLevelInfo(int opId)
+        public List<OperationLevelInfo> GetOperationLevelInfo(int opId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_GetLevelInfo cmdInfo = new spOperations_GetLevelInfo() { OpId = opId };
+            List<OperationLevelInfo> entities = null;
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                entities = empAuthDao.GetOperationLevelInfo(opId);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
-            return ds;
+            return entities;
         }
 
         /// <summary>
