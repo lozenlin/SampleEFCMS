@@ -1019,27 +1019,26 @@ namespace Common.LogicObject
                 bool isRoot = false;
 
                 // get article info
-                IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-                Common.DataAccess.ArticlePublisher.spArticle_GetDataForBackend articleCmdInfo = new DataAccess.ArticlePublisher.spArticle_GetDataForBackend()
-                {
-                    ArticleId = curArticleId
-                };
-                DataSet dsArticle = cmd.ExecuteDataset(articleCmdInfo);
+                ArticleForBackend article = null;
 
-                if (dsArticle != null && dsArticle.Tables[0].Rows.Count > 0)
+                using(ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
                 {
-                    DataRow drArticle = dsArticle.Tables[0].Rows[0];
+                    article = artPubDao.GetArticleDataForBackend(curArticleId);
+                    string dbErrMsg = artPubDao.GetErrMsg();
+                }
 
-                    if (Convert.IsDBNull(drArticle["ParentId"]))
+                if (article != null)
+                {
+                    if (!article.ParentId.HasValue)
                     {
                         isRoot = true;
                     }
                     else
                     {
-                        curParentId = new Guid(drArticle.ToSafeStr("ParentId"));
+                        curParentId = article.ParentId.Value;
                     }
 
-                    curArticleLevelNo = Convert.ToInt32(drArticle["ArticleLevelNo"]);
+                    curArticleLevelNo = article.ArticleLevelNo.Value;
                 }
 
                 if (isRoot)
@@ -1074,20 +1073,24 @@ namespace Common.LogicObject
                         }
 
                         // get parent info
-                        articleCmdInfo.ArticleId = curParentId;
-                        DataSet dsParent = cmd.ExecuteDataset(articleCmdInfo);
+                        ArticleForBackend parent = null;
 
-                        if (dsParent == null || dsParent.Tables[0].Rows.Count == 0)
+                        using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+                        {
+                            parent = artPubDao.GetArticleDataForBackend(curParentId);
+                            string dbErrMsg = artPubDao.GetErrMsg();
+                        }
+
+                        if (parent == null)
                         {
                             logger.Error(string.Format("can not get article data of {0}", curParentId));
                             break;
                         }
 
                         // move to parent level
-                        DataRow drParent = dsParent.Tables[0].Rows[0];
                         curArticleId = curParentId;
-                        curParentId = new Guid(drParent.ToSafeStr("ParentId"));
-                        curArticleLevelNo = Convert.ToInt32(drParent["ArticleLevelNo"]);
+                        curParentId = parent.ParentId.Value;
+                        curArticleLevelNo = parent.ArticleLevelNo.Value;
                     }
                 } while (!gotOpId);
 

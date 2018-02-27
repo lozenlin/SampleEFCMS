@@ -63,15 +63,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後台用網頁內容資料
         /// </summary>
-        public DataSet GetArticleDataForBackend(Guid articleId)
+        public ArticleForBackend GetArticleDataForBackend(Guid articleId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetDataForBackend cmdInfo = new spArticle_GetDataForBackend() { ArticleId = articleId };
+            ArticleForBackend entity = null;
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entity = artPubDao.GetArticleDataForBackend(articleId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
-            return ds;
+            return entity;
         }
 
         /// <summary>
@@ -1395,25 +1397,23 @@ namespace Common.LogicObject
             bool isRoleAdmin = authCondition.IsInRole("admin");
 
             // get article info
-            DataSet dsArticle = GetArticleDataForBackend(curArticleId);
+            ArticleForBackend article = GetArticleDataForBackend(curArticleId);
 
-            if (dsArticle != null && dsArticle.Tables[0].Rows.Count > 0)
+            if (article != null)
             {
-                DataRow drArticle = dsArticle.Tables[0].Rows[0];
-
-                if (Convert.IsDBNull(drArticle["ParentId"]))
+                if (!article.ParentId.HasValue)
                 {
                     isRoot = true;
                 }
                 else
                 {
-                    curParentId = (Guid)drArticle["ParentId"];
+                    curParentId = article.ParentId;
                 }
 
-                curArticleLevelNo = Convert.ToInt32(drArticle["ArticleLevelNo"]);
+                curArticleLevelNo = article.ArticleLevelNo.Value;
 
-                authAndOwner.OwnerAccountOfDataExamined = drArticle.ToSafeStr("PostAccount");
-                authAndOwner.OwnerDeptIdOfDataExamined = Convert.ToInt32(drArticle["PostDeptId"]);
+                authAndOwner.OwnerAccountOfDataExamined = article.PostAccount;
+                authAndOwner.OwnerDeptIdOfDataExamined = article.PostDeptId;
             }
 
             if (isRoot || isRoleAdmin)
@@ -1474,28 +1474,27 @@ namespace Common.LogicObject
                     }
 
                     // get parent info
-                    DataSet dsParent = GetArticleDataForBackend(curParentId.Value);
+                    ArticleForBackend parent = GetArticleDataForBackend(curParentId.Value);
 
-                    if (dsParent == null || dsParent.Tables[0].Rows.Count == 0)
+                    if (parent == null)
                     {
                         logger.Error(string.Format("can not get article data of {0}", curParentId.Value));
                         break;
                     }
 
                     // move to parent level
-                    DataRow drParent = dsParent.Tables[0].Rows[0];
                     curArticleId = curParentId.Value;
 
-                    if (Convert.IsDBNull(drParent["ParentId"]))
+                    if (!parent.ParentId.HasValue)
                     {
                         curParentId = null;
                     }
                     else
                     {
-                        curParentId = (Guid)drParent["ParentId"];
+                        curParentId = parent.ParentId;
                     }
 
-                    curArticleLevelNo = Convert.ToInt32(drParent["ArticleLevelNo"]);
+                    curArticleLevelNo = parent.ArticleLevelNo.Value;
                 }
             } while (!gotOpAuth);
 

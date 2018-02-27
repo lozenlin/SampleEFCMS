@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using Newtonsoft.Json;
 using System;
@@ -280,22 +281,20 @@ public partial class Article_Node : BasePage
         btnEditContext.Attributes["onclick"] =
             string.Format("popWin('Article-Config.aspx?act={0}&artid={1}', 700, 600);", ConfigFormAction.edit, c.qsArtId);
 
-        DataSet dsArticle = artPub.GetArticleDataForBackend(c.qsArtId);
+        ArticleForBackend article = artPub.GetArticleDataForBackend(c.qsArtId);
 
-        if (dsArticle != null && dsArticle.Tables[0].Rows.Count > 0)
+        if (article != null)
         {
-            DataRow drFirst = dsArticle.Tables[0].Rows[0];
+            hidParentId.Text = article.ParentId.ToString();
+            hidArticleLevelNo.Text = article.ArticleLevelNo.ToString();
 
-            hidParentId.Text = drFirst.ToSafeStr("ParentId");
-            hidArticleLevelNo.Text = drFirst.ToSafeStr("ArticleLevelNo");
+            ltrValidDateRange.Text = string.Format("{0:yyyy-MM-dd} ~ {1:yyyy-MM-dd}", article.StartDate, article.EndDate);
 
-            ltrValidDateRange.Text = string.Format("{0:yyyy-MM-dd} ~ {1:yyyy-MM-dd}", drFirst["StartDate"], drFirst["EndDate"]);
-
-            DateTime startDate = Convert.ToDateTime(drFirst["StartDate"]);
-            DateTime endDate = Convert.ToDateTime(drFirst["EndDate"]);
-            bool isHideSelf = Convert.ToBoolean(drFirst["IsHideSelf"]);
-            int showTypeId = Convert.ToInt32(drFirst["ShowTypeId"]);
-            string linkUrl = drFirst.ToSafeStr("LinkUrl");
+            DateTime startDate = article.StartDate.Value;
+            DateTime endDate = article.EndDate.Value;
+            bool isHideSelf = article.IsHideSelf;
+            int showTypeId = article.ShowTypeId.Value;
+            string linkUrl = article.LinkUrl;
 
             switch (showTypeId)
             {
@@ -328,8 +327,8 @@ public partial class Article_Node : BasePage
             }
 
             // article-content-setting
-            string sortFieldOfFrontStage = drFirst.ToSafeStr("SortFieldOfFrontStage");
-            bool isSortDescOfFrontStage = Convert.ToBoolean(drFirst["IsSortDescOfFrontStage"]);
+            string sortFieldOfFrontStage = article.SortFieldOfFrontStage;
+            bool isSortDescOfFrontStage = article.IsSortDescOfFrontStage;
 
             if (sortFieldOfFrontStage != "")
             {
@@ -347,19 +346,19 @@ public partial class Article_Node : BasePage
                 ltrSortInfoOfFrontStage.Text += " - " + ddlIsSortDescOfFrontStage.SelectedItem.Text;
             }
 
-            bool isListAreaShowInFrontStage = Convert.ToBoolean(drFirst["IsListAreaShowInFrontStage"]);
+            bool isListAreaShowInFrontStage = article.IsListAreaShowInFrontStage;
             hidIsListAreaShowInFrontStage.Value = isListAreaShowInFrontStage.ToString();
             SetupStatusHtmlOfArticleContentSetting(ctlIsListAreaShowInFrontStageStatus, isListAreaShowInFrontStage);
 
-            bool isAttAreaShowInFrontStage = Convert.ToBoolean(drFirst["IsAttAreaShowInFrontStage"]);
+            bool isAttAreaShowInFrontStage = article.IsAttAreaShowInFrontStage;
             hidIsAttAreaShowInFrontStage.Value = isAttAreaShowInFrontStage.ToString();
             SetupStatusHtmlOfArticleContentSetting(ctlIsAttAreaShowInFrontStageStatus, isAttAreaShowInFrontStage);
 
-            bool isPicAreaShowInFrontStage = Convert.ToBoolean(drFirst["IsPicAreaShowInFrontStage"]);
+            bool isPicAreaShowInFrontStage = article.IsPicAreaShowInFrontStage;
             hidIsPicAreaShowInFrontStage.Value = isPicAreaShowInFrontStage.ToString();
             SetupStatusHtmlOfArticleContentSetting(ctlIsPicAreaShowInFrontStageStatus, isPicAreaShowInFrontStage);
 
-            bool isVideoAreaShowInFrontStage = Convert.ToBoolean(drFirst["IsVideoAreaShowInFrontStage"]);
+            bool isVideoAreaShowInFrontStage = article.IsVideoAreaShowInFrontStage;
             hidIsVideoAreaShowInFrontStage.Value = isVideoAreaShowInFrontStage.ToString();
             SetupStatusHtmlOfArticleContentSetting(ctlIsVideoAreaShowInFrontStageStatus, isVideoAreaShowInFrontStage);
 

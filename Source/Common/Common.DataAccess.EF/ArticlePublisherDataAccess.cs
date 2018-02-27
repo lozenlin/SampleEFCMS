@@ -59,6 +59,66 @@ namespace Common.DataAccess.EF
             return entities;
         }
 
+        /// <summary>
+        /// 取得後台用網頁內容資料
+        /// </summary>
+        public ArticleForBackend GetArticleDataForBackend(Guid articleId)
+        {
+            Logger.Debug("GetArticleDataForBackend(articleId)");
+            ArticleForBackend entity = null;
+
+            try
+            {
+                entity = (from a in cmsCtx.Article
+                          from e in cmsCtx.Employee
+                          where a.PostAccount == e.PostAccount
+                             && a.ArticleId == articleId
+                          select new ArticleForBackend()
+                          {
+                              ArticleId = a.ArticleId,
+                              ParentId = a.ParentId,
+                              ArticleLevelNo = a.ArticleLevelNo,
+                              ArticleAlias = a.ArticleAlias,
+                              BannerPicFileName = a.BannerPicFileName,
+                              LayoutModeId = a.LayoutModeId,
+                              ShowTypeId = a.ShowTypeId,
+                              LinkUrl = a.LinkUrl,
+                              LinkTarget = a.LinkTarget,
+                              ControlName = a.ControlName,
+                              SubItemControlName = a.SubItemControlName,
+                              IsHideSelf = a.IsHideSelf,
+                              IsHideChild = a.IsHideChild,
+                              StartDate = a.StartDate,
+                              EndDate = a.EndDate,
+                              SortNo = a.SortNo,
+                              DontDelete = a.DontDelete,
+                              PostAccount = a.PostAccount,
+                              PostDate = a.PostDate,
+                              MdfAccount = a.MdfAccount,
+                              MdfDate = a.MdfDate,
+                              SubjectAtBannerArea = a.SubjectAtBannerArea,
+                              PublishDate = a.PublishDate,
+                              IsShowInUnitArea = a.IsShowInUnitArea,
+                              IsShowInSitemap = a.IsShowInSitemap,
+                              SortFieldOfFrontStage = a.SortFieldOfFrontStage,
+                              IsSortDescOfFrontStage = a.IsSortDescOfFrontStage,
+                              IsListAreaShowInFrontStage = a.IsListAreaShowInFrontStage,
+                              IsAttAreaShowInFrontStage = a.IsAttAreaShowInFrontStage,
+                              IsPicAreaShowInFrontStage = a.IsPicAreaShowInFrontStage,
+                              IsVideoAreaShowInFrontStage = a.IsVideoAreaShowInFrontStage,
+                              SubItemLinkUrl = a.SubItemLinkUrl,
+                              PostDeptId = e.DeptId ?? 0
+                          }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
+        }
 
         #endregion
     }

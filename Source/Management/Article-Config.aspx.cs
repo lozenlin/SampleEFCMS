@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -138,54 +139,52 @@ public partial class Article_Config : System.Web.UI.Page
     {
         if (c.qsAct == ConfigFormAction.edit)
         {
-            DataSet dsArticle = artPub.GetArticleDataForBackend(c.qsArtId);
+            ArticleForBackend article = artPub.GetArticleDataForBackend(c.qsArtId);
 
-            if (dsArticle != null && dsArticle.Tables[0].Rows.Count > 0)
+            if (article != null)
             {
-                DataRow drFirst = dsArticle.Tables[0].Rows[0];
+                hidArticleLevelNo.Text = article.ArticleLevelNo.ToString();
+                txtSortNo.Text = article.SortNo.ToString();
+                txtStartDate.Text = string.Format("{0:yyyy-MM-dd}", article.StartDate);
+                txtEndDate.Text = string.Format("{0:yyyy-MM-dd}", article.EndDate);
+                txtBannerPicFileName.Text = article.BannerPicFileName;
 
-                hidArticleLevelNo.Text = drFirst.ToSafeStr("ArticleLevelNo");
-                txtSortNo.Text = drFirst.ToSafeStr("SortNo");
-                txtStartDate.Text = string.Format("{0:yyyy-MM-dd}", drFirst["StartDate"]);
-                txtEndDate.Text = string.Format("{0:yyyy-MM-dd}", drFirst["EndDate"]);
-                txtBannerPicFileName.Text = drFirst.ToSafeStr("BannerPicFileName");
-
-                txtArticleAlias.Text = drFirst.ToSafeStr("ArticleAlias");
+                txtArticleAlias.Text = article.ArticleAlias;
                 btnAliasLink.HRef = string.Format("{0}/Article.aspx?alias={1}", ConfigurationManager.AppSettings["WebsiteUrl"], txtArticleAlias.Text);
                 btnAliasLink.InnerHtml = Server.HtmlEncode(btnAliasLink.HRef);
                 AliasLinkArea.Visible = true;
 
-                rdolLayoutMode.SelectedValue = drFirst.ToSafeStr("LayoutModeId");
-                rdolShowType.SelectedValue = drFirst.ToSafeStr("ShowTypeId");
-                txtLinkUrl.Text = drFirst.ToSafeStr("LinkUrl");
-                string linkTarget = drFirst.ToSafeStr("LinkTarget");
+                rdolLayoutMode.SelectedValue = article.LayoutModeId.ToString();
+                rdolShowType.SelectedValue = article.ShowTypeId.ToString();
+                txtLinkUrl.Text = article.LinkUrl;
+                string linkTarget = article.LinkTarget;
                 chkIsNewWindow.Checked = (linkTarget == "_blank");
-                txtControlName.Text = drFirst.ToSafeStr("ControlName");
-                txtSubItemControlName.Text = drFirst.ToSafeStr("SubItemControlName");
-                chkIsHideSelf.Checked = Convert.ToBoolean(drFirst["IsHideSelf"]);
-                chkIsHideChild.Checked = Convert.ToBoolean(drFirst["IsHideChild"]);
-                chkDontDelete.Checked = Convert.ToBoolean(drFirst["DontDelete"]);
-                ltrPostAccount.Text = drFirst.ToSafeStr("PostAccount");
-                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["PostDate"]);
-                string mdfAccount = drFirst.ToSafeStr("MdfAccount");
+                txtControlName.Text = article.ControlName;
+                txtSubItemControlName.Text = article.SubItemControlName;
+                chkIsHideSelf.Checked = article.IsHideSelf;
+                chkIsHideChild.Checked = article.IsHideChild;
+                chkDontDelete.Checked = article.DontDelete;
+                ltrPostAccount.Text = article.PostAccount;
+                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", article.PostDate);
+                string mdfAccount = article.MdfAccount;
                 DateTime mdfDate = DateTime.MinValue;
 
-                if (!Convert.IsDBNull(drFirst["MdfDate"]))
+                if (article.MdfDate.HasValue)
                 {
-                    mdfDate = Convert.ToDateTime(drFirst["MdfDate"]);
+                    mdfDate = article.MdfDate.Value;
                 }
 
-                chkSubjectAtBannerArea.Checked = Convert.ToBoolean(drFirst["SubjectAtBannerArea"]);
-                txtPublishDate.Text = string.Format("{0:yyyy-MM-dd}", drFirst["PublishDate"]);
-                chkIsShowInUnitArea.Checked = Convert.ToBoolean(drFirst["IsShowInUnitArea"]);
-                chkIsShowInSitemap.Checked = Convert.ToBoolean(drFirst["IsShowInSitemap"]);
-                hidSortFieldOfFrontStage.Text = drFirst.ToSafeStr("SortFieldOfFrontStage");
-                hidIsSortDescOfFrontStage.Text = Convert.ToBoolean(drFirst["IsSortDescOfFrontStage"]).ToString();
-                hidIsListAreaShowInFrontStage.Text = Convert.ToBoolean(drFirst["IsListAreaShowInFrontStage"]).ToString();
-                hidIsAttAreaShowInFrontStage.Text = Convert.ToBoolean(drFirst["IsAttAreaShowInFrontStage"]).ToString();
-                hidIsPicAreaShowInFrontStage.Text = Convert.ToBoolean(drFirst["IsPicAreaShowInFrontStage"]).ToString();
-                hidIsVideoAreaShowInFrontStage.Text = Convert.ToBoolean(drFirst["IsVideoAreaShowInFrontStage"]).ToString();
-                txtSubItemLinkUrl.Text = drFirst.ToSafeStr("SubItemLinkUrl");
+                chkSubjectAtBannerArea.Checked = article.SubjectAtBannerArea;
+                txtPublishDate.Text = string.Format("{0:yyyy-MM-dd}", article.PublishDate);
+                chkIsShowInUnitArea.Checked = article.IsShowInUnitArea;
+                chkIsShowInSitemap.Checked = article.IsShowInSitemap;
+                hidSortFieldOfFrontStage.Text = article.SortFieldOfFrontStage;
+                hidIsSortDescOfFrontStage.Text = article.IsSortDescOfFrontStage.ToString();
+                hidIsListAreaShowInFrontStage.Text = article.IsListAreaShowInFrontStage.ToString();
+                hidIsAttAreaShowInFrontStage.Text = article.IsAttAreaShowInFrontStage.ToString();
+                hidIsPicAreaShowInFrontStage.Text = article.IsPicAreaShowInFrontStage.ToString();
+                hidIsVideoAreaShowInFrontStage.Text = article.IsVideoAreaShowInFrontStage.ToString();
+                txtSubItemLinkUrl.Text = article.SubItemLinkUrl;
 
                 //zh-TW
                 if (LangManager.IsEnableEditLangZHTW())
@@ -245,21 +244,19 @@ public partial class Article_Config : System.Web.UI.Page
         else if (c.qsAct == ConfigFormAction.add)
         {
             // get parent data
-            DataSet dsParent = artPub.GetArticleDataForBackend(c.qsArtId);
+            ArticleForBackend parent = artPub.GetArticleDataForBackend(c.qsArtId);
 
-            if (dsParent != null && dsParent.Tables[0].Rows.Count > 0)
+            if (parent != null)
             {
-                DataRow drParent = dsParent.Tables[0].Rows[0];
-
-                int parentArticleLevelNo = Convert.ToInt32(drParent["ArticleLevelNo"]);
+                int parentArticleLevelNo = parent.ArticleLevelNo.Value;
                 hidArticleLevelNo.Text = (parentArticleLevelNo + 1).ToString();
-                int parentShowTypeId = Convert.ToInt32(drParent["ShowTypeId"]);
-                int parentLayoutModeId = Convert.ToInt32(drParent["LayoutModeId"]);
+                int parentShowTypeId = parent.ShowTypeId.Value;
+                int parentLayoutModeId = parent.LayoutModeId.Value;
 
                 if (parentShowTypeId == 3)
                 {
                     // setting Sub-item default URL
-                    string parentSubItemLinkUrl = drParent.ToSafeStr("SubItemLinkUrl");
+                    string parentSubItemLinkUrl = parent.SubItemLinkUrl;
 
                     if (parentSubItemLinkUrl != "")
                     {
@@ -270,7 +267,7 @@ public partial class Article_Config : System.Web.UI.Page
                 else if (parentShowTypeId == 4)
                 {
                     // setting Sub-item default control
-                    string parentSubItemControlName = drParent.ToSafeStr("SubItemControlName");
+                    string parentSubItemControlName = parent.SubItemControlName;
 
                     if (parentSubItemControlName != "")
                     {

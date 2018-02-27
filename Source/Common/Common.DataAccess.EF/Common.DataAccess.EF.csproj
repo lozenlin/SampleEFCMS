@@ -76,6 +76,7 @@
     <Compile Include="Model\Article.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\ArticleForBackend.cs" />
     <Compile Include="Model\ArticleMultiLang.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
