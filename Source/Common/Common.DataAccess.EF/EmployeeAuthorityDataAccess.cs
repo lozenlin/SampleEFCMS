@@ -571,6 +571,36 @@ namespace Common.DataAccess.EF
         }
 
         /// <summary>
+        /// 用超連結網址取得後端作業選項資訊
+        /// </summary>
+        public OperationOpInfo GetOperationOpInfoByLinkUrl(string linkUrl, bool isNewWindow)
+        {
+            Logger.Debug("GetOperationOpInfoByLinkUrl(linkUrl, isNewWindow)");
+
+            OperationOpInfo entity = null;
+
+            try
+            {
+                entity = (from op in cmsCtx.Operations
+                          where op.LinkUrl == linkUrl
+                            && op.IsNewWindow == isNewWindow
+                          select new OperationOpInfo
+                          {
+                              OpId = op.OpId,
+                              IsNewWindow = op.IsNewWindow
+                          }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
+        }
+
+        /// <summary>
         /// 取得後端作業選項階層資訊
         /// </summary>
         public List<OperationLevelInfo> GetOperationLevelInfo(int opId)

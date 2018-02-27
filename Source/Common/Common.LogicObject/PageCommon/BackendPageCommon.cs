@@ -12,7 +12,6 @@
 using Common.DataAccess;
 using Common.DataAccess.EF;
 using Common.DataAccess.EF.Model;
-using Common.DataAccess.EmployeeAuthority;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -639,10 +638,6 @@ namespace Common.LogicObject
                     if (!string.IsNullOrEmpty(empAccount))
                     {
                         accountOfData = empAccount;
-                        spEmployee_GetData cmdInfoGetData = new spEmployee_GetData()
-                        {
-                            EmpAccount = empAccount
-                        };
 
                         EmployeeForBackend empData = empAuthDao.GetEmployeeDataForBackend(empAccount);
                         dbErrMsg = empAuthDao.GetErrMsg();
@@ -1057,17 +1052,17 @@ namespace Common.LogicObject
                 {
                     // get opId by LinkUrl
                     linkUrl = string.Format("Article-Node.aspx?artid={0}", curArticleId);
+                    OperationOpInfo opInfo = null;
 
-                    Common.DataAccess.EmployeeAuthority.spOperations_GetOpInfoByLinkUrl opCmdInfo = new DataAccess.EmployeeAuthority.spOperations_GetOpInfoByLinkUrl()
+                    using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
                     {
-                        LinkUrl = linkUrl
-                    };
-                    DataSet dsOpInfo = cmd.ExecuteDataset(opCmdInfo);
+                        opInfo = empAuthDao.GetOperationOpInfoByLinkUrl(linkUrl);
+                        string dbErrMsg = empAuthDao.GetErrMsg();
+                    }
 
-                    if (dsOpInfo != null && dsOpInfo.Tables[0].Rows.Count > 0)
+                    if (opInfo != null)
                     {
-                        DataRow drOpInfo = dsOpInfo.Tables[0].Rows[0];
-                        opIdOfPage = Convert.ToInt32(drOpInfo["OpId"]);
+                        opIdOfPage = opInfo.OpId;
                         gotOpId = true;
                     }
                     else
@@ -1275,22 +1270,17 @@ namespace Common.LogicObject
         {
             if (opIdOfPage < 1 && qsUrl != "")
             {
-                IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-                Common.DataAccess.EmployeeAuthority.spOperations_GetOpInfoByLinkUrl cmdInfo = new DataAccess.EmployeeAuthority.spOperations_GetOpInfoByLinkUrl()
-                {
-                    LinkUrl = qsUrl
-                };
-                DataSet dsOpInfo = cmd.ExecuteDataset(cmdInfo);
+                OperationOpInfo opInfo = null;
 
-                if (dsOpInfo != null)
+                using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
                 {
-                    dsOpInfo.Tables[0].DefaultView.RowFilter = "IsNewWindow=0";
+                    opInfo = empAuthDao.GetOperationOpInfoByLinkUrl(qsUrl, false);
+                    string dbErrMsg = empAuthDao.GetErrMsg();
+                }
 
-                    if (dsOpInfo.Tables[0].Rows.Count > 0)
-                    {
-                        DataRow drOpInfo = dsOpInfo.Tables[0].Rows[0];
-                        opIdOfPage = Convert.ToInt32(drOpInfo["OpId"]);
-                    }
+                if (opInfo != null)
+                {
+                    opIdOfPage = opInfo.OpId;
                 }
             }
 

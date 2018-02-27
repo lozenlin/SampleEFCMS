@@ -1,7 +1,5 @@
 ﻿<%@ Application Language="C#" %>
 <%@ Import Namespace="Common.LogicObject" %>
-<%@ Import Namespace="Common.DataAccess" %>
-<%@ Import Namespace="Common.DataAccess.EmployeeAuthority" %>
 
 <script runat="server">
 
