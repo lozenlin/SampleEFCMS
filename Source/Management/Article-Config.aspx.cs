@@ -189,22 +189,20 @@ public partial class Article_Config : System.Web.UI.Page
                 //zh-TW
                 if (LangManager.IsEnableEditLangZHTW())
                 {
-                    DataSet dsZhTw = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, LangManager.CultureNameZHTW);
+                    ArticleMultiLang articleZhTw = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, LangManager.CultureNameZHTW);
 
-                    if (dsZhTw != null && dsZhTw.Tables[0].Rows.Count > 0)
+                    if (articleZhTw != null)
                     {
-                        DataRow drZhTw = dsZhTw.Tables[0].Rows[0];
+                        txtArticleSubjectZhTw.Text = articleZhTw.ArticleSubject;
+                        chkIsShowInLangZhTw.Checked = articleZhTw.IsShowInLang;
+                        txtCkeContextZhTw.Text = articleZhTw.ArticleContext;
+                        txtSubtitleZhTw.Text = articleZhTw.Subtitle;
+                        txtPublisherNameZhTw.Text = articleZhTw.PublisherName;
 
-                        txtArticleSubjectZhTw.Text = drZhTw.ToSafeStr("ArticleSubject");
-                        chkIsShowInLangZhTw.Checked = Convert.ToBoolean(drZhTw["IsShowInLang"]);
-                        txtCkeContextZhTw.Text = drZhTw["ArticleContext"].ToString();
-                        txtSubtitleZhTw.Text = drZhTw.ToSafeStr("Subtitle");
-                        txtPublisherNameZhTw.Text = drZhTw.ToSafeStr("PublisherName");
-
-                        if (!Convert.IsDBNull(drZhTw["MdfDate"]) && Convert.ToDateTime(drZhTw["MdfDate"]) > mdfDate)
+                        if (articleZhTw.MdfDate.HasValue && articleZhTw.MdfDate.Value > mdfDate)
                         {
-                            mdfAccount = drZhTw.ToSafeStr("MdfAccount");
-                            mdfDate = Convert.ToDateTime(drZhTw["MdfDate"]);
+                            mdfAccount = articleZhTw.MdfAccount;
+                            mdfDate = articleZhTw.MdfDate.Value;
                         }
                     }
                 }
@@ -212,22 +210,20 @@ public partial class Article_Config : System.Web.UI.Page
                 //en
                 if (LangManager.IsEnableEditLangEN())
                 {
-                    DataSet dsEn = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, LangManager.CultureNameEN);
+                    ArticleMultiLang articleEn = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, LangManager.CultureNameEN);
 
-                    if (dsEn != null && dsEn.Tables[0].Rows.Count > 0)
+                    if (articleEn != null)
                     {
-                        DataRow drEn = dsEn.Tables[0].Rows[0];
+                        txtArticleSubjectEn.Text = articleEn.ArticleSubject;
+                        chkIsShowInLangEn.Checked = articleEn.IsShowInLang;
+                        txtCkeContextEn.Text = articleEn.ArticleContext;
+                        txtSubtitleEn.Text = articleEn.Subtitle;
+                        txtPublisherNameEn.Text = articleEn.PublisherName;
 
-                        txtArticleSubjectEn.Text = drEn.ToSafeStr("ArticleSubject");
-                        chkIsShowInLangEn.Checked = Convert.ToBoolean(drEn["IsShowInLang"]);
-                        txtCkeContextEn.Text = drEn["ArticleContext"].ToString();
-                        txtSubtitleEn.Text = drEn.ToSafeStr("Subtitle");
-                        txtPublisherNameEn.Text = drEn.ToSafeStr("PublisherName");
-
-                        if (!Convert.IsDBNull(drEn["MdfDate"]) && Convert.ToDateTime(drEn["MdfDate"]) > mdfDate)
+                        if (articleEn.MdfDate.HasValue && articleEn.MdfDate.Value > mdfDate)
                         {
-                            mdfAccount = drEn.ToSafeStr("MdfAccount");
-                            mdfDate = Convert.ToDateTime(drEn["MdfDate"]);
+                            mdfAccount = articleEn.MdfAccount;
+                            mdfDate = articleEn.MdfDate.Value;
                         }
                     }
                 }

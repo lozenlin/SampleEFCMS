@@ -362,24 +362,22 @@ public partial class Article_Node : BasePage
             hidIsVideoAreaShowInFrontStage.Value = isVideoAreaShowInFrontStage.ToString();
             SetupStatusHtmlOfArticleContentSetting(ctlIsVideoAreaShowInFrontStageStatus, isVideoAreaShowInFrontStage);
 
-            DataSet dsArticleMultiLang = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, c.seCultureNameOfBackend);
+            ArticleMultiLang articleMultiLang = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, c.seCultureNameOfBackend);
 
-            if (dsArticleMultiLang != null && dsArticleMultiLang.Tables[0].Rows.Count > 0)
+            if (articleMultiLang != null)
             {
-                DataRow drMultiLang = dsArticleMultiLang.Tables[0].Rows[0];
-
                 string mdfAccount;
                 DateTime mdfDate;
 
-                if (Convert.IsDBNull(drMultiLang["MdfDate"]))
+                if (!articleMultiLang.MdfDate.HasValue)
                 {
-                    mdfAccount = drMultiLang.ToSafeStr("PostAccount");
-                    mdfDate = Convert.ToDateTime(drMultiLang["PostDate"]);
+                    mdfAccount = articleMultiLang.PostAccount;
+                    mdfDate = articleMultiLang.PostDate.Value;
                 }
                 else
                 {
-                    mdfAccount = drMultiLang.ToSafeStr("MdfAccount");
-                    mdfDate = Convert.ToDateTime(drMultiLang["MdfDate"]);
+                    mdfAccount = articleMultiLang.MdfAccount;
+                    mdfDate = articleMultiLang.MdfDate.Value;
                 }
 
                 ltrMdfName.Text = mdfAccount;
@@ -389,15 +387,13 @@ public partial class Article_Node : BasePage
             //zh-TW
             if (LangManager.IsEnableEditLangZHTW())
             {
-                DataSet dsZhTw = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, LangManager.CultureNameZHTW);
+                ArticleMultiLang articleZhTw = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, LangManager.CultureNameZHTW);
 
-                if (dsZhTw != null && dsZhTw.Tables[0].Rows.Count > 0)
+                if (articleZhTw != null)
                 {
-                    DataRow drZhTw = dsZhTw.Tables[0].Rows[0];
+                    ltrContextZhTw.Text = Microsoft.Security.Application.AntiXss.GetSafeHtmlFragment(articleZhTw.ArticleContext);
 
-                    ltrContextZhTw.Text = Microsoft.Security.Application.AntiXss.GetSafeHtmlFragment(drZhTw["ArticleContext"].ToString());
-
-                    bool isShowInLang = Convert.ToBoolean(drZhTw["IsShowInLang"]);
+                    bool isShowInLang = articleZhTw.IsShowInLang;
                     string url = "";
                     string websiteUrl = ConfigurationManager.AppSettings["WebsiteUrl"];
 
@@ -441,15 +437,13 @@ public partial class Article_Node : BasePage
             //en
             if (LangManager.IsEnableEditLangEN())
             {
-                DataSet dsEn = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, LangManager.CultureNameEN);
+                ArticleMultiLang articleEn = artPub.GetArticleMultiLangDataForBackend(c.qsArtId, LangManager.CultureNameEN);
 
-                if (dsEn != null && dsEn.Tables[0].Rows.Count > 0)
+                if (articleEn != null)
                 {
-                    DataRow drEn = dsEn.Tables[0].Rows[0];
+                    ltrContextEn.Text = Microsoft.Security.Application.AntiXss.GetSafeHtmlFragment(articleEn.ArticleContext);
 
-                    ltrContextEn.Text = Microsoft.Security.Application.AntiXss.GetSafeHtmlFragment(drEn["ArticleContext"].ToString());
-
-                    bool isShowInLang = Convert.ToBoolean(drEn["IsShowInLang"]);
+                    bool isShowInLang = articleEn.IsShowInLang;
                     string url = "";
                     string websiteUrl = ConfigurationManager.AppSettings["WebsiteUrl"];
 

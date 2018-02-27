@@ -79,18 +79,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後台用網頁內容的多國語系資料
         /// </summary>
-        public DataSet GetArticleMultiLangDataForBackend(Guid articleId, string cultureName)
+        public ArticleMultiLang GetArticleMultiLangDataForBackend(Guid articleId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleMultiLang_GetDataForBackend cmdInfo = new spArticleMultiLang_GetDataForBackend()
-            {
-                ArticleId = articleId,
-                CultureName = cultureName
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            ArticleMultiLang entity = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entity = artPubDao.Get<ArticleMultiLang>(new object[] { articleId, cultureName });
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entity;
         }
 
         /// <summary>
