@@ -604,6 +604,55 @@ namespace Common.DataAccess.EF
             return entities;
         }
 
+        /// <summary>
+        /// 刪除後端作業選項
+        /// </summary>
+        public bool DeleteOperationData(int opId)
+        {
+            Logger.Debug("DeleteOperationData(opId)");
+            DbContextTransaction tran = null;
+
+            try
+            {
+                // check sub-items
+                if(cmsCtx.Operations.Any(op=>op.ParentId == opId))
+                {
+                    sqlErrNumber = 50000;
+                    sqlErrState = 2;
+                    return false;
+                }
+
+                tran = cmsCtx.Database.BeginTransaction();
+
+                // 先刪除授權設定
+                cmsCtx.Database.ExecuteSqlCommand("delete from dbo.EmployeeRoleOperationsDesc where OpId=@p0", opId);
+
+                // main data
+                Operations entity = new Operations() { OpId = opId };
+                cmsCtx.Entry<Operations>(entity).State = EntityState.Deleted;
+                cmsCtx.SaveChanges();
+
+                tran.Commit();
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+
+                if (tran != null)
+                    tran.Rollback();
+
+                return false;
+            }
+            finally
+            {
+                if (tran != null)
+                    tran.Dispose();
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region 員工身分後端作業授權相關

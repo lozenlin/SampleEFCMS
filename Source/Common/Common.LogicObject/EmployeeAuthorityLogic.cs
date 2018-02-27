@@ -843,15 +843,17 @@ namespace Common.LogicObject
         /// </summary>
         public bool DeleteOperationData(OpParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_DeleteData cmdInfo = new spOperations_DeleteData() { OpId = param.OpId };
+            bool result = false;
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-
-            if (!result && cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 2)
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                param.IsThereSubitemOfOp = true;
+                result = empAuthDao.DeleteOperationData(param.OpId);
+                dbErrMsg = empAuthDao.GetErrMsg();
+
+                if (!result && empAuthDao.GetSqlErrNumber() == 50000 && empAuthDao.GetSqlErrState() == 2)
+                {
+                    param.IsThereSubitemOfOp = true;
+                }
             }
 
             return result;
