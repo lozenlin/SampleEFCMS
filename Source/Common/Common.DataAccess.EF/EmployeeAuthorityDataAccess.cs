@@ -321,6 +321,31 @@ namespace Common.DataAccess.EF
             return entities;
         }
 
+        /// <summary>
+        /// 取得員工身分名稱
+        /// </summary>
+        public string GetRoleNameOfEmp(string empAccount)
+        {
+            Logger.Debug("GetRoleNameOfEmp(empAccount)");
+            string roleName = "";
+
+            try
+            {
+                roleName = cmsCtx.Employee.Include(emp => emp.EmployeeRole)
+                    .Where(emp => emp.EmpAccount == empAccount)
+                    .Select(emp => emp.EmployeeRole.RoleName)
+                    .FirstOrDefault() ?? "";
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return "";
+            }
+
+            return roleName;
+        }
+
         #endregion
 
         #region 網頁後端作業選項相關

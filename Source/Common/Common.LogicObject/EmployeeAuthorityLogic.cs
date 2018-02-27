@@ -9,8 +9,6 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // ===============================================================================
 
-using Common.DataAccess;
-using Common.DataAccess.EmployeeAuthority;
 using Common.DataAccess.EF;
 using Common.DataAccess.EF.Model;
 using log4net;
@@ -460,17 +458,10 @@ namespace Common.LogicObject
         {
             string roleName = "";
 
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spEmployee_GetRoleName cmdInfo = new spEmployee_GetRoleName()
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                EmpAccount = empAccount
-            };
-            roleName = cmd.ExecuteScalar<string>(cmdInfo, "-1");
-            dbErrMsg = cmd.GetErrMsg();
-
-            if (roleName == "-1")
-            {
-                roleName = "";
+                roleName = empAuthDao.GetRoleNameOfEmp(empAccount);
+                dbErrMsg = empAuthDao.GetErrMsg();
             }
 
             return roleName;
