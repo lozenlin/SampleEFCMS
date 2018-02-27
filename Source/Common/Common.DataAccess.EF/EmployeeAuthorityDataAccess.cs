@@ -653,6 +653,126 @@ namespace Common.DataAccess.EF
             return true;
         }
 
+        /// <summary>
+        /// 加大後端作業選項的排序編號
+        /// </summary>
+        public bool IncreaseOperationSortNo(int opId, string mdfAccount)
+        {
+            Logger.Debug("IncreaseOperationSortNo(opId, mdfAccount)");
+
+            try
+            {
+                Operations entity = cmsCtx.Operations.Find(opId);
+
+                if (entity == null)
+                {
+                    throw new Exception("there is no data of opId.");
+                }
+
+                // get bigger one
+                Operations biggerOne = cmsCtx.Operations.Where(op =>
+                    op.ParentId == entity.ParentId
+                    && op.OpId != entity.OpId
+                    && op.SortNo >= entity.SortNo)
+                    .OrderBy(op => op.SortNo)
+                    .FirstOrDefault();
+
+                // there is no bigger one, exit
+                if (biggerOne == null)
+                {
+                    return true;
+                }
+
+                int sortNo = entity.SortNo ?? 0;
+                int biggerSortNo = biggerOne.SortNo ?? 0;
+
+                // when the values are the same
+                if (biggerSortNo == sortNo)
+                {
+                    biggerSortNo = sortNo + 1;
+                }
+
+                // swap
+                entity.SortNo = biggerSortNo;
+                entity.MdfAccount = mdfAccount;
+                entity.MdfDate = DateTime.Now;
+
+                biggerOne.SortNo = sortNo;
+                biggerOne.MdfAccount = mdfAccount;
+                biggerOne.MdfDate = DateTime.Now;
+
+                cmsCtx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 減小後端作業選項的排序編號
+        /// </summary>
+        public bool DecreaseOperationSortNo(int opId, string mdfAccount)
+        {
+            Logger.Debug("DecreaseOperationSortNo(opId, mdfAccount)");
+
+            try
+            {
+                Operations entity = cmsCtx.Operations.Find(opId);
+
+                if (entity == null)
+                {
+                    throw new Exception("there is no data of opId.");
+                }
+
+                // get smaller one
+                Operations smallerOne = cmsCtx.Operations.Where(op =>
+                    op.ParentId == entity.ParentId
+                    && op.OpId != entity.OpId
+                    && op.SortNo <= entity.SortNo)
+                    .OrderByDescending(op => op.SortNo)
+                    .FirstOrDefault();
+
+                // there is no smaller one, exit
+                if(smallerOne == null)
+                {
+                    return true;
+                }
+
+                int sortNo = entity.SortNo ?? 0;
+                int smallerSortNo = smallerOne.SortNo ?? 0;
+
+                // when the values are the same
+                if (smallerSortNo == sortNo)
+                {
+                    sortNo = smallerSortNo + 1;
+                }
+
+                // swap
+                entity.SortNo = smallerSortNo;
+                entity.MdfAccount = mdfAccount;
+                entity.MdfDate = DateTime.Now;
+
+                smallerOne.SortNo = sortNo;
+                smallerOne.MdfAccount = mdfAccount;
+                smallerOne.MdfDate = DateTime.Now;
+
+                cmsCtx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region 員工身分後端作業授權相關

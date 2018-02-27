@@ -864,15 +864,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool IncreaseOperationSortNo(int opId, string mdfAccount)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_IncreaseSortNo cmdInfo = new spOperations_IncreaseSortNo()
-            {
-                OpId = opId,
-                MdfAccount = mdfAccount
-            };
+            bool result = false;
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                result = empAuthDao.IncreaseOperationSortNo(opId, mdfAccount);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -882,15 +880,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool DecreaseOperationSortNo(int opId, string mdfAccount)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_DecreaseSortNo cmdInfo = new spOperations_DecreaseSortNo()
-            {
-                OpId = opId,
-                MdfAccount = mdfAccount
-            };
+            bool result = false;
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                result = empAuthDao.DecreaseOperationSortNo(opId, mdfAccount);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
