@@ -296,29 +296,19 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後台用指定語系的網頁內容清單
         /// </summary>
-        public DataSet GetArticleMultiLangListForBackend(ArticleListQueryParams param)
+        public List<ArticleForBEList> GetArticleMultiLangListForBackend(ArticleListQueryParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleMultiLang_GetListForBackend cmdInfo = new spArticleMultiLang_GetListForBackend()
-            {
-                ParentId = param.ParentId,
-                CultureName = param.CultureName,
-                Kw = param.Kw,
-                BeginNum = param.PagedParams.BeginNum,
-                EndNum = param.PagedParams.EndNum,
-                SortField = param.PagedParams.SortField,
-                IsSortDesc = param.PagedParams.IsSortDesc,
-                CanReadSubItemOfOthers = param.AuthParams.CanReadSubItemOfOthers,
-                CanReadSubItemOfCrew = param.AuthParams.CanReadSubItemOfCrew,
-                CanReadSubItemOfSelf = param.AuthParams.CanReadSubItemOfSelf,
-                MyAccount = param.AuthParams.MyAccount,
-                MyDeptId = param.AuthParams.MyDeptId
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-            param.PagedParams.RowCount = cmdInfo.RowCount;
+            List<ArticleForBEList> entities = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                ArticleListQueryParamsDA paramDA = param.GenArticleListQueryParamsDA();
+                entities = artPubDao.GetArticleMultiLangListForBackend(paramDA);
+                dbErrMsg = artPubDao.GetErrMsg();
+                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
+            }
+
+            return entities;
         }
 
         /// <summary>

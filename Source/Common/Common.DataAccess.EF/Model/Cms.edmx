@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CmsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CmsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Article">
           <Key>
             <PropertyRef Name="ArticleId" />
@@ -337,6 +337,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fnArticle_IsShowInLang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
+          <Parameter Name="ArticleId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="CultureName" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="spSearchDataSource_Build" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MainLinkUrl" Type="nvarchar" Mode="In" />
         </Function>
@@ -370,8 +374,7 @@
             <End Role="EmployeeRoleOperationsDesc" EntitySet="EmployeeRoleOperationsDesc" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CmsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -740,7 +743,7 @@
             <End Role="EmployeeRoleOperationsDesc" EntitySet="EmployeeRoleOperationsDesc" />
           </AssociationSet>
           <FunctionImport Name="spSearchDataSource_Build">
-            <Parameter Name="MainLinkUrl" Mode="In" Type="String" />
+          <Parameter Name="MainLinkUrl" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
       </Schema>

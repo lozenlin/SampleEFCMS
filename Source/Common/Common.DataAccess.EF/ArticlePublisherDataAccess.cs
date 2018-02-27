@@ -10,8 +10,10 @@
 // ===============================================================================
 
 using Common.DataAccess.EF.Model;
+using Common.DataAccess.EF.ExtensionMethods;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -127,7 +129,7 @@ namespace Common.DataAccess.EF
         {
             Logger.Debug("GetArticleMultiLangLevelInfoList(articleId, cultureName)");
             List<ArticleMultiLangLevelInfo> entities = null;
-
+            
             try
             {
                 entities = new List<ArticleMultiLangLevelInfo>();
@@ -177,6 +179,120 @@ namespace Common.DataAccess.EF
             }
 
             return entities;
+        }
+
+        /// <summary>
+        /// 取得後台用指定語系的網頁內容清單
+        /// </summary>
+        public List<ArticleForBEList> GetArticleMultiLangListForBackend(ArticleListQueryParamsDA param)
+        {
+            Logger.Debug("GetArticleMultiLangListForBackend(param)");
+            List<ArticleForBEList> entities = null;
+
+            try
+            {
+                var tempQuery = from am in cmsCtx.ArticleMultiLang
+                                join a in cmsCtx.Article on am.ArticleId equals a.ArticleId
+                                join e in cmsCtx.Employee.Include(emp => emp.Department) on am.PostAccount equals e.EmpAccount
+                                into amGroup
+                                from e in amGroup.DefaultIfEmpty()
+                                where a.ParentId == param.ParentId
+                                    && am.CultureName == param.CultureName
+                                select new ArticleForBEList()
+                                {
+                                    ArticleId = am.ArticleId,
+                                    ArticleSubject = am.ArticleSubject,
+                                    ReadCount = am.ReadCount,
+                                    PostAccount = am.PostAccount,
+                                    PostDate = am.PostDate,
+                                    MdfAccount = am.MdfAccount,
+                                    MdfDate = am.MdfDate,
+
+                                    IsHideSelf = a.IsHideSelf,
+                                    IsHideChild = a.IsHideChild,
+                                    StartDate = a.StartDate,
+                                    EndDate = a.EndDate,
+                                    SortNo = a.SortNo,
+                                    DontDelete = a.DontDelete,
+
+                                    IsShowInLangZhTw = fnArticle_IsShowInLang(am.ArticleId, "zh-TW"),
+                                    IsShowInLangEn = fnArticle_IsShowInLang(am.ArticleId, "en"),
+                                    PostDeptId = e.DeptId ?? 0,
+                                    PostDeptName = e.Department.DeptName
+                                };
+
+                // Query conditions
+
+                if (!param.AuthParams.CanReadSubItemOfOthers)
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                        param.AuthParams.CanReadSubItemOfCrew && obj.PostDeptId == param.AuthParams.MyDeptId
+                        || param.AuthParams.CanReadSubItemOfSelf && obj.PostAccount == param.AuthParams.MyAccount);
+                }
+
+                if(param.Kw != "")
+                {
+                    tempQuery = tempQuery.Where(obj => obj.ArticleSubject.Contains(param.Kw));
+                }
+
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
+                // sorting
+                if (param.PagedParams.SortField != "")
+                {
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempQuery = tempQuery.OrderBy(obj => obj.SortNo);
+                }
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if (skipCount > 0)
+                {
+                    tempQuery = tempQuery.Skip(skipCount);
+                }
+
+                if (takeCount >= 0)
+                {
+                    tempQuery = tempQuery.Take(takeCount);
+                }
+
+                // result
+                entities = tempQuery.ToList();
+                int rowIndex = 0;
+
+                foreach (var entity in entities)
+                {
+                    entity.RowNum = skipCount + rowIndex + 1;
+                    rowIndex++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
+        #endregion
+
+        #region Custom database function
+
+        // reference: https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/ef/language-reference/how-to-call-custom-database-functions
+
+        [DbFunction("CmsModel.Store", "fnArticle_IsShowInLang")]
+        public bool fnArticle_IsShowInLang(Guid ArticleId, string CultureName)
+        {
+            throw new NotSupportedException("Direct calls are not supported.");
         }
 
         #endregion

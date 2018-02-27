@@ -20,6 +20,7 @@ public partial class Article_Node : BasePage
     protected ArticlePublisherLogic artPub;
     protected EmployeeAuthorityLogic empAuth;
     private IHeadUpDisplay hud = null;
+    private int totalSubitems = 0;
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -529,11 +530,12 @@ public partial class Article_Node : BasePage
             IsSortDesc = c.qsIsSortDesc
         };
 
-        DataSet dsSubitems = artPub.GetArticleMultiLangListForBackend(param);
+        List<ArticleForBEList> subitems = artPub.GetArticleMultiLangListForBackend(param);
 
-        if (dsSubitems != null)
+        if (subitems != null)
         {
-            rptSubitems.DataSource = dsSubitems.Tables[0];
+            totalSubitems = subitems.Count;
+            rptSubitems.DataSource = subitems;
             rptSubitems.DataBind();
         }
 
@@ -545,16 +547,16 @@ public partial class Article_Node : BasePage
 
     protected void rptSubitems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticleForBEList artData = (ArticleForBEList)e.Item.DataItem;
 
-        Guid articleId = (Guid)drvTemp["ArticleId"];
-        string articleSubject = drvTemp.ToSafeStr("ArticleSubject");
-        bool isShowInLangZhTw = drvTemp.To<bool>("IsShowInLangZhTw", false);
-        bool isShowInLangEn = drvTemp.To<bool>("IsShowInLangEn", false);
-        bool isHideSelf = Convert.ToBoolean(drvTemp["IsHideSelf"]);
-        DateTime startDate = Convert.ToDateTime(drvTemp["StartDate"]);
-        DateTime endDate = Convert.ToDateTime(drvTemp["EndDate"]);
-        bool dontDelete = Convert.ToBoolean(drvTemp["DontDelete"]);
+        Guid articleId = artData.ArticleId;
+        string articleSubject = artData.ArticleSubject;
+        bool isShowInLangZhTw = artData.IsShowInLangZhTw;
+        bool isShowInLangEn = artData.IsShowInLangEn;
+        bool isHideSelf = artData.IsHideSelf;
+        DateTime startDate = artData.StartDate.Value;
+        DateTime endDate = artData.EndDate.Value;
+        bool dontDelete = artData.DontDelete;
 
         LinkButton btnMoveDown = (LinkButton)e.Item.FindControl("btnMoveDown");
         btnMoveDown.ToolTip = Resources.Lang.btnMoveDown;
@@ -562,7 +564,6 @@ public partial class Article_Node : BasePage
         LinkButton btnMoveUp = (LinkButton)e.Item.FindControl("btnMoveUp");
         btnMoveUp.ToolTip = Resources.Lang.btnMoveUp;
 
-        int total = drvTemp.DataView.Count;
         int itemNum = e.Item.ItemIndex + 1;
 
         if (itemNum == 1)
@@ -570,7 +571,7 @@ public partial class Article_Node : BasePage
             btnMoveUp.Visible = false;
         }
 
-        if (itemNum == total)
+        if (itemNum == totalSubitems)
         {
             btnMoveDown.Visible = false;
         }
@@ -649,8 +650,8 @@ public partial class Article_Node : BasePage
             btnDelete.Visible = false;
         }
 
-        string ownerAccount = drvTemp.ToSafeStr("PostAccount");
-        int ownerDeptId = Convert.ToInt32(drvTemp["PostDeptId"]);
+        string ownerAccount = artData.PostAccount;
+        int ownerDeptId = artData.PostDeptId;
 
         if (!empAuth.CanEditThisPage(false, ownerAccount, ownerDeptId))
         {

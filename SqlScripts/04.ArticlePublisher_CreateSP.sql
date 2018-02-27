@@ -5,6 +5,117 @@ go
 -- db functions
 go
 -- =============================================
+-- Author:      <lozen_lin>
+-- Create date: <2017/12/01>
+-- Description: <網頁內容在指定語系是否顯示>
+-- Test:
+/*
+select dbo.fnArticle_IsShowInLang('00000000-0000-0000-0000-000000000000', 'zh-TW')
+*/
+-- =============================================
+create function dbo.fnArticle_IsShowInLang(
+@ArticleId uniqueidentifier
+,@CultureName varchar(10)
+)
+returns bit
+as
+begin
+	declare @IsShowInLang bit
+
+	select 
+		@IsShowInLang=IsShowInLang
+	from dbo.ArticleMultiLang
+	where ArticleId=@ArticleId
+		and CultureName=@CultureName
+
+	return isnull(@IsShowInLang, 0)
+end
+go
+
+-- =============================================
+-- Author:      <lozen_lin>
+-- Create date: <2017/12/07>
+-- Description: <附件檔案在指定語系是否顯示>
+-- Test:
+/*
+*/
+-- =============================================
+create function dbo.fnAttachFile_IsShowInLang(
+@AttId uniqueidentifier
+,@CultureName varchar(10)
+)
+returns bit
+as
+begin
+	declare @IsShowInLang bit
+
+	select
+		@IsShowInLang=IsShowInLang
+	from dbo.AttachFileMultiLang
+	where AttId=@AttId
+		and CultureName=@CultureName
+
+	return isnull(@IsShowInLang, 0)
+end
+go
+
+-- =============================================
+-- Author:      <lozen_lin>
+-- Create date: <2017/12/11>
+-- Description: <網頁照片在指定語系是否顯示>
+-- Test:
+/*
+select dbo.fnArticlePicture_IsShowInLang('C2FC6EE9-D018-4A0C-B927-3362DDB5D902', 'zh-TW')
+*/
+-- =============================================
+create function dbo.fnArticlePicture_IsShowInLang(
+@PicId uniqueidentifier
+,@CultureName varchar(10)
+)
+returns bit
+as
+begin
+	declare @IsShowInLang bit
+
+	select
+		@IsShowInLang=IsShowInLang
+	from dbo.ArticlePictureMultiLang
+	where PicId=@PicId
+		and CultureName=@CultureName
+
+	return isnull(@IsShowInLang, 0)
+end
+go
+
+-- =============================================
+-- Author:      <lozen_lin>
+-- Create date: <2017/12/13>
+-- Description: <網頁影片在指定語系是否顯示>
+-- Test:
+/*
+select dbo.fnArticleVideo_IsShowInLang('68480C66-8F2F-4CEB-BC21-CD770B34B2F4', 'zh-TW')
+*/
+-- =============================================
+create function dbo.fnArticleVideo_IsShowInLang(
+@VidId uniqueidentifier
+,@CultureName varchar(10)
+)
+returns bit
+as
+begin
+	declare @IsShowInLang bit
+
+	select
+		@IsShowInLang=IsShowInLang
+	from dbo.ArticleVideoMultiLang
+	where VidId=@VidId
+		and CultureName=@CultureName
+
+	return isnull(@IsShowInLang, 0)
+end
+go
+
+-- =============================================
 -- Author:		<http://lazycoders.blogspot.tw/2007/06/stripping-html-from-text-in-sql-server.html>
 -- Create date: <2018/01/08>
 -- Description:	<移除Html碼>
