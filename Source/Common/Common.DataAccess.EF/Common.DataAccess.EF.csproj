@@ -81,6 +81,7 @@
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\ArticleMultiLangForOpMenu.cs" />
+    <Compile Include="Model\ArticleMultiLangLevelInfo.cs" />
     <Compile Include="Model\ArticlePicture.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>

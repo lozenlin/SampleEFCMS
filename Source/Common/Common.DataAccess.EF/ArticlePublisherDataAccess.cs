@@ -120,6 +120,65 @@ namespace Common.DataAccess.EF
             return entity;
         }
 
+        /// <summary>
+        /// 取得指定語系的網頁內容階層資料
+        /// </summary>
+        public List<ArticleMultiLangLevelInfo> GetArticleMultiLangLevelInfoList(Guid articleId, string cultureName)
+        {
+            Logger.Debug("GetArticleMultiLangLevelInfoList(articleId, cultureName)");
+            List<ArticleMultiLangLevelInfo> entities = null;
+
+            try
+            {
+                entities = new List<ArticleMultiLangLevelInfo>();
+                ArticleMultiLangLevelInfo entity = null;
+                Guid curArticleId = articleId;
+
+                do
+                {
+                    entity = (from am in cmsCtx.ArticleMultiLang
+                              from a in cmsCtx.Article
+                              where am.ArticleId == a.ArticleId
+                               && am.ArticleId == curArticleId
+                               && am.CultureName == cultureName
+                              select new ArticleMultiLangLevelInfo()
+                              {
+                                  ArticleId = am.ArticleId,
+                                  ParentId = a.ParentId,
+                                  ArticleSubject = am.ArticleSubject,
+                                  ArticleLevelNo = a.ArticleLevelNo,
+                                  ShowTypeId = a.ShowTypeId,
+                                  LinkUrl = a.LinkUrl,
+                                  LinkTarget = a.LinkTarget,
+                                  IsHideSelf = a.IsHideSelf,
+                                  IsShowInLang = am.IsShowInLang,
+                                  StartDate = a.StartDate,
+                                  EndDate = a.EndDate
+                              }).FirstOrDefault();
+
+                    if (entity == null)
+                    {
+                        throw new Exception(string.Format("there is no data of curArticleId[{0}].", curArticleId));
+                    }
+
+                    entities.Add(entity);
+
+                    if (entity.ParentId.HasValue)
+                        curArticleId = entity.ParentId.Value;
+
+                } while (entity.ParentId.HasValue);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
     }
 }

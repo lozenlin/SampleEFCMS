@@ -101,19 +101,19 @@ public partial class Article_Node : BasePage
     {
         StringBuilder sbBreadcrumbWoHome = new StringBuilder(100);
 
-        DataSet dsLevelInfo = artPub.GetArticleMultiLangLevelInfo(c.qsArtId, c.seCultureNameOfBackend);
+        List<ArticleMultiLangLevelInfo> levelInfos = artPub.GetArticleMultiLangLevelInfo(c.qsArtId, c.seCultureNameOfBackend);
 
-        if (dsLevelInfo != null && dsLevelInfo.Tables[0].Rows.Count > 0)
+        if (levelInfos != null)
         {
-            int total = dsLevelInfo.Tables[0].Rows.Count;
+            int total = levelInfos.Count    ;
 
             for (int itemNum = total; itemNum >= 1; itemNum--)
             {
-                DataRow drArticle = dsLevelInfo.Tables[0].Rows[itemNum - 1];
+                ArticleMultiLangLevelInfo levelInfo = levelInfos[itemNum - 1];
 
-                Guid articleId = (Guid)drArticle["ArticleId"];
-                string articleSubject = drArticle.ToSafeStr("ArticleSubject");
-                int articleLevelNo = Convert.ToInt32(drArticle["ArticleLevelNo"]);
+                Guid articleId = levelInfo.ArticleId;
+                string articleSubject = levelInfo.ArticleSubject;
+                int articleLevelNo = levelInfo.ArticleLevelNo.Value;
                 string url = string.Format("Article-Node.aspx?artid={0}", articleId);
 
                 if (itemNum == 1)

@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -83,29 +84,30 @@ public partial class UserControls_wucBreadcrumb : System.Web.UI.UserControl
         else
         {
             Guid articleId = articleData.ArticleId.Value;
-            DataSet dsLevelInfo = artPub.GetArticleMultiLangLevelInfo(articleId, c.qsCultureNameOfLangNo);
+            List<ArticleMultiLangLevelInfo> levelInfos = artPub.GetArticleMultiLangLevelInfo(articleId, c.qsCultureNameOfLangNo);
 
-            if (dsLevelInfo != null && dsLevelInfo.Tables[0].Rows.Count > 0)
+            if (levelInfos != null)
             {
-                int total = dsLevelInfo.Tables[0].Rows.Count;
+                int total = levelInfos.Count;
+
                 for (int i = total - 1; i >= 0; i--)
                 {
-                    DataRow drLevelInfo = dsLevelInfo.Tables[0].Rows[i];
+                    ArticleMultiLangLevelInfo levelInfo = levelInfos[i];
 
-                    Guid itemId = (Guid)drLevelInfo["ArticleId"];
+                    Guid itemId = levelInfo.ArticleId;
 
                     if (itemId == Guid.Empty)
                     {
                         continue;
                     }
 
-                    string itemSubject = drLevelInfo.ToSafeStr("ArticleSubject");
-                    bool isHideSelf = Convert.ToBoolean(drLevelInfo["IsHideSelf"]);
-                    bool isShowInLang = Convert.ToBoolean(drLevelInfo["IsShowInLang"]);
-                    DateTime startDate = Convert.ToDateTime(drLevelInfo["StartDate"]);
-                    DateTime endDate = Convert.ToDateTime(drLevelInfo["EndDate"]);
-                    int showTypeId = Convert.ToInt32(drLevelInfo["ShowTypeId"]);
-                    string linkUrl = drLevelInfo.ToSafeStr("LinkUrl");
+                    string itemSubject = levelInfo.ArticleSubject;
+                    bool isHideSelf = levelInfo.IsHideSelf;
+                    bool isShowInLang = levelInfo.IsShowInLang;
+                    DateTime startDate = levelInfo.StartDate.Value;
+                    DateTime endDate = levelInfo.EndDate.Value;
+                    int showTypeId = levelInfo.ShowTypeId.Value;
+                    string linkUrl = levelInfo.LinkUrl;
 
                     if (startDate <= DateTime.Today && DateTime.Today <= endDate
                         && !isHideSelf
