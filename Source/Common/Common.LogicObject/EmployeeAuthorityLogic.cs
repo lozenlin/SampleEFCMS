@@ -912,12 +912,13 @@ namespace Common.LogicObject
         /// </summary>
         public int GetOperationMaxSortNo(int parentId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_GetMaxSortNo cmdInfo = new spOperations_GetMaxSortNo() { ParentId = parentId };
+            int result = 0;
 
-            int errCode = -1;
-            int result = cmd.ExecuteScalar<int>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
+            using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
+            {
+                result = empAuthDao.GetOperationMaxSortNo(parentId);
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -927,29 +928,40 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertOperationData(OpParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_InsertData cmdInfo = new spOperations_InsertData()
-            {
-                ParentId = param.ParentId,
-                OpSubject = param.OpSubject,
-                LinkUrl = param.LinkUrl,
-                IsNewWindow = param.IsNewWindow,
-                IconImageFile = param.IconImageFile,
-                SortNo = param.SortNo,
-                IsHideSelf = param.IsHideSelf,
-                CommonClass = param.CommonClass,
-                PostAccount = param.PostAccount,
-                EnglishSubject = param.EnglishSubject
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            if (result)
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                param.OpId = cmdInfo.OpId;
+                int? objParentId = null;
+
+                if (param.ParentId != 0)
+                    objParentId = param.ParentId;
+
+                Operations entity = new Operations()
+                {
+                    ParentId = objParentId,
+                    OpSubject = param.OpSubject,
+                    LinkUrl = param.LinkUrl,
+                    IsNewWindow = param.IsNewWindow,
+                    IconImageFile = param.IconImageFile,
+                    SortNo = param.SortNo,
+                    IsHideSelf = param.IsHideSelf,
+                    CommonClass = param.CommonClass,
+                    EnglishSubject = param.EnglishSubject,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = empAuthDao.Insert<Operations>(entity);
+                dbErrMsg = empAuthDao.GetErrMsg();
+
+                if (insResult.IsSuccess)
+                {
+                    param.OpId = (int)insResult.NewId;
+                }
             }
 
-            return result;
+            return insResult.IsSuccess;
         }
 
         /// <summary>
@@ -957,22 +969,30 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateOperaionData(OpParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spOperations_UpdateData cmdInfo = new spOperations_UpdateData()
+            bool result = false;
+
+            using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                OpId = param.OpId,
-                OpSubject = param.OpSubject,
-                LinkUrl = param.LinkUrl,
-                IsNewWindow = param.IsNewWindow,
-                IconImageFile = param.IconImageFile,
-                SortNo = param.SortNo,
-                IsHideSelf = param.IsHideSelf,
-                CommonClass = param.CommonClass,
-                MdfAccount = param.PostAccount,
-                EnglishSubject = param.EnglishSubject
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                Operations entity = empAuthDao.GetEmptyEntity<Operations>(new OperationsRequiredPropValues()
+                {
+                    OpId = param.OpId
+                });
+
+                entity.OpId = param.OpId;
+                entity.OpSubject = param.OpSubject;
+                entity.LinkUrl = param.LinkUrl;
+                entity.IsNewWindow = param.IsNewWindow;
+                entity.IconImageFile = param.IconImageFile;
+                entity.SortNo = param.SortNo;
+                entity.IsHideSelf = param.IsHideSelf;
+                entity.CommonClass = param.CommonClass;
+                entity.EnglishSubject = param.EnglishSubject;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = empAuthDao.Update();
+                dbErrMsg = empAuthDao.GetErrMsg();
+            }
 
             return result;
         }

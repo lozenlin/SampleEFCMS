@@ -773,6 +773,33 @@ namespace Common.DataAccess.EF
             return true;
         }
 
+        /// <summary>
+        /// 取得後端作業選項最大排序編號
+        /// </summary>
+        public int GetOperationMaxSortNo(int parentId)
+        {
+            Logger.Debug("GetOperationMaxSortNo(parentId)");
+            int result = 0;
+
+            try
+            {
+                int? objParentId = null;
+
+                if (parentId != 0)
+                    objParentId = parentId;
+
+                result = cmsCtx.Operations.Where(op => op.ParentId == objParentId).Max(op => op.SortNo) ?? 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return -1;
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region 員工身分後端作業授權相關
