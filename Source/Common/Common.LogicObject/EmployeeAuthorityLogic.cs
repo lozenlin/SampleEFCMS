@@ -586,7 +586,9 @@ namespace Common.LogicObject
                 {
                     EmpId = param.EmpId,
                     EmpAccount = "",
-                    EmpPassword = ""
+                    EmpPassword = "",
+                    IsAccessDenied = !param.IsAccessDenied,
+                    PasswordHashed = !param.PasswordHashed
                 });
 
                 entity.EmpPassword = param.EmpPassword;
@@ -966,7 +968,9 @@ namespace Common.LogicObject
             {
                 Operations entity = empAuthDao.GetEmptyEntity<Operations>(new OperationsRequiredPropValues()
                 {
-                    OpId = param.OpId
+                    OpId = param.OpId,
+                    IsNewWindow = !param.IsNewWindow,
+                    IsHideSelf = !param.IsHideSelf
                 });
 
                 entity.OpId = param.OpId;

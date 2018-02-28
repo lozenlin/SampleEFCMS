@@ -10,5 +10,6 @@ namespace Common.DataAccess.EF.EntityRequiredPropValues
     {
         public System.Guid VidId { get; set; }
         public string CultureName { get; set; }
+        public bool IsShowInLang { get; set; }
     }
 }

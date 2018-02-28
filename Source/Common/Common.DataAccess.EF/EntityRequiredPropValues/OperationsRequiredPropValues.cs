@@ -9,5 +9,7 @@ namespace Common.DataAccess.EF.EntityRequiredPropValues
     public class OperationsRequiredPropValues
     {
         public int OpId { get; set; }
+        public bool IsNewWindow { get; set; }
+        public bool IsHideSelf { get; set; }
     }
 }

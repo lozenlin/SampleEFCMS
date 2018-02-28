@@ -9,5 +9,6 @@ namespace Common.DataAccess.EF.EntityRequiredPropValues
     public class AttachFileRequiredPropValues
     {
         public System.Guid AttId { get; set; }
+        public bool DontDelete { get; set; }
     }
 }

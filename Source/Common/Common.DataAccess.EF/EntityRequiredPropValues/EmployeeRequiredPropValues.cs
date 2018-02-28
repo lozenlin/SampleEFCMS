@@ -11,5 +11,8 @@ namespace Common.DataAccess.EF.EntityRequiredPropValues
         public int EmpId { get; set; }
         public string EmpAccount { get; set; }
         public string EmpPassword { get; set; }
+        public bool IsAccessDenied { get; set; }
+        public bool IsEmailConfirmed { get; set; }
+        public bool PasswordHashed { get; set; }
     }
 }
