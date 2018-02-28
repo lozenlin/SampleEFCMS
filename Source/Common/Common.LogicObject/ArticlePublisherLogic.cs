@@ -114,12 +114,13 @@ namespace Common.LogicObject
         /// </summary>
         public int GetArticleMaxSortNo(Guid parentId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetMaxSortNo cmdInfo = new spArticle_GetMaxSortNo() { ParentId = parentId };
+            int result = 0;
 
-            int errCode = -1;
-            int result = cmd.ExecuteScalar<int>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.GetArticleMaxSortNo(parentId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }

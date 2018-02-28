@@ -645,6 +645,28 @@ where exists(
             return true;
         }
 
+        /// <summary>
+        /// 取得網頁內容最大排序編號
+        /// </summary>
+        public int GetArticleMaxSortNo(Guid parentId)
+        {
+            Logger.Debug("GetArticleMaxSortNo(parentId)");
+            int result = 0;
+
+            try
+            {
+                result = cmsCtx.Article.Where(obj => obj.ParentId == parentId).Max(obj => obj.SortNo) ?? 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return -1;
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region Custom database function
