@@ -420,21 +420,14 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateArticleSortFieldOfFrontStage(ArticleUpdateSortFieldOfFrontStageParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_UpdateSortFieldOfFrontStage cmdInfo = new spArticle_UpdateSortFieldOfFrontStage()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleId = param.ArticleId,
-                SortFieldOfFrontStage = param.SortFieldOfFrontStage,
-                IsSortDescOfFrontStage = param.IsSortDescOfFrontStage,
-                MdfAccount = param.MdfAccount,
-                CanEditSubItemOfOthers = param.AuthUpdateParams.CanEditSubItemOfOthers,
-                CanEditSubItemOfCrew = param.AuthUpdateParams.CanEditSubItemOfCrew,
-                CanEditSubItemOfSelf = param.AuthUpdateParams.CanEditSubItemOfSelf,
-                MyAccount = param.AuthUpdateParams.MyAccount,
-                MyDeptId = param.AuthUpdateParams.MyDeptId
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                ArticleUpdateSortFieldOfFrontStageParamsDA paramDA = param.GenArticleUpdateSortFieldOfFrontStageParamsDA();
+                result = artPubDao.UpdateArticleSortFieldOfFrontStage(paramDA);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }

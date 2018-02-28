@@ -601,6 +601,50 @@ where exists(
             return true;
         }
 
+        /// <summary>
+        /// 更新網頁內容的前台子項目排序欄位
+        /// </summary>
+        public bool UpdateArticleSortFieldOfFrontStage(ArticleUpdateSortFieldOfFrontStageParamsDA param)
+        {
+            Logger.Debug("UpdateArticleSortFieldOfFrontStage(param)");
+
+            try
+            {
+                // get valid entity
+                var tempQuery = from a in cmsCtx.Article
+                                join e in cmsCtx.Employee on a.PostAccount equals e.EmpAccount
+                                into articleGroup
+                                from e in articleGroup.DefaultIfEmpty()
+                                where a.ArticleId == param.ArticleId
+                                    && (param.AuthUpdateParams.CanEditSubItemOfOthers
+                                        || param.AuthUpdateParams.CanEditSubItemOfCrew && e.DeptId == param.AuthUpdateParams.MyDeptId
+                                        || param.AuthUpdateParams.CanEditSubItemOfSelf && a.PostAccount == param.AuthUpdateParams.MyAccount)
+                                select a;
+
+                Article entity = tempQuery.FirstOrDefault();
+
+                if (entity == null)
+                {
+                    throw new Exception("update failed");
+                }
+
+                entity.SortFieldOfFrontStage = param.SortFieldOfFrontStage;
+                entity.IsSortDescOfFrontStage = param.IsSortDescOfFrontStage;
+                entity.MdfAccount = param.MdfAccount;
+                entity.MdfDate = DateTime.Now;
+
+                cmsCtx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Custom database function
