@@ -680,14 +680,14 @@ public partial class Article_Node : BasePage
                 string articleSubject = args[1];
 
                 //取得所有子項目id, 階層越高排越前面
-                DataSet dsDescsAndSelf = artPub.GetArticleDescendants(articleId);
+                List<ArticleDescendant> descsAndSelf = artPub.GetArticleDescendants(articleId);
 
-                if (dsDescsAndSelf != null && dsDescsAndSelf.Tables[0].Rows.Count > 1)
+                if (descsAndSelf != null && descsAndSelf.Count > 1)
                 {
                     // delete descendants
-                    foreach (DataRow drDesc in dsDescsAndSelf.Tables[0].Rows)
+                    foreach (ArticleDescendant desc in descsAndSelf)
                     {
-                        Guid descId = (Guid)drDesc["ArticleId"];
+                        Guid descId = desc.ArticleId;
 
                         if (descId == articleId)
                             continue;

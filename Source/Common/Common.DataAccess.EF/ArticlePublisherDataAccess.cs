@@ -283,6 +283,68 @@ namespace Common.DataAccess.EF
             return entities;
         }
 
+        /// <summary>
+        /// 取得網頁的所有子網頁資訊
+        /// </summary>
+        public List<ArticleDescendant> GetArticleDescendants(Guid articleId)
+        {
+            Logger.Debug("GetArticleDescendants(articleId)");
+            List<ArticleDescendant> entities = null;
+            List<ArticleDescendant> descendants = null;
+            Guid curArticleId = articleId;
+            int curLevelNo = 0;
+
+            try
+            {
+                entities = new List<ArticleDescendant>();
+
+                // get current info
+                ArticleDescendant entity = cmsCtx.Article.Where(obj => obj.ArticleId == articleId)
+                    .Select(obj => new ArticleDescendant()
+                    {
+                        ArticleId = obj.ArticleId,
+                        ArticleLevelNo = obj.ArticleLevelNo
+                    }).FirstOrDefault();
+
+                if (entity != null)
+                {
+                    curLevelNo = entity.ArticleLevelNo.Value;
+                    entities.Add(entity);
+
+                    do
+                    {
+                        List<Guid?> parentIds = entities.Where(obj => obj.ArticleLevelNo == curLevelNo)
+                            .Select(obj => (Guid?)obj.ArticleId).ToList();
+
+                        descendants = (from a in cmsCtx.Article
+                                       where parentIds.Contains(a.ParentId)
+                                       select new ArticleDescendant()
+                                       {
+                                           ArticleId = a.ArticleId,
+                                           ArticleLevelNo = a.ArticleLevelNo
+                                       }).ToList();
+
+                        if (descendants.Count > 0)
+                        {
+                            entities.InsertRange(0, descendants);
+                        }
+
+                        curLevelNo++;
+
+                    } while (descendants.Count > 0);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
 
         #region Custom database function

@@ -572,15 +572,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得網頁的所有子網頁
         /// </summary>
-        public DataSet GetArticleDescendants(Guid articleId)
+        public List<ArticleDescendant> GetArticleDescendants(Guid articleId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetDescendants cmdInfo = new spArticle_GetDescendants() { ArticleId = articleId };
+            List<ArticleDescendant> entities = null;
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entities = artPubDao.GetArticleDescendants(articleId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
-            return ds;
+            return entities;
         }
 
         #endregion
