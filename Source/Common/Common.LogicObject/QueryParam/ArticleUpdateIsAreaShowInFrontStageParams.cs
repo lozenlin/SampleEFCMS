@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.DataAccess.EF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,20 @@ namespace Common.LogicObject
         public ArticleUpdateIsAreaShowInFrontStageParams()
         {
             AuthUpdateParams = new AuthenticationUpdateParams();
+        }
+
+        public ArticleUpdateIsAreaShowInFrontStageParamsDA GenArticleUpdateIsAreaShowInFrontStageParamsDA()
+        {
+            ArticleUpdateIsAreaShowInFrontStageParamsDA result = new ArticleUpdateIsAreaShowInFrontStageParamsDA()
+            {
+                ArticleId = ArticleId,
+                AreaName = AreaName,
+                IsShowInFrontStage = IsShowInFrontStage,
+                MdfAccount = MdfAccount,
+                AuthUpdateParams = AuthUpdateParams.GenAuthenticationUpdateParamsDA()
+            };
+
+            return result;
         }
     }
 }

@@ -156,7 +156,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryParam\AccountListQueryParamsDA.cs" />
     <Compile Include="QueryParam\ArticleListQueryParamsDA.cs" />
+    <Compile Include="QueryParam\ArticleUpdateIsAreaShowInFrontStageParamsDA.cs" />
     <Compile Include="QueryParam\AuthenticationQueryParamsDA.cs" />
+    <Compile Include="QueryParam\AuthenticationUpdateParamsDA.cs" />
     <Compile Include="QueryParam\BackEndLogListQueryParamsDA.cs" />
     <Compile Include="QueryParam\DeptListQueryParamsDA.cs" />
     <Compile Include="QueryParam\OpListQueryParamsDA.cs" />

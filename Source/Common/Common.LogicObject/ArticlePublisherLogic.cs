@@ -403,21 +403,14 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateArticleIsAreaShowInFrontStage(ArticleUpdateIsAreaShowInFrontStageParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_UpdateIsAreaShowInFrontStage cmdInfo = new spArticle_UpdateIsAreaShowInFrontStage()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleId = param.ArticleId,
-                AreaName = param.AreaName,
-                IsShowInFrontStage = param.IsShowInFrontStage,
-                MdfAccount = param.MdfAccount,
-                CanEditSubItemOfOthers = param.AuthUpdateParams.CanEditSubItemOfOthers,
-                CanEditSubItemOfCrew = param.AuthUpdateParams.CanEditSubItemOfCrew,
-                CanEditSubItemOfSelf = param.AuthUpdateParams.CanEditSubItemOfSelf,
-                MyAccount = param.AuthUpdateParams.MyAccount,
-                MyDeptId = param.AuthUpdateParams.MyDeptId
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                ArticleUpdateIsAreaShowInFrontStageParamsDA paramDA = param.GenArticleUpdateIsAreaShowInFrontStageParamsDA();
+                result = artPubDao.UpdateArticleIsAreaShowInFrontStage(paramDA);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
