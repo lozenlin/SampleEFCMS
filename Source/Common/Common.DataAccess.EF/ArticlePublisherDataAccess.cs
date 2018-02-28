@@ -667,6 +667,57 @@ where exists(
             return result;
         }
 
+        /// <summary>
+        /// 新增網頁內容
+        /// </summary>
+        public InsertResult InsertArticleData(Article entity)
+        {
+            Logger.Debug("InsertArticleData(entity)");
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
+
+            try
+            {
+                // check id
+                if (cmsCtx.Article.Any(obj => obj.ArticleId == entity.ArticleId))
+                {
+                    sqlErrNumber = 50000;
+                    sqlErrState = 2;
+                    return insResult;
+                }
+
+                // check alias
+                if (cmsCtx.Article.Any(obj => obj.ArticleAlias == entity.ArticleAlias))
+                {
+                    sqlErrNumber = 50000;
+                    sqlErrState = 3;
+                    return insResult;
+                }
+
+                // get parent info
+                var parent = cmsCtx.Article.Where(obj => obj.ArticleId == entity.ParentId)
+                    .Select(obj => new
+                    {
+                        obj.ArticleLevelNo
+                    }).FirstOrDefault();
+
+                entity.ArticleLevelNo = parent.ArticleLevelNo.Value + 1;
+                entity.PostDate = DateTime.Now;
+
+                cmsCtx.Article.Add(entity);
+                cmsCtx.SaveChanges();
+
+                insResult.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return insResult;
+            }
+
+            return insResult;
+        }
+
         #endregion
 
         #region Custom database function

@@ -130,54 +130,59 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertArticleData(ArticleParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_InsertData cmdInfo = new spArticle_InsertData()
-            {
-                ArticleId = param.ArticleId,
-                ParentId = param.ParentId,
-                ArticleAlias = param.ArticleAlias,
-                BannerPicFileName = param.BannerPicFileName,
-                LayoutModeId = param.LayoutModeId,
-                ShowTypeId = param.ShowTypeId,
-                LinkUrl = param.LinkUrl,
-                LinkTarget = param.LinkTarget,
-                ControlName = param.ControlName,
-                SubItemControlName = param.SubItemControlName,
-                IsHideSelf = param.IsHideSelf,
-                IsHideChild = param.IsHideChild,
-                StartDate = param.StartDate,
-                EndDate = param.EndDate,
-                SortNo = param.SortNo,
-                DontDelete = param.DontDelete,
-                PostAccount = param.PostAccount,
-                SubjectAtBannerArea = param.SubjectAtBannerArea,
-                PublishDate = param.PublishDate,
-                IsShowInUnitArea = param.IsShowInUnitArea,
-                IsShowInSitemap = param.IsShowInSitemap,
-                SortFieldOfFrontStage = param.SortFieldOfFrontStage,
-                IsSortDescOfFrontStage = param.IsSortDescOfFrontStage,
-                IsListAreaShowInFrontStage = param.IsListAreaShowInFrontStage,
-                IsAttAreaShowInFrontStage = param.IsAttAreaShowInFrontStage,
-                IsPicAreaShowInFrontStage = param.IsPicAreaShowInFrontStage,
-                IsVideoAreaShowInFrontStage = param.IsVideoAreaShowInFrontStage,
-                SubItemLinkUrl = param.SubItemLinkUrl
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            if (!result)
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                if (cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 2)
+                Article entity = new Article()
                 {
-                    param.HasIdBeenUsed = true;
-                }
-                else if (cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 3)
+                    ArticleId = param.ArticleId,
+                    ParentId = param.ParentId,
+                    ArticleAlias = param.ArticleAlias,
+                    BannerPicFileName = param.BannerPicFileName,
+                    LayoutModeId = param.LayoutModeId,
+                    ShowTypeId = param.ShowTypeId,
+                    LinkUrl = param.LinkUrl,
+                    LinkTarget = param.LinkTarget,
+                    ControlName = param.ControlName,
+                    SubItemControlName = param.SubItemControlName,
+                    IsHideSelf = param.IsHideSelf,
+                    IsHideChild = param.IsHideChild,
+                    StartDate = param.StartDate,
+                    EndDate = param.EndDate,
+                    SortNo = param.SortNo,
+                    DontDelete = param.DontDelete,
+                    PostAccount = param.PostAccount,
+                    SubjectAtBannerArea = param.SubjectAtBannerArea,
+                    PublishDate = param.PublishDate,
+                    IsShowInUnitArea = param.IsShowInUnitArea,
+                    IsShowInSitemap = param.IsShowInSitemap,
+                    SortFieldOfFrontStage = param.SortFieldOfFrontStage,
+                    IsSortDescOfFrontStage = param.IsSortDescOfFrontStage,
+                    IsListAreaShowInFrontStage = param.IsListAreaShowInFrontStage,
+                    IsAttAreaShowInFrontStage = param.IsAttAreaShowInFrontStage,
+                    IsPicAreaShowInFrontStage = param.IsPicAreaShowInFrontStage,
+                    IsVideoAreaShowInFrontStage = param.IsVideoAreaShowInFrontStage,
+                    SubItemLinkUrl = param.SubItemLinkUrl
+                };
+
+                insResult = artPubDao.InsertArticleData(entity);
+                dbErrMsg = artPubDao.GetErrMsg();
+
+                if (!insResult.IsSuccess)
                 {
-                    param.HasAliasBeenUsed = true;
+                    if (artPubDao.GetSqlErrNumber() == 50000 && artPubDao.GetSqlErrState() == 2)
+                    {
+                        param.HasIdBeenUsed = true;
+                    }
+                    else if (artPubDao.GetSqlErrNumber() == 50000 && artPubDao.GetSqlErrState() == 3)
+                    {
+                        param.HasAliasBeenUsed = true;
+                    }
                 }
             }
 
-            return result;
+            return insResult.IsSuccess;
         }
 
         /// <summary>
@@ -185,23 +190,29 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertArticleMultiLangData(ArticleMultiLangParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleMultiLang_InsertData cmdInfo = new spArticleMultiLang_InsertData()
-            {
-                ArticleId = param.ArticleId,
-                CultureName = param.CultureName,
-                ArticleSubject = param.ArticleSubject,
-                ArticleContext = param.ArticleContext,
-                IsShowInLang = param.IsShowInLang,
-                PostAccount = param.PostAccount,
-                Subtitle = param.Subtitle,
-                PublisherName = param.PublisherName,
-                TextContext = param.TextContext
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            return result;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                ArticleMultiLang entity = new ArticleMultiLang()
+                {
+                    ArticleId = param.ArticleId,
+                    CultureName = param.CultureName,
+                    ArticleSubject = param.ArticleSubject,
+                    ArticleContext = param.ArticleContext,
+                    IsShowInLang = param.IsShowInLang,
+                    PostAccount = param.PostAccount,
+                    Subtitle = param.Subtitle,
+                    PublisherName = param.PublisherName,
+                    TextContext = param.TextContext,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = artPubDao.Insert<ArticleMultiLang>(entity);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return insResult.IsSuccess;
         }
 
         /// <summary>
