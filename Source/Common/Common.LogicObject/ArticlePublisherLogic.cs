@@ -339,11 +339,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool DeleteArticleData(Guid articleId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_DeleteData cmdInfo = new spArticle_DeleteData() { ArticleId = articleId };
+            bool result = false;
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.DeleteArticleData(articleId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }

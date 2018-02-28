@@ -345,6 +345,81 @@ namespace Common.DataAccess.EF
             return entities;
         }
 
+        /// <summary>
+        /// 刪除網頁內容
+        /// </summary>
+        public bool DeleteArticleData(Guid articleId)
+        {
+            Logger.Debug("DeleteArticleData(articleId)");
+            DbContextTransaction tran = null;
+
+            try
+            {
+                tran = cmsCtx.Database.BeginTransaction();
+
+                // delete attachment
+                cmsCtx.Database.ExecuteSqlCommand(@"
+delete from dbo.AttachFileMultiLang
+where exists(
+	select *
+	from dbo.AttachFile af
+	where af.AttId=AttachFileMultiLang.AttId and af.ArticleId=@p0
+)", articleId);
+
+                cmsCtx.Database.ExecuteSqlCommand("delete from dbo.AttachFile where ArticleId = @p0", articleId);
+
+                // delete picture
+                cmsCtx.Database.ExecuteSqlCommand(@"
+delete from dbo.ArticlePictureMultiLang
+where exists(
+	select *
+	from dbo.ArticlePicture ap
+	where ap.PicId=ArticlePictureMultiLang.PicId and ap.ArticleId=@p0
+)", articleId);
+
+                cmsCtx.Database.ExecuteSqlCommand("delete from dbo.ArticlePicture where ArticleId = @p0", articleId);
+
+                // delete video
+                cmsCtx.Database.ExecuteSqlCommand(@"
+delete from dbo.ArticleVideoMultiLang
+where exists(
+	select *
+	from dbo.ArticleVideo av
+	where av.VidId=ArticleVideoMultiLang.VidId and av.ArticleId=@p0
+)", articleId);
+
+                cmsCtx.Database.ExecuteSqlCommand("delete from dbo.ArticleVideo where ArticleId = @p0", articleId);
+
+                // delete multi language data
+                cmsCtx.Database.ExecuteSqlCommand("delete from dbo.ArticleMultiLang where ArticleId = @p0", articleId);
+
+                // delete main data
+                Article entity = new Article() { ArticleId = articleId };
+                cmsCtx.Entry<Article>(entity).State = EntityState.Deleted;
+
+                cmsCtx.SaveChanges();
+
+                tran.Commit();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+
+                if (tran != null)
+                    tran.Rollback();
+
+                return false;
+            }
+            finally
+            {
+                if (tran != null)
+                    tran.Dispose();
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Custom database function
@@ -352,7 +427,7 @@ namespace Common.DataAccess.EF
         // reference: https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/ef/language-reference/how-to-call-custom-database-functions
 
         [DbFunction("CmsModel.Store", "fnArticle_IsShowInLang")]
-        public bool fnArticle_IsShowInLang(Guid ArticleId, string CultureName)
+        private bool fnArticle_IsShowInLang(Guid ArticleId, string CultureName)
         {
             throw new NotSupportedException("Direct calls are not supported.");
         }
