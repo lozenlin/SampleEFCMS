@@ -420,6 +420,126 @@ where exists(
             return true;
         }
 
+        /// <summary>
+        /// 加大網頁內容的排序編號
+        /// </summary>
+        public bool IncreaseArticleSortNo(Guid articleId, string mdfAccount)
+        {
+            Logger.Debug("IncreaseArticleSortNo(articleId, mdfAccount)");
+
+            try
+            {
+                Article entity = cmsCtx.Article.Find(articleId);
+
+                if (entity == null)
+                {
+                    throw new Exception("there is no data of articleId.");
+                }
+
+                // get bigger one
+                Article biggerOne = cmsCtx.Article.Where(obj =>
+                    obj.ParentId == entity.ParentId
+                    && obj.ArticleId != entity.ArticleId
+                    && obj.SortNo >= entity.SortNo)
+                    .OrderBy(obj => obj.SortNo)
+                    .FirstOrDefault();
+
+                // there is no bigger one, exit
+                if (biggerOne == null)
+                {
+                    return true;
+                }
+
+                int sortNo = entity.SortNo ?? 0;
+                int biggerSortNo = biggerOne.SortNo ?? 0;
+
+                // when the values are the same
+                if (biggerSortNo == sortNo)
+                {
+                    biggerSortNo = sortNo + 1;
+                }
+
+                // swap
+                entity.SortNo = biggerSortNo;
+                entity.MdfAccount = mdfAccount;
+                entity.MdfDate = DateTime.Now;
+
+                biggerOne.SortNo = sortNo;
+                biggerOne.MdfAccount = mdfAccount;
+                biggerOne.MdfDate = DateTime.Now;
+
+                cmsCtx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 減小網頁內容的排序編號
+        /// </summary>
+        public bool DecreaseArticleSortNo(Guid articleId, string mdfAccount)
+        {
+            Logger.Debug("DecreaseArticleSortNo(articleId, mdfAccount)");
+
+            try
+            {
+                Article entity = cmsCtx.Article.Find(articleId);
+
+                if (entity == null)
+                {
+                    throw new Exception("there is no data of articleId.");
+                }
+
+                // get smaller one
+                Article smallerOne = cmsCtx.Article.Where(obj =>
+                    obj.ParentId == entity.ParentId
+                    && obj.ArticleId != entity.ArticleId
+                    && obj.SortNo <= entity.SortNo)
+                    .OrderByDescending(obj => obj.SortNo)
+                    .FirstOrDefault();
+
+                // there is no smaller one, exit
+                if (smallerOne == null)
+                {
+                    return true;
+                }
+
+                int sortNo = entity.SortNo ?? 0;
+                int smallerSortNo = smallerOne.SortNo ?? 0;
+
+                // when the values are the same
+                if (smallerSortNo == sortNo)
+                {
+                    sortNo = smallerSortNo + 1;
+                }
+
+                // swap
+                entity.SortNo = smallerSortNo;
+                entity.MdfAccount = mdfAccount;
+                entity.MdfDate = DateTime.Now;
+
+                smallerOne.SortNo = sortNo;
+                smallerOne.MdfAccount = mdfAccount;
+                smallerOne.MdfDate = DateTime.Now;
+
+                cmsCtx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Custom database function

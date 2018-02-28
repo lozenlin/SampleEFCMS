@@ -355,14 +355,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool IncreaseArticleSortNo(Guid articleId, string mdfAccount)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_IncreaseSortNo cmdInfo = new spArticle_IncreaseSortNo()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleId = articleId,
-                MdfAccount = mdfAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                result = artPubDao.IncreaseArticleSortNo(articleId, mdfAccount);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -372,14 +371,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool DecreaseArticleSortNo(Guid articleId, string mdfAccount)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_DecreaseSortNo cmdInfo = new spArticle_DecreaseSortNo()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleId = articleId,
-                MdfAccount = mdfAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                result = artPubDao.DecreaseArticleSortNo(articleId, mdfAccount);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
