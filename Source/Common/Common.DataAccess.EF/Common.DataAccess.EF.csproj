@@ -87,6 +87,7 @@
     <Compile Include="Model\ArticlePicture.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\ArticlePictureForBEList.cs" />
     <Compile Include="Model\ArticlePictureMultiLang.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
@@ -157,6 +158,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryParam\AccountListQueryParamsDA.cs" />
     <Compile Include="QueryParam\ArticleListQueryParamsDA.cs" />
+    <Compile Include="QueryParam\ArticlePictureListQueryParamsDA.cs" />
     <Compile Include="QueryParam\ArticleUpdateIsAreaShowInFrontStageParamsDA.cs" />
     <Compile Include="QueryParam\ArticleUpdateSortFieldOfFrontStageParamsDA.cs" />
     <Compile Include="QueryParam\AttachFileListQueryParamsDA.cs" />

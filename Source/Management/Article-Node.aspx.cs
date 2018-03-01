@@ -1020,34 +1020,34 @@ public partial class Article_Node : BasePage
             MyDeptId = c.GetDeptId()
         };
 
-        DataSet dsArticlePictures = artPub.GetArticlePicutreMultiLangListForBackend(param);
+        List<ArticlePictureForBEList> articlePictures = artPub.GetArticlePicutreMultiLangListForBackend(param);
 
-        if (dsArticlePictures != null)
+        if (articlePictures != null)
         {
-            rptArticlePictures.DataSource = dsArticlePictures.Tables[0];
+            rptArticlePictures.DataSource = articlePictures;
             rptArticlePictures.DataBind();
         }
     }
     protected void rptArticlePictures_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticlePictureForBEList artPic = (ArticlePictureForBEList)e.Item.DataItem;
 
-        Guid picId = (Guid)drvTemp["PicId"];
-        string picSubject = drvTemp.ToSafeStr("PicSubject");
-        bool isShowInLangZhTw = drvTemp.To<bool>("IsShowInLangZhTw", false);
-        bool isShowInLangEn = drvTemp.To<bool>("IsShowInLangEn", false);
+        Guid picId = artPic.PicId;
+        string picSubject = artPic.PicSubject;
+        bool isShowInLangZhTw = artPic.IsShowInLangZhTw;
+        bool isShowInLangEn = artPic.IsShowInLangEn;
         string mdfAccount = "";
         DateTime mdfDate = DateTime.MinValue;
 
-        if (Convert.IsDBNull(drvTemp["MdfDate"]))
+        if (!artPic.MdfDate.HasValue)
         {
-            mdfAccount = drvTemp.ToSafeStr("PostAccount");
-            mdfDate = Convert.ToDateTime(drvTemp["PostDate"]);
+            mdfAccount = artPic.PostAccount;
+            mdfDate = artPic.PostDate.Value;
         }
         else
         {
-            mdfAccount = drvTemp.ToSafeStr("MdfAccount");
-            mdfDate = Convert.ToDateTime(drvTemp["MdfDate"]);
+            mdfAccount = artPic.MdfAccount;
+            mdfDate = artPic.MdfDate.Value;
         }
 
         HtmlAnchor btnView = (HtmlAnchor)e.Item.FindControl("btnView");
@@ -1080,8 +1080,8 @@ public partial class Article_Node : BasePage
         btnDelete.OnClientClick = string.Format("return confirm('" + Resources.Lang.ArticlePicture_ConfirmDelete_Format + "');",
             picSubject, picId);
 
-        string ownerAccount = drvTemp.ToSafeStr("PostAccount");
-        int ownerDeptId = Convert.ToInt32(drvTemp["PostDeptId"]);
+        string ownerAccount = artPic.PostAccount;
+        int ownerDeptId = artPic.PostDeptId;
 
         btnEdit.Visible = empAuth.CanEditThisPage(false, ownerAccount, ownerDeptId);
 

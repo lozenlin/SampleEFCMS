@@ -1040,6 +1040,107 @@ where exists(
 
         #endregion
 
+        #region 網頁照片
+
+        /// <summary>
+        /// 取得後台用指定語系的網頁照片清單
+        /// </summary>
+        public List<ArticlePictureForBEList> GetArticlePicutreMultiLangListForBackend(ArticlePictureListQueryParamsDA param)
+        {
+            Logger.Debug("GetArticlePicutreMultiLangListForBackend(param)");
+            List<ArticlePictureForBEList> entities = null;
+
+            try
+            {
+                var tempQuery = from apm in cmsCtx.ArticlePictureMultiLang
+                                join ap in cmsCtx.ArticlePicture on apm.PicId equals ap.PicId
+                                join e in cmsCtx.Employee.Include(emp => emp.Department) on apm.PostAccount equals e.EmpAccount
+                                into apmGroup
+                                from e in apmGroup.DefaultIfEmpty()
+                                where ap.ArticleId == param.ArticleId
+                                    && apm.CultureName == param.CultureName
+                                select new ArticlePictureForBEList()
+                                {
+                                    PicId = apm.PicId,
+                                    PicSubject = apm.PicSubject,
+                                    PostAccount = apm.PostAccount,
+                                    PostDate = apm.PostDate,
+                                    MdfAccount = apm.MdfAccount,
+                                    MdfDate = apm.MdfDate,
+                                    FileSavedName = ap.FileSavedName,
+                                    FileSize = ap.FileSize,
+                                    SortNo = ap.SortNo,
+                                    FileMIME = ap.FileMIME,
+                                    IsShowInLangZhTw = fnArticlePicture_IsShowInLang(apm.PicId, "zh-TW"),
+                                    IsShowInLangEn = fnArticlePicture_IsShowInLang(apm.PicId, "en"),
+                                    PostDeptId = e.DeptId ?? 0,
+                                    PostDeptName = e.Department.DeptName
+                                };
+
+                // Query conditions
+
+                if (!param.AuthParams.CanReadSubItemOfOthers)
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                       param.AuthParams.CanReadSubItemOfCrew && obj.PostDeptId == param.AuthParams.MyDeptId
+                       || param.AuthParams.CanReadSubItemOfSelf && obj.PostAccount == param.AuthParams.MyAccount);
+                }
+
+                if (param.Kw != "")
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                        obj.PicSubject.Contains(param.Kw));
+                }
+
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
+                // sorting
+                if (param.PagedParams.SortField != "")
+                {
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    tempQuery = tempQuery.OrderByDescending(obj => obj.SortNo);
+                }
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if (skipCount > 0)
+                {
+                    tempQuery = tempQuery.Skip(skipCount);
+                }
+
+                if (takeCount >= 0)
+                {
+                    tempQuery = tempQuery.Take(takeCount);
+                }
+
+                // result
+                entities = tempQuery.ToList();
+                int rowIndex = 0;
+
+                foreach (var entity in entities)
+                {
+                    entity.RowNum = skipCount + rowIndex + 1;
+                    rowIndex++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
+        #endregion
+
         #region 搜尋用資料來源
 
         /// <summary>
