@@ -753,11 +753,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool DeleteAttachFileData(Guid attId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFile_DeleteData cmdInfo = new spAttachFile_DeleteData() { AttId = attId };
+            bool result = false;
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.DeleteAttachFileData(attId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }

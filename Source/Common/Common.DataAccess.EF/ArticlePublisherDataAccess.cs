@@ -975,6 +975,47 @@ where exists(
             return true;
         }
 
+        /// <summary>
+        /// 刪除附件檔案資料
+        /// </summary>
+        public bool DeleteAttachFileData(Guid attId)
+        {
+            Logger.Debug("DeleteAttachFileData(attId)");
+            DbContextTransaction tran = null;
+
+            try
+            {
+                tran = cmsCtx.Database.BeginTransaction();
+
+                // delete multi language data
+                cmsCtx.Database.ExecuteSqlCommand("delete from dbo.AttachFileMultiLang where AttId=@p0", attId);
+
+                // delete main data
+                AttachFile entity = new AttachFile() { AttId = attId };
+                cmsCtx.Entry<AttachFile>(entity).State = EntityState.Deleted;
+                cmsCtx.SaveChanges();
+
+                tran.Commit();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+
+                if (tran != null)
+                    tran.Rollback();
+
+                return false;
+            }
+            finally
+            {
+                if (tran != null)
+                    tran.Dispose();
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region 搜尋用資料來源
