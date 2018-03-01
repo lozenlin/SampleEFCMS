@@ -718,6 +718,36 @@ where exists(
             return insResult;
         }
 
+        /// <summary>
+        /// 更新網頁內容
+        /// </summary>
+        public bool UpdateArticleData(Article entity)
+        {
+            Logger.Debug("UpdateArticleData(entity)");
+
+            try
+            {
+                // check alias
+                if (cmsCtx.Article.Any(obj => obj.ArticleAlias == entity.ArticleAlias && obj.ArticleId != entity.ArticleId))
+                {
+                    sqlErrNumber = 50000;
+                    sqlErrState = 3;
+                    return false;
+                }
+
+                entity.MdfDate = DateTime.Now;
+                cmsCtx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Custom database function

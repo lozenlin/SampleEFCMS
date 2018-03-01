@@ -12,6 +12,7 @@
 using Common.DataAccess;
 using Common.DataAccess.ArticlePublisher;
 using Common.DataAccess.EF;
+using Common.DataAccess.EF.EntityRequiredPropValues;
 using Common.DataAccess.EF.Model;
 using log4net;
 using System;
@@ -220,45 +221,63 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateArticleData(ArticleParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_UpdateData cmdInfo = new spArticle_UpdateData()
-            {
-                ArticleId = param.ArticleId,
-                ArticleAlias = param.ArticleAlias,
-                BannerPicFileName = param.BannerPicFileName,
-                LayoutModeId = param.LayoutModeId,
-                ShowTypeId = param.ShowTypeId,
-                LinkUrl = param.LinkUrl,
-                LinkTarget = param.LinkTarget,
-                ControlName = param.ControlName,
-                SubItemControlName = param.SubItemControlName,
-                IsHideSelf = param.IsHideSelf,
-                IsHideChild = param.IsHideChild,
-                StartDate = param.StartDate,
-                EndDate = param.EndDate,
-                SortNo = param.SortNo,
-                DontDelete = param.DontDelete,
-                MdfAccount = param.PostAccount,
-                SubjectAtBannerArea = param.SubjectAtBannerArea,
-                PublishDate = param.PublishDate,
-                IsShowInUnitArea = param.IsShowInUnitArea,
-                IsShowInSitemap = param.IsShowInSitemap,
-                SortFieldOfFrontStage = param.SortFieldOfFrontStage,
-                IsSortDescOfFrontStage = param.IsSortDescOfFrontStage,
-                IsListAreaShowInFrontStage = param.IsListAreaShowInFrontStage,
-                IsAttAreaShowInFrontStage = param.IsAttAreaShowInFrontStage,
-                IsPicAreaShowInFrontStage = param.IsPicAreaShowInFrontStage,
-                IsVideoAreaShowInFrontStage = param.IsVideoAreaShowInFrontStage,
-                SubItemLinkUrl = param.SubItemLinkUrl
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            bool result = false;
 
-            if (!result)
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                if (cmd.GetSqlErrNumber() == 50000 && cmd.GetSqlErrState() == 3)
+                Article entity = artPubDao.GetEmptyEntity<Article>(new ArticleRequiredPropValues()
                 {
-                    param.HasAliasBeenUsed = true;
+                    ArticleId = param.ArticleId,
+                    IsHideSelf = !param.IsHideSelf,
+                    IsHideChild = !param.IsHideChild,
+                    DontDelete = !param.DontDelete,
+                    SubjectAtBannerArea = !param.SubjectAtBannerArea,
+                    IsShowInUnitArea = !param.IsShowInUnitArea,
+                    IsShowInSitemap = !param.IsShowInSitemap,
+                    IsSortDescOfFrontStage = !param.IsSortDescOfFrontStage,
+                    IsListAreaShowInFrontStage = !param.IsListAreaShowInFrontStage,
+                    IsAttAreaShowInFrontStage = !param.IsAttAreaShowInFrontStage,
+                    IsPicAreaShowInFrontStage = !param.IsPicAreaShowInFrontStage,
+                    IsVideoAreaShowInFrontStage = !param.IsVideoAreaShowInFrontStage
+                });
+
+                entity.ArticleAlias = param.ArticleAlias;
+                entity.BannerPicFileName = param.BannerPicFileName;
+                entity.LayoutModeId = param.LayoutModeId;
+                entity.ShowTypeId = param.ShowTypeId;
+                entity.LinkUrl = param.LinkUrl;
+                entity.LinkTarget = param.LinkTarget;
+                entity.ControlName = param.ControlName;
+                entity.SubItemControlName = param.SubItemControlName;
+                entity.IsHideSelf = param.IsHideSelf;
+                entity.IsHideChild = param.IsHideChild;
+                entity.StartDate = param.StartDate;
+                entity.EndDate = param.EndDate;
+                entity.SortNo = param.SortNo;
+                entity.DontDelete = param.DontDelete;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+                entity.SubjectAtBannerArea = param.SubjectAtBannerArea;
+                entity.PublishDate = param.PublishDate;
+                entity.IsShowInUnitArea = param.IsShowInUnitArea;
+                entity.IsShowInSitemap = param.IsShowInSitemap;
+                entity.SortFieldOfFrontStage = param.SortFieldOfFrontStage;
+                entity.IsSortDescOfFrontStage = param.IsSortDescOfFrontStage;
+                entity.IsListAreaShowInFrontStage = param.IsListAreaShowInFrontStage;
+                entity.IsAttAreaShowInFrontStage = param.IsAttAreaShowInFrontStage;
+                entity.IsPicAreaShowInFrontStage = param.IsPicAreaShowInFrontStage;
+                entity.IsVideoAreaShowInFrontStage = param.IsVideoAreaShowInFrontStage;
+                entity.SubItemLinkUrl = param.SubItemLinkUrl;
+
+                result = artPubDao.UpdateArticleData(entity);
+                dbErrMsg = artPubDao.GetErrMsg();
+
+                if (!result)
+                {
+                    if (artPubDao.GetSqlErrNumber() == 50000 && artPubDao.GetSqlErrState() == 3)
+                    {
+                        param.HasAliasBeenUsed = true;
+                    }
                 }
             }
 
@@ -270,21 +289,29 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateArticleMultiLangData(ArticleMultiLangParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleMultiLang_UpdateData cmdInfo = new spArticleMultiLang_UpdateData()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleId = param.ArticleId,
-                CultureName = param.CultureName,
-                ArticleSubject = param.ArticleSubject,
-                ArticleContext = param.ArticleContext,
-                IsShowInLang = param.IsShowInLang,
-                MdfAccount = param.PostAccount,
-                Subtitle = param.Subtitle,
-                PublisherName = param.PublisherName,
-                TextContext = param.TextContext
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                ArticleMultiLang entity = artPubDao.GetEmptyEntity<ArticleMultiLang>(new ArticleMultiLangRequiredPropValues()
+                {
+                    ArticleId = param.ArticleId,
+                    CultureName = param.CultureName,
+                    IsShowInLang = !param.IsShowInLang
+                });
+
+                entity.ArticleSubject = param.ArticleSubject;
+                entity.ArticleContext = param.ArticleContext;
+                entity.IsShowInLang = param.IsShowInLang;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+                entity.Subtitle = param.Subtitle;
+                entity.PublisherName = param.PublisherName;
+                entity.TextContext = param.TextContext;
+
+                result = artPubDao.Update();
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
