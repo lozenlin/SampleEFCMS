@@ -784,14 +784,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool IncreaseAttachFileSortNo(Guid attId, string mdfAccount)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFile_IncreaseSortNo cmdInfo = new spAttachFile_IncreaseSortNo()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                AttId = attId,
-                MdfAccount = mdfAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                result = artPubDao.IncreaseAttachFileSortNo(attId, mdfAccount);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -801,14 +800,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool DecreaseAttachFileSortNo(Guid attId, string mdfAccount)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFile_DecreaseSortNo cmdInfo = new spAttachFile_DecreaseSortNo()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                AttId = attId,
-                MdfAccount = mdfAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                result = artPubDao.DecreaseAttachFileSortNo(attId, mdfAccount);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }

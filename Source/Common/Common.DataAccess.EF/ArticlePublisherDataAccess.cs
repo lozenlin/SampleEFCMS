@@ -855,6 +855,126 @@ where exists(
             return entities;
         }
 
+        /// <summary>
+        /// 加大附件檔案的排序編號
+        /// </summary>
+        public bool IncreaseAttachFileSortNo(Guid attId, string mdfAccount)
+        {
+            Logger.Debug("IncreaseAttachFileSortNo(attId, mdfAccount)");
+
+            try
+            {
+                AttachFile entity = cmsCtx.AttachFile.Find(attId);
+
+                if(entity == null)
+                {
+                    throw new Exception("there is no data of attId.");
+                }
+
+                // get bigger one
+                AttachFile biggerOne = cmsCtx.AttachFile.Where(obj =>
+                    obj.ArticleId == entity.ArticleId
+                    && obj.AttId != attId
+                    && obj.SortNo >= entity.SortNo)
+                    .OrderBy(obj => obj.SortNo)
+                    .FirstOrDefault();
+
+                // there is no bigger one, exit
+                if(biggerOne == null)
+                {
+                    return true;
+                }
+
+                int sortNo = entity.SortNo ?? 0;
+                int biggerSortNo = biggerOne.SortNo ?? 0;
+
+                // when the values are the same
+                if(biggerSortNo == sortNo)
+                {
+                    biggerSortNo++;
+                }
+
+                // swap
+                entity.SortNo = biggerSortNo;
+                entity.MdfAccount = mdfAccount;
+                entity.MdfDate = DateTime.Now;
+
+                biggerOne.SortNo = sortNo;
+                biggerOne.MdfAccount = mdfAccount;
+                biggerOne.MdfDate = DateTime.Now;
+
+                cmsCtx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 減小附件檔案的排序編號
+        /// </summary>
+        public bool DecreaseAttachFileSortNo(Guid attId, string mdfAccount)
+        {
+            Logger.Debug("DecreaseAttachFileSortNo(attId, mdfAccount)");
+
+            try
+            {
+                AttachFile entity = cmsCtx.AttachFile.Find(attId);
+
+                if(entity == null)
+                {
+                    throw new Exception("there is no data of attId");
+                }
+
+                // get smaller one
+                AttachFile smallerOne = cmsCtx.AttachFile.Where(obj =>
+                    obj.ArticleId == entity.ArticleId
+                    && obj.AttId != attId
+                    && obj.SortNo <= entity.SortNo)
+                    .OrderByDescending(obj => obj.SortNo)
+                    .FirstOrDefault();
+
+                // there is no smaller one, exit
+                if(smallerOne == null)
+                {
+                    return true;
+                }
+
+                int sortNo = entity.SortNo ?? 0;
+                int smallerSortNo = smallerOne.SortNo ?? 0;
+
+                // when the values are the same
+                if(smallerSortNo == sortNo)
+                {
+                    sortNo++;
+                }
+
+                // swap
+                entity.SortNo = smallerSortNo;
+                entity.MdfAccount = mdfAccount;
+                entity.MdfDate = DateTime.Now;
+
+                smallerOne.SortNo = sortNo;
+                smallerOne.MdfAccount = mdfAccount;
+                smallerOne.MdfDate = DateTime.Now;
+
+                cmsCtx.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region 搜尋用資料來源
