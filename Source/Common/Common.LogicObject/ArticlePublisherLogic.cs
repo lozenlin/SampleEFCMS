@@ -723,20 +723,28 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateAttachFileData(AttachFileParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFile_UpdateData cmdInfo = new spAttachFile_UpdateData()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                AttId = param.AttId,
-                FilePath = param.FilePath,
-                FileSavedName = param.FileSavedName,
-                FileSize = param.FileSize,
-                SortNo = param.SortNo,
-                FileMIME = param.FileMIME,
-                DontDelete = param.DontDelete,
-                MdfAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                AttachFile entity = artPubDao.GetEmptyEntity<AttachFile>(new AttachFileRequiredPropValues()
+                {
+                    AttId = param.AttId,
+                    DontDelete = !param.DontDelete
+                });
+
+                entity.FilePath = param.FilePath;
+                entity.FileSavedName = param.FileSavedName;
+                entity.FileSize = param.FileSize;
+                entity.SortNo = param.SortNo;
+                entity.FileMIME = param.FileMIME;
+                entity.DontDelete = param.DontDelete;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = artPubDao.Update();
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -746,17 +754,25 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateAttachFileMultiLangData(AttachFileMultiLangParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFileMultiLang_UpdateData cmdInfo = new spAttachFileMultiLang_UpdateData()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                AttId = param.AttId,
-                CultureName = param.CultureName,
-                AttSubject = param.AttSubject,
-                IsShowInLang = param.IsShowInLang,
-                MdfAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                AttachFileMultiLang entity = artPubDao.GetEmptyEntity<AttachFileMultiLang>(new AttachFileMultiLangRequiredPropValues()
+                {
+                    AttId = param.AttId,
+                    CultureName = param.CultureName,
+                    IsShowInLang = !param.IsShowInLang
+                });
+
+                entity.AttSubject = param.AttSubject;
+                entity.IsShowInLang = param.IsShowInLang;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = artPubDao.Update();
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -832,14 +848,20 @@ namespace Common.LogicObject
         /// </summary>
         public bool IncreaseAttachFileMultiLangReadCount(Guid attId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFileMultiLang_IncreaseReadCount cmdInfo = new spAttachFileMultiLang_IncreaseReadCount()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                AttId = attId,
-                CultureName = cultureName
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                AttachFileMultiLang entity = artPubDao.Get<AttachFileMultiLang>(attId, cultureName);
+
+                if (entity != null)
+                {
+                    entity.ReadCount++;
+
+                    result = artPubDao.Update();
+                    dbErrMsg = artPubDao.GetErrMsg();
+                }
+            }
 
             return result;
         }
