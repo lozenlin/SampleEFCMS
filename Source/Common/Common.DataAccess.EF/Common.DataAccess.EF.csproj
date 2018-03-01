@@ -99,6 +99,7 @@
     <Compile Include="Model\AttachFile.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\AttachFileForBEList.cs" />
     <Compile Include="Model\AttachFileMultiLang.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
@@ -158,6 +159,7 @@
     <Compile Include="QueryParam\ArticleListQueryParamsDA.cs" />
     <Compile Include="QueryParam\ArticleUpdateIsAreaShowInFrontStageParamsDA.cs" />
     <Compile Include="QueryParam\ArticleUpdateSortFieldOfFrontStageParamsDA.cs" />
+    <Compile Include="QueryParam\AttachFileListQueryParamsDA.cs" />
     <Compile Include="QueryParam\AuthenticationQueryParamsDA.cs" />
     <Compile Include="QueryParam\AuthenticationUpdateParamsDA.cs" />
     <Compile Include="QueryParam\BackEndLogListQueryParamsDA.cs" />

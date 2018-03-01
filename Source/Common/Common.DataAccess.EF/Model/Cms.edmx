@@ -341,6 +341,18 @@
           <Parameter Name="ArticleId" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="CultureName" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="fnArticlePicture_IsShowInLang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
+          <Parameter Name="PicId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="CultureName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="fnArticleVideo_IsShowInLang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
+          <Parameter Name="VidId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="CultureName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="fnAttachFile_IsShowInLang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
+          <Parameter Name="AttId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="CultureName" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="spSearchDataSource_Build" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MainLinkUrl" Type="nvarchar" Mode="In" />
         </Function>
@@ -749,7 +761,7 @@
           <Parameter Name="MainLinkUrl" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="spStartJob">
-            <Parameter Name="job_name" Mode="In" Type="String" />
+          <Parameter Name="job_name" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
       </Schema>

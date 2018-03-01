@@ -750,6 +750,113 @@ where exists(
 
         #endregion
 
+        #region 附件檔案
+
+        /// <summary>
+        /// 取得後台用指定語系的附件檔案清單
+        /// </summary>
+        public List<AttachFileForBEList> GetAttachFileMultiLangListForBackend(AttachFileListQueryParamsDA param)
+        {
+            Logger.Debug("GetAttachFileMultiLangListForBackend(param)");
+            List<AttachFileForBEList> entities = null;
+
+            try
+            {
+                var tempQuery = from afm in cmsCtx.AttachFileMultiLang
+                                join af in cmsCtx.AttachFile on afm.AttId equals af.AttId
+                                join e in cmsCtx.Employee.Include(emp => emp.Department) on afm.PostAccount equals e.EmpAccount
+                                into afmGroup
+                                from e in afmGroup.DefaultIfEmpty()
+                                where af.ArticleId == param.ArticleId
+                                    && afm.CultureName == param.CultureName
+                                select new AttachFileForBEList()
+                                {
+                                    AttId = afm.AttId,
+                                    AttSubject = afm.AttSubject,
+                                    ReadCount = afm.ReadCount,
+                                    PostAccount = afm.PostAccount,
+                                    PostDate = afm.PostDate,
+                                    MdfAccount = afm.MdfAccount,
+                                    MdfDate = afm.MdfDate,
+
+                                    FilePath = af.FilePath,
+                                    FileSavedName = af.FileSavedName,
+                                    FileSize = af.FileSize,
+                                    SortNo = af.SortNo,
+                                    FileMIME = af.FileMIME,
+                                    DontDelete = af.DontDelete,
+
+                                    IsShowInLangZhTw = fnAttachFile_IsShowInLang(afm.AttId, "zh-TW"),
+                                    IsShowInLangEn = fnAttachFile_IsShowInLang(afm.AttId, "en"),
+                                    PostDeptId = e.DeptId ?? 0,
+                                    PostDeptName = e.Department.DeptName
+                                };
+
+                // Query conditions
+
+                if (!param.AuthParams.CanReadSubItemOfOthers)
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                        param.AuthParams.CanReadSubItemOfCrew && obj.PostDeptId == param.AuthParams.MyDeptId
+                        || param.AuthParams.CanReadSubItemOfSelf && obj.PostAccount == param.AuthParams.MyAccount);
+                }
+
+                if(param.Kw != "")
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                        obj.AttSubject.Contains(param.Kw));
+                }
+
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
+                // sorting
+                if (param.PagedParams.SortField != "")
+                {
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempQuery = tempQuery.OrderBy(obj => obj.SortNo);
+                }
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if (skipCount > 0)
+                {
+                    tempQuery = tempQuery.Skip(skipCount);
+                }
+
+                if (takeCount >= 0)
+                {
+                    tempQuery = tempQuery.Take(takeCount);
+                }
+
+                // result
+                entities = tempQuery.ToList();
+                int rowIndex = 0;
+
+                foreach (var entity in entities)
+                {
+                    entity.RowNum = skipCount + rowIndex + 1;
+                    rowIndex++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
+        #endregion
+
         #region 搜尋用資料來源
 
         /// <summary>
@@ -807,6 +914,24 @@ where exists(
 
         [DbFunction("CmsModel.Store", "fnArticle_IsShowInLang")]
         private bool fnArticle_IsShowInLang(Guid ArticleId, string CultureName)
+        {
+            throw new NotSupportedException("Direct calls are not supported.");
+        }
+
+        [DbFunction("CmsModel.Store", "fnAttachFile_IsShowInLang")]
+        private bool fnAttachFile_IsShowInLang(Guid AttId, string CultureName)
+        {
+            throw new NotSupportedException("Direct calls are not supported.");
+        }
+
+        [DbFunction("CmsModel.Store", "fnArticlePicture_IsShowInLang")]
+        private bool fnArticlePicture_IsShowInLang(Guid PicId, string CultureName)
+        {
+            throw new NotSupportedException("Direct calls are not supported.");
+        }
+
+        [DbFunction("CmsModel.Store", "fnArticleVideo_IsShowInLang")]
+        private bool fnArticleVideo_IsShowInLang(Guid VidId, string CultureName)
         {
             throw new NotSupportedException("Direct calls are not supported.");
         }

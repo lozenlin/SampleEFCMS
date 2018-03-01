@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.DataAccess.EF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,20 @@ namespace Common.LogicObject
         {
             PagedParams = new PagedListQueryParams();
             AuthParams = new AuthenticationQueryParams();
+        }
+
+        public AttachFileListQueryParamsDA GenAttachFileListQueryParamsDA()
+        {
+            AttachFileListQueryParamsDA result = new AttachFileListQueryParamsDA()
+            {
+                ArticleId = ArticleId,
+                CultureName = CultureName,
+                Kw = Kw,
+                PagedParams = PagedParams.GenPagedListQueryParamsDA(),
+                AuthParams = AuthParams.GenAuthenticationQueryParamsDA()
+            };
+
+            return result;
         }
     }
 }

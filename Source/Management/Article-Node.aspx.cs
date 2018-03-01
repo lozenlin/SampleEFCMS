@@ -21,6 +21,7 @@ public partial class Article_Node : BasePage
     protected EmployeeAuthorityLogic empAuth;
     private IHeadUpDisplay hud = null;
     private int totalSubitems = 0;
+    private int totalAttachFiles = 0;
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -812,36 +813,37 @@ public partial class Article_Node : BasePage
             MyDeptId = c.GetDeptId()
         };
 
-        DataSet dsAttachFiles = artPub.GetAttachFileMultiLangListForBackend(param);
+        List<AttachFileForBEList> attachFiles = artPub.GetAttachFileMultiLangListForBackend(param);
 
-        if (dsAttachFiles != null)
+        if (attachFiles != null)
         {
-            rptAttachFiles.DataSource = dsAttachFiles.Tables[0];
+            totalAttachFiles = attachFiles.Count;
+            rptAttachFiles.DataSource = attachFiles;
             rptAttachFiles.DataBind();
         }
     }
 
     protected void rptAttachFiles_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        AttachFileForBEList attData = (AttachFileForBEList)e.Item.DataItem;
 
-        Guid attId = (Guid)drvTemp["AttId"];
-        string attSubject = drvTemp.ToSafeStr("AttSubject");
-        bool isShowInLangZhTw = drvTemp.To<bool>("IsShowInLangZhTw", false);
-        bool isShowInLangEn = drvTemp.To<bool>("IsShowInLangEn", false);
-        bool dontDelete = Convert.ToBoolean(drvTemp["DontDelete"]);
+        Guid attId = attData.AttId;
+        string attSubject = attData.AttSubject;
+        bool isShowInLangZhTw = attData.IsShowInLangZhTw;
+        bool isShowInLangEn = attData.IsShowInLangEn;
+        bool dontDelete = attData.DontDelete;
         string mdfAccount = "";
         DateTime mdfDate = DateTime.MinValue;
 
-        if(Convert.IsDBNull(drvTemp["MdfDate"]))
+        if (!attData.MdfDate.HasValue)
         {
-            mdfAccount = drvTemp.ToSafeStr("PostAccount");
-            mdfDate = Convert.ToDateTime(drvTemp["PostDate"]);
+            mdfAccount = attData.PostAccount;
+            mdfDate = attData.PostDate.Value;
         }
         else
         {
-            mdfAccount = drvTemp.ToSafeStr("MdfAccount");
-            mdfDate = Convert.ToDateTime(drvTemp["MdfDate"]);
+            mdfAccount = attData.MdfAccount;
+            mdfDate = attData.MdfDate.Value;
         }
         
         LinkButton btnMoveDown = (LinkButton)e.Item.FindControl("btnMoveDown");
@@ -850,7 +852,6 @@ public partial class Article_Node : BasePage
         LinkButton btnMoveUp = (LinkButton)e.Item.FindControl("btnMoveUp");
         btnMoveUp.ToolTip = Resources.Lang.btnMoveUp;
 
-        int total = drvTemp.DataView.Count;
         int itemNum = e.Item.ItemIndex + 1;
 
         if (itemNum == 1)
@@ -858,7 +859,7 @@ public partial class Article_Node : BasePage
             btnMoveUp.Visible = false;
         }
 
-        if (itemNum == total)
+        if (itemNum == totalAttachFiles)
         {
             btnMoveDown.Visible = false;
         }
@@ -874,7 +875,7 @@ public partial class Article_Node : BasePage
         Literal ltrMdfDate = (Literal)e.Item.FindControl("ltrMdfDate");
         ltrMdfDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", mdfDate);
 
-        string fileSavedName = drvTemp.ToSafeStr("FileSavedName");
+        string fileSavedName = attData.FileSavedName;
         HtmlImage imgExt = (HtmlImage)e.Item.FindControl("imgExt");
         imgExt.Src = "BPimages/FileExtIcon/" + ResUtility.GetExtIconFileName(fileSavedName);
         imgExt.Alt = ResUtility.GetExtIconText(fileSavedName);
@@ -909,8 +910,8 @@ public partial class Article_Node : BasePage
         Literal ltrDownloadAtt = (Literal)e.Item.FindControl("ltrDownloadAtt");
         ltrDownloadAtt.Text = Resources.Lang.Article_btnDownloadAtt;
 
-        string ownerAccount = drvTemp.ToSafeStr("PostAccount");
-        int ownerDeptId = Convert.ToInt32(drvTemp["PostDeptId"]);
+        string ownerAccount = attData.PostAccount;
+        int ownerDeptId = attData.PostDeptId;
 
         if (!empAuth.CanEditThisPage(false, ownerAccount, ownerDeptId))
         {
