@@ -493,6 +493,31 @@ begin
 end
 go
 
+----------------------------------------------------------------------------
+-- msdb sp
+----------------------------------------------------------------------------
+go
+-- =============================================
+-- Author:      <lozen_lin>
+-- Create date: <2018/03/01>
+-- Description: <指示 SQL Server Agent 立即執行作業>
+-- Test:
+/*
+declare @rc int
+exec @rc = dbo.spStartJob 'Update SampleEFCMS SearchDataSource'
+select @rc
+*/
+-- =============================================
+create procedure dbo.spStartJob
+@job_name    sysname
+as
+begin
+	declare @rc int
+	exec @rc = msdb.dbo.sp_start_job @job_name
+	return @rc
+end
+go
+
 
 
 /*
@@ -503,7 +528,7 @@ go
 go
 -- =============================================
 -- Author:      <lozen_lin>
--- Create date: <2018/02/08>
+-- Create date: <2018/03/01>
 -- Description: <xxxxxxxxxxxxxxxxxx>
 -- Test:
 

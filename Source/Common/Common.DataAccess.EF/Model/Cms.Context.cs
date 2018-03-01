@@ -52,5 +52,14 @@ namespace Common.DataAccess.EF.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spSearchDataSource_Build", mainLinkUrlParameter);
         }
+    
+        public virtual int spStartJob(string job_name)
+        {
+            var job_nameParameter = job_name != null ?
+                new ObjectParameter("job_name", job_name) :
+                new ObjectParameter("job_name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spStartJob", job_nameParameter);
+        }
     }
 }

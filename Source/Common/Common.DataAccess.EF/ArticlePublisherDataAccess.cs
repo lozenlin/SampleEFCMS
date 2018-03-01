@@ -750,6 +750,57 @@ where exists(
 
         #endregion
 
+        #region 搜尋用資料來源
+
+        /// <summary>
+        /// 建立搜尋用資料來源
+        /// </summary>
+        public bool BuildSearchDataSource(string mainLinkUrl)
+        {
+            Logger.Debug("BuildSearchDataSource(mainLinkUrl)");
+
+            try
+            {
+                cmsCtx.spSearchDataSource_Build(mainLinkUrl);
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
+        #region msdb
+
+        /// <summary>
+        /// 指示 SQL Server Agent 立即執行作業
+        /// </summary>
+        public bool CallSqlServerAgentJob(string jobName)
+        {
+            Logger.Debug("CallSqlServerAgentJob(jobName)");
+
+            try
+            {
+                int rc = cmsCtx.spStartJob(jobName);
+                Logger.InfoFormat("executed sp_start_job '{0}', return:{1} ", jobName, rc);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
         #region Custom database function
 
         // reference: https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/ef/language-reference/how-to-call-custom-database-functions

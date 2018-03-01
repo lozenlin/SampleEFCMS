@@ -1289,11 +1289,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool BuildSearchDataSource(string mainLinkUrl)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spSearchDataSource_Build cmdInfo = new spSearchDataSource_Build() { MainLinkUrl = mainLinkUrl };
+            bool result = false;
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.BuildSearchDataSource(mainLinkUrl);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -1330,11 +1332,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool CallSqlServerAgentJob(string jobName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            sp_start_job cmdInfo = new sp_start_job() { jobName = jobName };
+            bool result = false;
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.CallSqlServerAgentJob(jobName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
