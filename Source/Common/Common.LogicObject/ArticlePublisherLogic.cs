@@ -651,12 +651,13 @@ namespace Common.LogicObject
         /// </summary>
         public int GetAttachFileMaxSortNo(Guid? articleId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFile_GetMaxSortNo cmdInfo = new spAttachFile_GetMaxSortNo() { ArticleId = articleId };
+            int result = 0;
 
-            int errCode = -1;
-            int result = cmd.ExecuteScalar<int>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.GetAttachFileMaxSortNo(articleId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -666,23 +667,29 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertAttachFileData(AttachFileParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFile_InsertData cmdInfo = new spAttachFile_InsertData()
-            {
-                AttId = param.AttId,
-                ArticleId = param.ArticleId,
-                FilePath = param.FilePath,
-                FileSavedName = param.FileSavedName,
-                FileSize = param.FileSize,
-                SortNo = param.SortNo,
-                FileMIME = param.FileMIME,
-                DontDelete = param.DontDelete,
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            return result;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                AttachFile entity = new AttachFile()
+                {
+                    AttId = param.AttId,
+                    ArticleId = param.ArticleId,
+                    FilePath = param.FilePath,
+                    FileSavedName = param.FileSavedName,
+                    FileSize = param.FileSize,
+                    SortNo = param.SortNo,
+                    FileMIME = param.FileMIME,
+                    DontDelete = param.DontDelete,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = artPubDao.Insert<AttachFile>(entity);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return insResult.IsSuccess;
         }
 
         /// <summary>
@@ -690,19 +697,25 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertAttachFileMultiLangData(AttachFileMultiLangParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFileMultiLang_InsertData cmdInfo = new spAttachFileMultiLang_InsertData()
-            {
-                AttId = param.AttId,
-                CultureName = param.CultureName,
-                AttSubject = param.AttSubject,
-                IsShowInLang = param.IsShowInLang,
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            return result;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                AttachFileMultiLang entity = new AttachFileMultiLang()
+                {
+                    AttId = param.AttId,
+                    CultureName = param.CultureName,
+                    AttSubject = param.AttSubject,
+                    IsShowInLang = param.IsShowInLang,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = artPubDao.Insert<AttachFileMultiLang>(entity);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return insResult.IsSuccess;
         }
 
         /// <summary>
