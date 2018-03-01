@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.DataAccess.EF.Model;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -513,17 +514,16 @@ namespace Common.LogicObject
             string fileFullName = "";
             string attRootDir = Server.MapPath(string.Format("~/{0}", ConfigurationManager.AppSettings["AttRootDir"]));
             ArticlePublisherLogic artPub = new ArticlePublisherLogic(null);
-            DataSet dsAttachFile = artPub.GetAttachFileDataForBackend(attId);
+            AttachFile attachFile = artPub.GetAttachFileDataForBackend(attId);
 
-            if (dsAttachFile == null && dsAttachFile.Tables[0].Rows.Count == 0)
+            if (attachFile == null)
             {
                 logger.ErrorFormat("can't get data of attId[{0}]", attId);
                 return "";
             }
 
-            DataRow drAtt = dsAttachFile.Tables[0].Rows[0];
-            string filePath = drAtt.ToSafeStr("FilePath");
-            string fileSavedName = drAtt.ToSafeStr("fileSavedName");
+            string filePath = attachFile.FilePath;
+            string fileSavedName = attachFile.FileSavedName;
 
             // update readCount
             if (!isInBackend)

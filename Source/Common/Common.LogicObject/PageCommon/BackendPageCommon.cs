@@ -1145,13 +1145,12 @@ namespace Common.LogicObject
                 return qsArtId;
 
             ArticlePublisherLogic artPub = new ArticlePublisherLogic();
-            DataSet dsAtt = artPub.GetAttachFileDataForBackend(qsAttId);
+            AttachFile att = artPub.GetAttachFileDataForBackend(qsAttId);
             Guid articleId = Guid.Empty;
 
-            if (dsAtt != null && dsAtt.Tables[0].Rows.Count > 0)
+            if (att != null)
             {
-                DataRow drFirst = dsAtt.Tables[0].Rows[0];
-                articleId = (Guid)drFirst["ArticleId"];
+                articleId = att.ArticleId.Value;
             }
 
             return articleId;
