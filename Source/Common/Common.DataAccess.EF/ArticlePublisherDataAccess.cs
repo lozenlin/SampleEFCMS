@@ -748,6 +748,47 @@ where exists(
             return true;
         }
 
+        /// <summary>
+        /// 取得使用在單元區的有效網頁清單
+        /// </summary>
+        public List<ArticleForFEUnitArea> GetArticleValidListForUnitArea(Guid parentId, string cultureName, bool isShowInUnitArea)
+        {
+            Logger.Debug("GetArticleValidListForUnitArea(parentId, cultureName, isShowInUnitArea)");
+            List<ArticleForFEUnitArea> entities = null;
+
+            try
+            {
+                entities = (from am in cmsCtx.ArticleMultiLang
+                            from a in cmsCtx.Article
+                            where am.ArticleId == a.ArticleId
+                             && a.ParentId == parentId
+                             && am.CultureName == cultureName
+                             && !a.IsHideSelf
+                             && a.StartDate <= DateTime.Now && DateTime.Now < DbFunctions.AddDays(a.EndDate, 1)
+                             && am.IsShowInLang
+                             && a.IsShowInUnitArea == isShowInUnitArea
+                            orderby a.SortNo
+                            select new ArticleForFEUnitArea()
+                            {
+                                ArticleId = am.ArticleId,
+                                ArticleSubject = am.ArticleSubject,
+                                ArticleAlias = a.ArticleAlias,
+                                ShowTypeId = a.ShowTypeId,
+                                LinkUrl = a.LinkUrl,
+                                LinkTarget = a.LinkTarget,
+                                IsHideChild = a.IsHideChild
+                            }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
 
         #region 附件檔案

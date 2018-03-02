@@ -545,19 +545,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得使用在單元區的有效網頁清單
         /// </summary>
-        public DataSet GetArticleValidListForUnitArea(Guid parentId, string cultureName, bool isShowInUnitArea)
+        public List<ArticleForFEUnitArea> GetArticleValidListForUnitArea(Guid parentId, string cultureName, bool isShowInUnitArea)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetValidListForUnitArea cmdInfo = new spArticle_GetValidListForUnitArea()
-            {
-                ParentId = parentId,
-                CultureName = cultureName,
-                IsShowInUnitArea = isShowInUnitArea
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            List<ArticleForFEUnitArea> entities = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entities = artPubDao.GetArticleValidListForUnitArea(parentId, cultureName, isShowInUnitArea);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entities;
         }
 
         /// <summary>

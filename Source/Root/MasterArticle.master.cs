@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -217,11 +218,11 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
         }
 
         Guid rootId = Guid.Empty;
-        DataSet dsUnitItems = artPub.GetArticleValidListForUnitArea(rootId, c.qsCultureNameOfLangNo, true);
+        List<ArticleForFEUnitArea> unitItems = artPub.GetArticleValidListForUnitArea(rootId, c.qsCultureNameOfLangNo, true);
 
-        if (dsUnitItems != null)
+        if (unitItems != null)
         {
-            rptUnitItems.DataSource = dsUnitItems.Tables[0];
+            rptUnitItems.DataSource = unitItems;
             rptUnitItems.DataBind();
         }
     }
@@ -231,14 +232,14 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
         if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
             return;
 
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticleForFEUnitArea unitItem = (ArticleForFEUnitArea)e.Item.DataItem;
 
-        Guid articleId = (Guid)drvTemp["ArticleId"];
-        string articleSubject = drvTemp.ToSafeStr("ArticleSubject");
-        int showTypeId = Convert.ToInt32(drvTemp["ShowTypeId"]);
-        string linkUrl = drvTemp.ToSafeStr("LinkUrl");
-        string linkTarget = drvTemp.ToSafeStr("LinkTarget");
-        bool isHideChild = Convert.ToBoolean(drvTemp["IsHideChild"]);
+        Guid articleId = unitItem.ArticleId;
+        string articleSubject = unitItem.ArticleSubject;
+        int showTypeId = unitItem.ShowTypeId.Value;
+        string linkUrl = unitItem.LinkUrl;
+        string linkTarget = unitItem.LinkTarget;
+        bool isHideChild = unitItem.IsHideChild;
 
         HtmlGenericControl ItemArea = (HtmlGenericControl)e.Item.FindControl("ItemArea");
 
@@ -258,13 +259,13 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
 
         if (!isHideChild && rptSubitems != null)
         {
-            DataSet dsSubitems = artPub.GetArticleValidListForUnitArea(articleId, c.qsCultureNameOfLangNo, false);
+            List<ArticleForFEUnitArea> subitems = artPub.GetArticleValidListForUnitArea(articleId, c.qsCultureNameOfLangNo, false);
 
-            if (dsSubitems != null && dsSubitems.Tables[0].Rows.Count > 0)
+            if (subitems != null && subitems.Count > 0)
             {
                 btnItem.Attributes["class"] = "fh5co-sub-ddown";    // add down arrow
 
-                rptSubitems.DataSource = dsSubitems.Tables[0];
+                rptSubitems.DataSource = subitems;
                 rptSubitems.DataBind();
             }
         }
