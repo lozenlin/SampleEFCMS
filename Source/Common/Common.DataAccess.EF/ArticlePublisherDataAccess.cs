@@ -265,12 +265,12 @@ namespace Common.DataAccess.EF
 
                 // result
                 entities = tempQuery.ToList();
-                int rowIndex = 0;
+                int rowNum = 1;
 
                 foreach (var entity in entities)
                 {
-                    entity.RowNum = skipCount + rowIndex + 1;
-                    rowIndex++;
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
                 }
             }
             catch (Exception ex)
@@ -837,12 +837,12 @@ where exists(
 
                 // result
                 entities = tempQuery.ToList();
-                int rowIndex = 0;
+                int rowNum = 1;
 
                 foreach (var entity in entities)
                 {
-                    entity.RowNum = skipCount + rowIndex + 1;
-                    rowIndex++;
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
                 }
             }
             catch (Exception ex)
@@ -1121,12 +1121,12 @@ where exists(
 
                 // result
                 entities = tempQuery.ToList();
-                int rowIndex = 0;
+                int rowNum = 1;
 
                 foreach (var entity in entities)
                 {
-                    entity.RowNum = skipCount + rowIndex + 1;
-                    rowIndex++;
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
                 }
             }
             catch (Exception ex)
@@ -1200,6 +1200,107 @@ where exists(
             }
 
             return result;
+        }
+
+        #endregion
+
+        #region 網頁影片
+
+        /// <summary>
+        /// 取得後台用指定語系的網頁影片清單
+        /// </summary>
+        public List<ArticleVideoForBEList> GetArticleVideoMultiLangListForBackend(ArticleVideoListQueryParamsDA param)
+        {
+            Logger.Debug("GetArticleVideoMultiLangListForBackend(param)");
+            List<ArticleVideoForBEList> entities = null;
+
+            try
+            {
+                var tempQuery = from avm in cmsCtx.ArticleVideoMultiLang
+                                join av in cmsCtx.ArticleVideo on avm.VidId equals av.VidId
+                                join e in cmsCtx.Employee.Include(emp => emp.Department) on avm.PostAccount equals e.EmpAccount
+                                into avmGroup
+                                from e in avmGroup.DefaultIfEmpty()
+                                where av.ArticleId == param.ArticleId
+                                    && avm.CultureName == param.CultureName
+                                select new ArticleVideoForBEList()
+                                {
+                                    VidId = avm.VidId,
+                                    VidSubject = avm.VidSubject,
+                                    VidDesc = avm.VidDesc,
+                                    PostAccount = avm.PostAccount,
+                                    PostDate = avm.PostDate,
+                                    MdfAccount = avm.MdfAccount,
+                                    MdfDate = avm.MdfDate,
+                                    SortNo = av.SortNo,
+                                    VidLinkUrl = av.VidLinkUrl,
+                                    SourceVideoId = av.SourceVideoId,
+                                    IsShowInLangZhTw = fnArticleVideo_IsShowInLang(avm.VidId, "zh-TW"),
+                                    IsShowInLangEn = fnArticleVideo_IsShowInLang(avm.VidId, "en"),
+                                    PostDeptId = e.DeptId ?? 0,
+                                    PostDeptName = e.Department.DeptName
+                                };
+
+                // Query conditions
+
+                if (!param.AuthParams.CanReadSubItemOfOthers)
+                {
+                    tempQuery = tempQuery.Where(obj =>
+                        param.AuthParams.CanReadSubItemOfCrew && obj.PostDeptId == param.AuthParams.MyDeptId
+                        || param.AuthParams.CanReadSubItemOfSelf && obj.PostAccount == param.AuthParams.MyAccount);
+                }
+
+                if (param.Kw != "")
+                {
+                    tempQuery = tempQuery.Where(obj => obj.VidSubject.Contains(param.Kw));
+                }
+
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
+                // sorting
+                if (param.PagedParams.SortField != "")
+                {
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempQuery = tempQuery.OrderByDescending(obj => obj.SortNo);
+                }
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if (skipCount > 0)
+                {
+                    tempQuery = tempQuery.Skip(skipCount);
+                }
+
+                if (takeCount >= 0)
+                {
+                    tempQuery = tempQuery.Take(takeCount);
+                }
+
+                // result
+                entities = tempQuery.ToList();
+                int rowNum = 1;
+
+                foreach (var entity in entities)
+                {
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
         }
 
         #endregion

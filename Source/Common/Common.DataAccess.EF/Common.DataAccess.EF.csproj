@@ -94,6 +94,7 @@
     <Compile Include="Model\ArticleVideo.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\ArticleVideoForBEList.cs" />
     <Compile Include="Model\ArticleVideoMultiLang.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
@@ -161,6 +162,7 @@
     <Compile Include="QueryParam\ArticlePictureListQueryParamsDA.cs" />
     <Compile Include="QueryParam\ArticleUpdateIsAreaShowInFrontStageParamsDA.cs" />
     <Compile Include="QueryParam\ArticleUpdateSortFieldOfFrontStageParamsDA.cs" />
+    <Compile Include="QueryParam\ArticleVideoListQueryParamsDA.cs" />
     <Compile Include="QueryParam\AttachFileListQueryParamsDA.cs" />
     <Compile Include="QueryParam\AuthenticationQueryParamsDA.cs" />
     <Compile Include="QueryParam\AuthenticationUpdateParamsDA.cs" />

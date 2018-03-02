@@ -303,12 +303,12 @@ namespace Common.DataAccess.EF
 
                 // result
                 entities = tempQuery.ToList();
-                int rowIndex = 0;
+                int rowNum = 1;
 
                 foreach (var entity in entities)
                 {
-                    entity.RowNum = skipCount + rowIndex + 1;
-                    rowIndex++;
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
                 }
             }
             catch (Exception ex)
@@ -488,18 +488,18 @@ namespace Common.DataAccess.EF
 
                 // result
                 entities = tempQuery.ToList();
-                int rowIndex = 0;
+                int rowNum = 1;
 
                 foreach (var entity in entities)
                 {
-                    entity.RowNum = skipCount + rowIndex + 1;
+                    entity.RowNum = skipCount + rowNum;
 
                     if (param.CultureName == "en")
                     {
                         entity.Subject = entity.EnglishSubject;
                     }
 
-                    rowIndex++;
+                    rowNum++;
                 }
             }
             catch (Exception ex)
@@ -1003,12 +1003,12 @@ namespace Common.DataAccess.EF
 
                 // result
                 entities = tempQuery.ToList();
-                int rowIndex = 0;
+                int rowNum = 1;
 
                 foreach (var entity in entities)
                 {
-                    entity.RowNum = skipCount + rowIndex + 1;
-                    rowIndex++;
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
                 }
             }
             catch (Exception ex)
@@ -1333,7 +1333,7 @@ namespace Common.DataAccess.EF
                 int skipCount = param.PagedParams.GetSkipCount();
                 int takeCount = param.PagedParams.GetTakeCount();
 
-                if(skipCount>0)
+                if (skipCount > 0)
                 {
                     tempQuery = tempQuery.Skip(skipCount);
                 }
@@ -1345,12 +1345,12 @@ namespace Common.DataAccess.EF
 
                 // result
                 entities = tempQuery.ToList();
-                int rowIndex = 0;
+                int rowNum = 1;
 
                 foreach (var entity in entities)
                 {
-                    entity.RowNum = skipCount + rowIndex + 1;
-                    rowIndex++;
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
                 }
             }
             catch (Exception ex)
@@ -1596,19 +1596,19 @@ namespace Common.DataAccess.EF
                     tempQuery = tempQuery.Skip(skipCount);
                 }
 
-                if (takeCount > 0)
+                if (takeCount >= 0)
                 {
                     tempQuery = tempQuery.Take(takeCount);
                 }
 
                 // result
                 entities = tempQuery.ToList();
-                int rowIndex = 0;
+                int rowNum = 1;
 
                 foreach (var entity in entities)
                 {
-                    entity.RowNum = skipCount + rowIndex + 1;
-                    rowIndex++;
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
                 }
             }
             catch (Exception ex)

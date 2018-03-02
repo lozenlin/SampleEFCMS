@@ -1232,29 +1232,19 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後台用指定語系的網頁影片清單
         /// </summary>
-        public DataSet GetArticleVideoMultiLangListForBackend(ArticleVideoListQueryParams param)
+        public List<ArticleVideoForBEList> GetArticleVideoMultiLangListForBackend(ArticleVideoListQueryParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideoMultiLang_GetListForBackend cmdInfo = new spArticleVideoMultiLang_GetListForBackend()
-            {
-                ArticleId = param.ArticleId,
-                CultureName = param.CultureName,
-                Kw = param.Kw,
-                BeginNum = param.PagedParams.BeginNum,
-                EndNum = param.PagedParams.EndNum,
-                SortField = param.PagedParams.SortField,
-                IsSortDesc = param.PagedParams.IsSortDesc,
-                CanReadSubItemOfOthers = param.AuthParams.CanReadSubItemOfOthers,
-                CanReadSubItemOfCrew = param.AuthParams.CanReadSubItemOfCrew,
-                CanReadSubItemOfSelf = param.AuthParams.CanReadSubItemOfSelf,
-                MyAccount = param.AuthParams.MyAccount,
-                MyDeptId = param.AuthParams.MyDeptId
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
-            param.PagedParams.RowCount = cmdInfo.RowCount;
+            List<ArticleVideoForBEList> entities = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                ArticleVideoListQueryParamsDA paramDA = param.GenArticleVideoListQueryParamsDA();
+                entities = artPubDao.GetArticleVideoMultiLangListForBackend(paramDA);
+                dbErrMsg = artPubDao.GetErrMsg();
+                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
+            }
+
+            return entities;
         }
 
         /// <summary>

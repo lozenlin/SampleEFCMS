@@ -1177,36 +1177,36 @@ public partial class Article_Node : BasePage
             MyDeptId = c.GetDeptId()
         };
 
-        DataSet dsArticleVideos = artPub.GetArticleVideoMultiLangListForBackend(param);
+        List<ArticleVideoForBEList> articleVideos = artPub.GetArticleVideoMultiLangListForBackend(param);
 
-        if (dsArticleVideos != null)
+        if (articleVideos != null)
         {
-            rptArticleVideos.DataSource = dsArticleVideos.Tables[0];
+            rptArticleVideos.DataSource = articleVideos;
             rptArticleVideos.DataBind();
         }
     }
 
     protected void rptArticleVideos_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticleVideoForBEList artVid = (ArticleVideoForBEList)e.Item.DataItem;
 
-        Guid vidId = (Guid)drvTemp["VidId"];
-        string vidSubject = drvTemp.ToSafeStr("VidSubject");
-        string sourceVideoId = drvTemp.ToSafeStr("SourceVideoId");
-        bool isShowInLangZhTw = drvTemp.To<bool>("IsShowInLangZhTw", false);
-        bool isShowInLangEn = drvTemp.To<bool>("IsShowInLangEn", false);
+        Guid vidId = artVid.VidId;
+        string vidSubject = artVid.VidSubject;
+        string sourceVideoId = artVid.SourceVideoId;
+        bool isShowInLangZhTw = artVid.IsShowInLangZhTw;
+        bool isShowInLangEn = artVid.IsShowInLangEn;
         string mdfAccount = "";
         DateTime mdfDate = DateTime.MinValue;
 
-        if (Convert.IsDBNull(drvTemp["MdfDate"]))
+        if (!artVid.MdfDate.HasValue)
         {
-            mdfAccount = drvTemp.ToSafeStr("PostAccount");
-            mdfDate = Convert.ToDateTime(drvTemp["PostDate"]);
+            mdfAccount = artVid.PostAccount;
+            mdfDate = artVid.PostDate.Value;
         }
         else
         {
-            mdfAccount = drvTemp.ToSafeStr("MdfAccount");
-            mdfDate = Convert.ToDateTime(drvTemp["MdfDate"]);
+            mdfAccount = artVid.MdfAccount;
+            mdfDate = artVid.MdfDate.Value;
         }
 
         HtmlAnchor btnView = (HtmlAnchor)e.Item.FindControl("btnView");
@@ -1239,8 +1239,8 @@ public partial class Article_Node : BasePage
         btnDelete.OnClientClick = string.Format("return confirm('" + Resources.Lang.ArticleVideo_ConfirmDelete_Format + "');",
             vidSubject, vidId);
 
-        string ownerAccount = drvTemp.ToSafeStr("PostAccount");
-        int ownerDeptId = Convert.ToInt32(drvTemp["PostDeptId"]);
+        string ownerAccount = artVid.PostAccount;
+        int ownerDeptId = artVid.PostDeptId;
 
         btnEdit.Visible = empAuth.CanEditThisPage(false, ownerAccount, ownerDeptId);
 
