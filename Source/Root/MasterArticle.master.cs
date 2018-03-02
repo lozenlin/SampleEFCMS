@@ -443,13 +443,11 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
         if (articleData.ArticleLevelNo > 1)
         {
             // change to parentId of parent
-            DataSet dsParent = artPub.GetArticleDataForFrontend(parentId, c.qsCultureNameOfLangNo);
+            ArticleForFrontend parent = artPub.GetArticleDataForFrontend(parentId, c.qsCultureNameOfLangNo);
 
-            if (dsParent != null && dsParent.Tables[0].Rows.Count > 0)
+            if (parent != null)
             {
-                DataRow drFirst = dsParent.Tables[0].Rows[0];
-
-                parentId = (Guid)drFirst["ParentId"];
+                parentId = parent.ParentId.Value;
             }
         }
 

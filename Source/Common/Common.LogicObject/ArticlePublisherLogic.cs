@@ -96,18 +96,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得前台用網頁內容資料
         /// </summary>
-        public DataSet GetArticleDataForFrontend(Guid articleId, string cultureName)
+        public ArticleForFrontend GetArticleDataForFrontend(Guid articleId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetDataForFrontend cmdInfo = new spArticle_GetDataForFrontend()
-            {
-                ArticleId = articleId,
-                CultureName = cultureName
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            ArticleForFrontend entity = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entity = artPubDao.GetArticleDataForFrontend(articleId, cultureName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entity;
         }
 
         /// <summary>

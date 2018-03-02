@@ -9,6 +9,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // ===============================================================================
 
+using Common.DataAccess.EF.Model;
 using Common.Utility;
 using Newtonsoft.Json;
 using System;
@@ -264,11 +265,10 @@ namespace Common.LogicObject
             if (!articleData.ArticleId.HasValue)
                 return result;
 
-            DataSet dsArticle = artPub.GetArticleDataForFrontend(articleData.ArticleId.Value, qsCultureNameOfLangNo);
+            ArticleForFrontend article = artPub.GetArticleDataForFrontend(articleData.ArticleId.Value, qsCultureNameOfLangNo);
 
-            if (dsArticle != null && dsArticle.Tables[0].Rows.Count > 0)
+            if (article != null)
             {
-                DataRow drArticle = dsArticle.Tables[0].Rows[0];
                 bool isValid = false;
 
                 if (isPreviewMode)
@@ -278,10 +278,10 @@ namespace Common.LogicObject
                 else
                 {
                     // check validation date, isHideSelf, isShowInLang
-                    DateTime startDate = Convert.ToDateTime(drArticle["StartDate"]);
-                    DateTime endDate = Convert.ToDateTime(drArticle["EndDate"]);
-                    bool isHideSelf = Convert.ToBoolean(drArticle["IsHideSelf"]);
-                    bool isShowInLang = Convert.ToBoolean(drArticle["IsShowInLang"]);
+                    DateTime startDate = article.StartDate.Value;
+                    DateTime endDate = article.EndDate.Value;
+                    bool isHideSelf = article.IsHideSelf;
+                    bool isShowInLang = article.IsShowInLang;
 
                     if (startDate <= DateTime.Today && DateTime.Today <= endDate
                         && !isHideSelf
@@ -299,7 +299,7 @@ namespace Common.LogicObject
                 {
                     try
                     {
-                        articleData.ImportDataFrom(drArticle);
+                        articleData.ImportDataFrom(article);
                         articleData.IsPreviewMode = isPreviewMode;
 
                         // get top level id's

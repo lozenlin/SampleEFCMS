@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.DataAccess.EF.Model;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -50,53 +51,49 @@ namespace Common.LogicObject
         public Guid? Lv3Id;
         public bool IsPreviewMode = false;
 
-        public void ImportDataFrom(DataRow drArticle)
+        public void ImportDataFrom(ArticleForFrontend artFE)
         {
-            if (!Convert.IsDBNull(drArticle["ParentId"]))
-            {
-                ParentId = (Guid)drArticle["ParentId"];
-            }
+            ParentId = artFE.ParentId;
+            ArticleLevelNo = artFE.ArticleLevelNo.Value;
+            ArticleAlias = artFE.ArticleAlias;
+            BannerPicFileName = artFE.BannerPicFileName;
+            LayoutModeId = artFE.LayoutModeId.Value;
+            ShowTypeId = artFE.ShowTypeId.Value;
+            LinkUrl = artFE.LinkUrl;
+            LinkTarget = artFE.LinkTarget;
+            ControlName = artFE.ControlName;
+            IsHideSelf = artFE.IsHideSelf;
+            IsHideChild = artFE.IsHideChild;
+            StartDate = artFE.StartDate.Value;
+            EndDate = artFE.EndDate.Value;
+            SortNo = artFE.SortNo.Value;
+            SubjectAtBannerArea = artFE.SubjectAtBannerArea;
+            PublishDate = artFE.PublishDate.Value;
+            IsShowInUnitArea = artFE.IsShowInUnitArea;
+            IsShowInSitemap = artFE.IsShowInSitemap;
+            SortFieldOfFrontStage = artFE.SortFieldOfFrontStage;
+            IsSortDescOfFrontStage = artFE.IsSortDescOfFrontStage;
+            IsListAreaShowInFrontStage = artFE.IsListAreaShowInFrontStage;
+            IsAttAreaShowInFrontStage = artFE.IsAttAreaShowInFrontStage;
+            IsPicAreaShowInFrontStage = artFE.IsPicAreaShowInFrontStage;
+            IsVideoAreaShowInFrontStage = artFE.IsVideoAreaShowInFrontStage;
+            ArticleSubject = artFE.ArticleSubject;
+            ArticleContext = artFE.ArticleContext;
+            IsShowInLang = artFE.IsShowInLang;
+            Subtitle = artFE.Subtitle;
+            PublisherName = artFE.PublisherName;
+            PostAccount = artFE.PostAccount;
+            PostDate = artFE.PostDate.Value;
 
-            ArticleLevelNo = Convert.ToInt32(drArticle["ArticleLevelNo"]);
-            ArticleAlias = drArticle.ToSafeStr("ArticleAlias");
-            BannerPicFileName = drArticle.ToSafeStr("BannerPicFileName");
-            LayoutModeId = Convert.ToInt32(drArticle["LayoutModeId"]);
-            ShowTypeId = Convert.ToInt32(drArticle["ShowTypeId"]);
-            LinkUrl = drArticle.ToSafeStr("LinkUrl");
-            LinkTarget = drArticle.ToSafeStr("LinkTarget");
-            ControlName = drArticle.ToSafeStr("ControlName");
-            IsHideSelf = Convert.ToBoolean(drArticle["IsHideSelf"]);
-            IsHideChild = Convert.ToBoolean(drArticle["IsHideChild"]);
-            StartDate = Convert.ToDateTime(drArticle["StartDate"]);
-            EndDate = Convert.ToDateTime(drArticle["EndDate"]);
-            SortNo = Convert.ToInt32(drArticle["SortNo"]);
-            SubjectAtBannerArea = Convert.ToBoolean(drArticle["SubjectAtBannerArea"]);
-            PublishDate = Convert.ToDateTime(drArticle["PublishDate"]);
-            IsShowInUnitArea = Convert.ToBoolean(drArticle["IsShowInUnitArea"]);
-            IsShowInSitemap = Convert.ToBoolean(drArticle["IsShowInSitemap"]);
-            SortFieldOfFrontStage = drArticle.ToSafeStr("SortFieldOfFrontStage");
-            IsSortDescOfFrontStage = Convert.ToBoolean(drArticle["IsSortDescOfFrontStage"]);
-            IsListAreaShowInFrontStage = Convert.ToBoolean(drArticle["IsListAreaShowInFrontStage"]);
-            IsAttAreaShowInFrontStage = Convert.ToBoolean(drArticle["IsAttAreaShowInFrontStage"]);
-            IsPicAreaShowInFrontStage = Convert.ToBoolean(drArticle["IsPicAreaShowInFrontStage"]);
-            IsVideoAreaShowInFrontStage = Convert.ToBoolean(drArticle["IsVideoAreaShowInFrontStage"]);
-            ArticleSubject = drArticle.ToSafeStr("ArticleSubject");
-            ArticleContext = drArticle.ToSafeStr("ArticleContext");
-            IsShowInLang = Convert.ToBoolean(drArticle["IsShowInLang"]);
-            Subtitle = drArticle.ToSafeStr("Subtitle");
-            PublisherName = drArticle.ToSafeStr("PublisherName");
-            PostAccount = drArticle.ToSafeStr("PostAccount");
-            PostDate = Convert.ToDateTime(drArticle["PostDate"]);
-
-            if (Convert.IsDBNull(drArticle["MdfDate"]))
+            if (!artFE.MdfDate.HasValue)
             {
                 MdfAccount = PostAccount;
                 MdfDate = PostDate;
             }
             else
             {
-                MdfAccount = drArticle.ToSafeStr("MdfAccount");
-                MdfDate = Convert.ToDateTime(drArticle["MdfDate"]);
+                MdfAccount = artFE.MdfAccount;
+                MdfDate = artFE.MdfDate.Value;
             }
         }
     }

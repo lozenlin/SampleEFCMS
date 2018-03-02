@@ -789,6 +789,69 @@ where exists(
             return entities;
         }
 
+        /// <summary>
+        /// 取得前台用網頁內容資料
+        /// </summary>
+        public ArticleForFrontend GetArticleDataForFrontend(Guid articleId, string cultureName)
+        {
+            Logger.Debug("GetArticleDataForFrontend(articleId, cultureName)");
+            ArticleForFrontend entity = null;
+
+            try
+            {
+                entity = (from a in cmsCtx.Article
+                          from am in cmsCtx.ArticleMultiLang
+                          where a.ArticleId == am.ArticleId
+                           && a.ArticleId == articleId
+                           && am.CultureName == cultureName
+                          select new ArticleForFrontend()
+                          {
+                              ParentId = a.ParentId,
+                              ArticleLevelNo = a.ArticleLevelNo,
+                              ArticleAlias = a.ArticleAlias,
+                              BannerPicFileName = a.BannerPicFileName,
+                              LayoutModeId = a.LayoutModeId,
+                              ShowTypeId = a.ShowTypeId,
+                              LinkUrl = a.LinkUrl,
+                              LinkTarget = a.LinkTarget,
+                              ControlName = a.ControlName,
+                              IsHideSelf = a.IsHideSelf,
+                              IsHideChild = a.IsHideChild,
+                              StartDate = a.StartDate,
+                              EndDate = a.EndDate,
+                              SortNo = a.SortNo,
+                              PostAccount = a.PostAccount,
+                              PostDate = a.PostDate,
+                              MdfAccount = a.MdfAccount,
+                              MdfDate = a.MdfDate,
+                              SubjectAtBannerArea = a.SubjectAtBannerArea,
+                              PublishDate = a.PublishDate,
+                              IsShowInUnitArea = a.IsShowInUnitArea,
+                              IsShowInSitemap = a.IsShowInSitemap,
+                              SortFieldOfFrontStage = a.SortFieldOfFrontStage,
+                              IsSortDescOfFrontStage = a.IsSortDescOfFrontStage,
+                              IsListAreaShowInFrontStage = a.IsListAreaShowInFrontStage,
+                              IsAttAreaShowInFrontStage = a.IsAttAreaShowInFrontStage,
+                              IsPicAreaShowInFrontStage = a.IsPicAreaShowInFrontStage,
+                              IsVideoAreaShowInFrontStage = a.IsVideoAreaShowInFrontStage,
+                              ArticleSubject = am.ArticleSubject,
+                              ArticleContext = am.ArticleContext,
+                              ReadCount = am.ReadCount,
+                              IsShowInLang = am.IsShowInLang,
+                              Subtitle = am.Subtitle,
+                              PublisherName = am.PublisherName
+                          }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entity;
+        }
+
         #endregion
 
         #region 附件檔案
