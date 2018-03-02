@@ -939,11 +939,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool DeleteArticlePictureData(Guid picId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticlePicture_DeleteData cmdInfo = new spArticlePicture_DeleteData() { PicId = picId };
+            bool result = false;
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.DeleteArticlePictureData(picId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
