@@ -1079,6 +1079,45 @@ where exists(
             return result;
         }
 
+        /// <summary>
+        /// 取得前台用附件檔案清單
+        /// </summary>
+        public List<AttachFileForFrontend> GetAttachFileListForFrontend(Guid articleId, string cultureName)
+        {
+            Logger.Debug("GetAttachFileListForFrontend(articleId, cultureName)");
+            List<AttachFileForFrontend> entities = null;
+
+            try
+            {
+                entities = (from afm in cmsCtx.AttachFileMultiLang
+                            from af in cmsCtx.AttachFile
+                            where afm.AttId == af.AttId
+                             && af.ArticleId == articleId
+                             && afm.CultureName == cultureName
+                             && afm.IsShowInLang
+                            orderby af.SortNo
+                            select new AttachFileForFrontend()
+                            {
+                                AttId = afm.AttId,
+                                AttSubject = afm.AttSubject,
+                                ReadCount = afm.ReadCount,
+                                FileSavedName = af.FileSavedName,
+                                FileSize = af.FileSize,
+                                SortNo = af.SortNo,
+                                PostDate = af.PostDate,
+                                MdfDate = af.MdfDate
+                            }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
 
         #region 網頁照片

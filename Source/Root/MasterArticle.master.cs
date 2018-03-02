@@ -299,13 +299,13 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
         if (!articleData.IsAttAreaShowInFrontStage)
             return;
 
-        DataSet dsAttachments = artPub.GetAttachFileListForFrontend(articleData.ArticleId.Value, c.qsCultureNameOfLangNo);
+        List<AttachFileForFrontend> attachments = artPub.GetAttachFileListForFrontend(articleData.ArticleId.Value, c.qsCultureNameOfLangNo);
 
-        if (dsAttachments != null && dsAttachments.Tables[0].Rows.Count > 0)
+        if (attachments != null && attachments.Count > 0)
         {
             try
             {
-                Att.AttCombination attComb = new Att.AttCombination(dsAttachments.Tables[0]);
+                Att.AttCombination attComb = new Att.AttCombination(attachments);
                 rptAttachments.DataSource = attComb.GetList();
                 rptAttachments.DataBind();
 

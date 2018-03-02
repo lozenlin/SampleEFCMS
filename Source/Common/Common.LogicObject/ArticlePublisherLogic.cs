@@ -867,18 +867,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得前台用附件檔案清單
         /// </summary>
-        public DataSet GetAttachFileListForFrontend(Guid articleId, string cultureName)
+        public List<AttachFileForFrontend> GetAttachFileListForFrontend(Guid articleId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spAttachFile_GetListForFrontend cmdInfo = new spAttachFile_GetListForFrontend()
-            {
-                ArticleId = articleId,
-                CultureName = cultureName
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            List<AttachFileForFrontend> entities = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entities = artPubDao.GetAttachFileListForFrontend(articleId, cultureName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entities;
         }
 
         #endregion

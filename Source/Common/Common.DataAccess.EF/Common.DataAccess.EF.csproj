@@ -103,6 +103,7 @@
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\AttachFileForBEList.cs" />
+    <Compile Include="Model\AttachFileForFrontend.cs" />
     <Compile Include="Model\AttachFileMultiLang.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>

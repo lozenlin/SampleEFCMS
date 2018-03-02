@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using Common.LogicObject;
+using Common.DataAccess.EF.Model;
 
 namespace Att
 {
@@ -12,9 +13,9 @@ namespace Att
     {
         protected List<AttInfo> attList = new List<AttInfo>();
 
-        public AttCombination(DataTable dt)
+        public AttCombination(List<AttachFileForFrontend> attachFiles)
         {
-            Initialize(dt);
+            Initialize(attachFiles);
         }
 
         public List<AttInfo> GetList()
@@ -22,13 +23,13 @@ namespace Att
             return attList;
         }
 
-        protected void Initialize(DataTable dt)
+        protected void Initialize(List<AttachFileForFrontend> attachFiles)
         {
-            foreach (DataRowView drvTemp in dt.DefaultView)
+            foreach (AttachFileForFrontend attFile in attachFiles)
             {
-                string attSubject = drvTemp.ToSafeStr("AttSubject");
-                int sortNo = Convert.ToInt32(drvTemp["SortNo"]);
-                string fileSavedName = drvTemp.ToSafeStr("FileSavedName");
+                string attSubject = attFile.AttSubject;
+                int sortNo = attFile.SortNo.Value;
+                string fileSavedName = attFile.FileSavedName;
 
                 //找出同名AttInfo
                 AttInfo curAttInfo = attList.Find(x => x.AttSubject == attSubject);
@@ -43,23 +44,23 @@ namespace Att
                 }
 
                 string ext = Path.GetExtension(fileSavedName);
-                DateTime mdfDate = drvTemp.To<DateTime>("MdfDate", DateTime.MinValue);
+                DateTime? mdfDate = attFile.MdfDate;
 
-                if (mdfDate == DateTime.MinValue)
+                if (!mdfDate.HasValue)
                 {
-                    mdfDate = Convert.ToDateTime(drvTemp["PostDate"]);
+                    mdfDate = attFile.PostDate.Value;
                 }
 
                 // add file data
                 FileData curFile = new FileData()
                 {
-                    AttId = (Guid)drvTemp["AttId"],
-                    SortNo = Convert.ToInt32(drvTemp["SortNo"]),
+                    AttId = attFile.AttId,
+                    SortNo = attFile.SortNo.Value,
                     FileName = fileSavedName,
                     FileExt = ext,
-                    FileSize = Convert.ToInt32(drvTemp["FileSize"]),
-                    ReadCount = Convert.ToInt32(drvTemp["ReadCount"]),
-                    MdfDate = mdfDate
+                    FileSize = attFile.FileSize,
+                    ReadCount = attFile.ReadCount,
+                    MdfDate = mdfDate.Value
                 };
 
                 if (curFile.FileSize > 1024)
