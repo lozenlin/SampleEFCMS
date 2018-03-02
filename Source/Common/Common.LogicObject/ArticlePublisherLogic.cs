@@ -530,14 +530,19 @@ namespace Common.LogicObject
         /// </summary>
         public bool IncreaseArticleMultiLangReadCount(Guid articleId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleMultiLang_IncreaseReadCount cmdInfo = new spArticleMultiLang_IncreaseReadCount()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleId = articleId,
-                CultureName = cultureName
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                ArticleMultiLang entity = artPubDao.Get<ArticleMultiLang>(articleId, cultureName);
+
+                if (entity != null)
+                {
+                    entity.ReadCount++;
+                    result = artPubDao.Update();
+                    dbErrMsg = artPubDao.GetErrMsg();
+                }
+            }
 
             return result;
         }
