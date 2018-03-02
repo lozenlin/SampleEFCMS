@@ -617,18 +617,17 @@ namespace Common.LogicObject
             string fileFullName = "";
             string attRootDir = Server.MapPath(string.Format("~/{0}", ConfigurationManager.AppSettings["AttRootDir"]));
             ArticlePublisherLogic artPub = new ArticlePublisherLogic(null);
-            DataSet dsPic = artPub.GetArticlePictureDataForBackend(attId);
+            ArticlePicture pic = artPub.GetArticlePictureDataForBackend(attId);
 
-            if (dsPic == null && dsPic.Tables[0].Rows.Count == 0)
+            if (pic == null)
             {
                 logger.ErrorFormat("can't get data of attId[{0}]", attId);
                 return "";
             }
 
-            DataRow drPic = dsPic.Tables[0].Rows[0];
             string filePath = "ArticlePictures";
-            string articleId = drPic.ToSafeStr("ArticleId");
-            string fileSavedName = drPic.ToSafeStr("fileSavedName");
+            string articleId = pic.ArticleId.ToString();
+            string fileSavedName = pic.FileSavedName;
 
             fileFullName = string.Format("{0}{1}/{2}/{3}", attRootDir, filePath, articleId, fileSavedName);
 

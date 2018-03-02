@@ -989,55 +989,51 @@ namespace Common.LogicObject
             if (attId != Guid.Empty)
             {
                 ArticlePublisherLogic artPub = new ArticlePublisherLogic(null);
-                DataSet dsPic = artPub.GetArticlePictureDataForBackend(attId);
+                ArticlePicture pic = artPub.GetArticlePictureDataForBackend(attId);
 
-                if (dsPic == null || dsPic.Tables[0].Rows.Count == 0)
+                if (pic == null)
                 {
                     errState = AttFileErrState.LoadDataFailed;
                     return false;
                 }
 
-                DataRow drFirst = dsPic.Tables[0].Rows[0];
-
-                contextId = (Guid)drFirst["ArticleId"];
+                contextId = pic.ArticleId;
                 filePath = GetDirectoryName();
-                fileSavedName = drFirst.ToSafeStr("FileSavedName");
-                fileSize = Convert.ToInt32(drFirst["FileSize"]);
-                sortNo = Convert.ToInt32(drFirst["SortNo"]);
-                fileMIME = drFirst.ToSafeStr("FileMIME");
+                fileSavedName = pic.FileSavedName;
+                fileSize = pic.FileSize;
+                sortNo = pic.SortNo.Value;
+                fileMIME = pic.FileMIME;
                 fileFullName = string.Format("{0}{1}/{2}", GetAttRootDirectoryFullName(), filePath, fileSavedName);
-                postAccount = drFirst.ToSafeStr("PostAccount");
-                postDate = Convert.ToDateTime(drFirst["PostDate"]);
+                postAccount = pic.PostAccount;
+                postDate = pic.PostDate.Value;
 
-                if (!Convert.IsDBNull(drFirst["MdfDate"]))
+                if (pic.MdfDate.HasValue)
                 {
-                    mdfAccount = drFirst.ToSafeStr("MdfAccount");
-                    mdfDate = Convert.ToDateTime(drFirst["MdfDate"]);
+                    mdfAccount = pic.MdfAccount;
+                    mdfDate = pic.MdfDate.Value;
                 }
 
                 //zh-TW
                 if (LangManager.IsEnableEditLangZHTW())
                 {
-                    DataSet dsPicZhTw = artPub.GetArticlePictureMultiLangDataForBackend(attId, LangManager.CultureNameZHTW);
+                    ArticlePictureMultiLang picZhTw = artPub.GetArticlePictureMultiLangDataForBackend(attId, LangManager.CultureNameZHTW);
 
-                    if (dsPicZhTw == null || dsPicZhTw.Tables[0].Rows.Count == 0)
+                    if (picZhTw == null)
                     {
                         errState = AttFileErrState.LoadMultiLangDataFailed;
                         return false;
                     }
 
-                    DataRow drZhTw = dsPicZhTw.Tables[0].Rows[0];
+                    attSubjectZhTw = picZhTw.PicSubject;
+                    isShowInLangZhTw = picZhTw.IsShowInLang;
 
-                    attSubjectZhTw = drZhTw.ToSafeStr("PicSubject");
-                    isShowInLangZhTw = Convert.ToBoolean(drZhTw["IsShowInLang"]);
-
-                    if (!Convert.IsDBNull(drZhTw["MdfDate"]))
+                    if (picZhTw.MdfDate.HasValue)
                     {
-                        DateTime mdfDateZhTw = Convert.ToDateTime(drZhTw["MdfDate"]);
+                        DateTime mdfDateZhTw = picZhTw.MdfDate.Value;
 
                         if (!mdfDate.HasValue || mdfDateZhTw > mdfDate.Value)
                         {
-                            mdfAccount = drZhTw.ToSafeStr("MdfAccount");
+                            mdfAccount = picZhTw.MdfAccount;
                             mdfDate = mdfDateZhTw;
                         }
                     }
@@ -1046,26 +1042,24 @@ namespace Common.LogicObject
                 //en
                 if (LangManager.IsEnableEditLangEN())
                 {
-                    DataSet dsPicEn = artPub.GetArticlePictureMultiLangDataForBackend(attId, LangManager.CultureNameEN);
+                    ArticlePictureMultiLang picEn = artPub.GetArticlePictureMultiLangDataForBackend(attId, LangManager.CultureNameEN);
 
-                    if (dsPicEn == null || dsPicEn.Tables[0].Rows.Count == 0)
+                    if (picEn == null)
                     {
                         errState = AttFileErrState.LoadMultiLangDataFailed;
                         return false;
                     }
 
-                    DataRow drEn = dsPicEn.Tables[0].Rows[0];
+                    attSubjectEn = picEn.PicSubject;
+                    isShowInLangEn = picEn.IsShowInLang;
 
-                    attSubjectEn = drEn.ToSafeStr("PicSubject");
-                    isShowInLangEn = Convert.ToBoolean(drEn["IsShowInLang"]);
-
-                    if (!Convert.IsDBNull(drEn["MdfDate"]))
+                    if (picEn.MdfDate.HasValue)
                     {
-                        DateTime mdfDateEn = Convert.ToDateTime(drEn["MdfDate"]);
+                        DateTime mdfDateEn = picEn.MdfDate.Value;
 
                         if (!mdfDate.HasValue || mdfDateEn > mdfDate.Value)
                         {
-                            mdfAccount = drEn.ToSafeStr("MdfAccount");
+                            mdfAccount = picEn.MdfAccount;
                             mdfDate = mdfDateEn;
                         }
                     }

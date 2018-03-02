@@ -890,32 +890,33 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後台用網頁照片資料
         /// </summary>
-        public DataSet GetArticlePictureDataForBackend(Guid picId)
+        public ArticlePicture GetArticlePictureDataForBackend(Guid picId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticlePicture_GetDataForBackend cmdInfo = new spArticlePicture_GetDataForBackend() { PicId = picId };
+            ArticlePicture entity = null;
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entity = artPubDao.Get<ArticlePicture>(picId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
-            return ds;
+            return entity;
         }
 
         /// <summary>
         /// 取得後台用網頁照片的多國語系資料
         /// </summary>
-        public DataSet GetArticlePictureMultiLangDataForBackend(Guid picId, string cultureName)
+        public ArticlePictureMultiLang GetArticlePictureMultiLangDataForBackend(Guid picId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticlePictureMultiLang_GetDataForBackend cmdInfo = new spArticlePictureMultiLang_GetDataForBackend()
-            {
-                PicId = picId,
-                CultureName = cultureName
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            ArticlePictureMultiLang entity = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entity = artPubDao.Get<ArticlePictureMultiLang>(picId, cultureName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entity;
         }
 
         /// <summary>

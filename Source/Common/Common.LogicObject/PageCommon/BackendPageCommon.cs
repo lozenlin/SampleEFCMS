@@ -1185,13 +1185,12 @@ namespace Common.LogicObject
                 return qsArtId;
 
             ArticlePublisherLogic artPub = new ArticlePublisherLogic();
-            DataSet dsAtt = artPub.GetArticlePictureDataForBackend(qsPicId);
+            ArticlePicture pic = artPub.GetArticlePictureDataForBackend(qsPicId);
             Guid articleId = Guid.Empty;
 
-            if (dsAtt != null && dsAtt.Tables[0].Rows.Count > 0)
+            if (pic != null)
             {
-                DataRow drFirst = dsAtt.Tables[0].Rows[0];
-                articleId = (Guid)drFirst["ArticleId"];
+                articleId = pic.ArticleId.Value;
             }
 
             return articleId;
