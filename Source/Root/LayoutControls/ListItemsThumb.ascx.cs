@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -127,14 +128,14 @@ public partial class LayoutControls_ListItemsThumb : System.Web.UI.UserControl
         }
 
         // get thumb picture
-        DataSet dsArtPic = artPub.GetArticlePictureListForFrontend(articleId, c.qsCultureNameOfLangNo);
+        List<ArticlePictureForFrontend> pictures = artPub.GetArticlePictureListForFrontend(articleId, c.qsCultureNameOfLangNo);
 
-        if (dsArtPic != null && dsArtPic.Tables[0].Rows.Count > 0)
+        if (pictures != null && pictures.Count > 0)
         {
-            DataRow drFirst = dsArtPic.Tables[0].Rows[0];
+            ArticlePictureForFrontend artPic = pictures[0];
 
-            Guid picId = (Guid)drFirst["PicId"];
-            string picSubject = drFirst.ToSafeStr("PicSubject");
+            Guid picId = artPic.PicId;
+            string picSubject = artPic.PicSubject;
 
             HtmlImage imgPic = (HtmlImage)e.Item.FindControl("imgPic");
             imgPic.Src = string.Format("/FileArtPic.ashx?attid={0}&w=640&h=480&l={1}", picId, c.qsLangNo);

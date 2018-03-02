@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -127,16 +128,16 @@ namespace JsonService
             {
                 Guid itemId = (Guid)dr["ArticleId"];
 
-                DataSet dsArtPic = artPub.GetArticlePictureListForFrontend(itemId, c.qsCultureNameOfLangNo);
+                List<ArticlePictureForFrontend> pictures = artPub.GetArticlePictureListForFrontend(itemId, c.qsCultureNameOfLangNo);
                 string picId = "";
                 string picSubject = "";
 
-                if (dsArtPic != null && dsArtPic.Tables[0].Rows.Count > 0)
+                if (pictures != null && pictures.Count > 0)
                 {
-                    DataRow drFirst = dsArtPic.Tables[0].Rows[0];
+                    ArticlePictureForFrontend artPic = pictures[0];
 
-                    picId = drFirst.ToSafeStr("PicId");
-                    picSubject = drFirst.ToSafeStr("PicSubject");
+                    picId = artPic.PicId.ToString();
+                    picSubject = artPic.PicSubject;
                 }
 
                 dr["PicId"] = picId;

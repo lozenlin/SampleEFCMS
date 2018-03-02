@@ -360,11 +360,11 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
         if (!articleData.IsPicAreaShowInFrontStage)
             return;
 
-        DataSet dsPictures = artPub.GetArticlePictureListForFrontend(articleData.ArticleId.Value, c.qsCultureNameOfLangNo);
+        List<ArticlePictureForFrontend> pictures = artPub.GetArticlePictureListForFrontend(articleData.ArticleId.Value, c.qsCultureNameOfLangNo);
 
-        if (dsPictures != null && dsPictures.Tables[0].Rows.Count > 0)
+        if (pictures != null && pictures.Count > 0)
         {
-            rptPictures.DataSource = dsPictures.Tables[0];
+            rptPictures.DataSource = pictures;
             rptPictures.DataBind();
 
             PicturesArea.Visible = true;
@@ -373,10 +373,10 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
 
     protected void rptPictures_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticlePictureForFrontend artPic = (ArticlePictureForFrontend)e.Item.DataItem;
 
-        Guid picId = (Guid)drvTemp["PicId"];
-        string picSubject = drvTemp.ToSafeStr("PicSubject");
+        Guid picId = artPic.PicId;
+        string picSubject = artPic.PicSubject;
 
         HtmlAnchor btnItem = (HtmlAnchor)e.Item.FindControl("btnItem");
         btnItem.Title = picSubject;

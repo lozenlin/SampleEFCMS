@@ -89,6 +89,7 @@
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\ArticlePictureForBEList.cs" />
+    <Compile Include="Model\ArticlePictureForFrontend.cs" />
     <Compile Include="Model\ArticlePictureMultiLang.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>

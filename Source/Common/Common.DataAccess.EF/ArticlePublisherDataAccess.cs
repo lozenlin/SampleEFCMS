@@ -1282,6 +1282,41 @@ where exists(
             return result;
         }
 
+        /// <summary>
+        /// 取得前台用網頁照片清單
+        /// </summary>
+        public List<ArticlePictureForFrontend> GetArticlePictureListForFrontend(Guid articleId, string cultureName)
+        {
+            Logger.Debug("GetArticlePictureListForFrontend(articleId, cultureName)");
+            List<ArticlePictureForFrontend> entities = null;
+
+            try
+            {
+                entities = (from apm in cmsCtx.ArticlePictureMultiLang
+                            from ap in cmsCtx.ArticlePicture
+                            where apm.PicId == ap.PicId
+                             && ap.ArticleId == articleId
+                             && apm.CultureName == cultureName
+                             && apm.IsShowInLang
+                            orderby ap.SortNo descending
+                            select new ArticlePictureForFrontend()
+                            {
+                                PicId = apm.PicId,
+                                PicSubject = apm.PicSubject,
+                                FileSavedName = ap.FileSavedName,
+                                SortNo = ap.SortNo
+                            }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
 
         #region 網頁影片

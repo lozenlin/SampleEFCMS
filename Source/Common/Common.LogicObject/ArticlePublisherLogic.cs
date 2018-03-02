@@ -1079,18 +1079,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得前台用網頁照片清單
         /// </summary>
-        public DataSet GetArticlePictureListForFrontend(Guid articleId, string cultureName)
+        public List<ArticlePictureForFrontend> GetArticlePictureListForFrontend(Guid articleId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticlePicture_GetListForFrontend cmdInfo = new spArticlePicture_GetListForFrontend()
-            {
-                ArticleId = articleId,
-                CultureName = cultureName
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            List<ArticlePictureForFrontend> entities = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entities = artPubDao.GetArticlePictureListForFrontend(articleId, cultureName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entities;
         }
 
         #endregion
