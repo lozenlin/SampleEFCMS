@@ -1137,12 +1137,13 @@ namespace Common.LogicObject
         /// </summary>
         public int GetArticleVideoMaxSortNo(Guid articleId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideo_GetMaxSortNo cmdInfo = new spArticleVideo_GetMaxSortNo() { ArticleId = articleId };
+            int result = 0;
 
-            int errCode = -1;
-            int result = cmd.ExecuteScalar<int>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.GetArticleVideoMaxSortNo(articleId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -1152,20 +1153,26 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertArticleVideoData(ArticleVideoParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideo_InsertData cmdInfo = new spArticleVideo_InsertData()
-            {
-                VidId = param.VidId,
-                ArticleId = param.ArticleId,
-                SortNo = param.SortNo,
-                VidLinkUrl = param.VidLinkUrl,
-                SourceVideoId = param.SourceVideoId,
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            return result;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                ArticleVideo entity = new ArticleVideo()
+                {
+                    VidId = param.VidId,
+                    ArticleId = param.ArticleId,
+                    SortNo = param.SortNo,
+                    VidLinkUrl = param.VidLinkUrl,
+                    SourceVideoId = param.SourceVideoId,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = artPubDao.Insert<ArticleVideo>(entity);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return insResult.IsSuccess;
         }
 
         /// <summary>
@@ -1173,20 +1180,26 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertArticleVideoMultiLangData(ArticleVideoMultiLangParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideoMultiLang_InsertData cmdInfo = new spArticleVideoMultiLang_InsertData()
-            {
-                VidId = param.VidId,
-                CultureName = param.CultureName,
-                VidSubject = param.VidSubject,
-                VidDesc = param.VidDesc,
-                IsShowInLang = param.IsShowInLang,
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            return result;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                ArticleVideoMultiLang entity = new ArticleVideoMultiLang()
+                {
+                    VidId = param.VidId,
+                    CultureName = param.CultureName,
+                    VidSubject = param.VidSubject,
+                    VidDesc = param.VidDesc,
+                    IsShowInLang = param.IsShowInLang,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = artPubDao.Insert<ArticleVideoMultiLang>(entity);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return insResult.IsSuccess;
         }
 
         /// <summary>

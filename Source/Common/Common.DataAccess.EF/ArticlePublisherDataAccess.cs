@@ -1344,6 +1344,28 @@ where exists(
             return true;
         }
 
+        /// <summary>
+        /// 取得網頁影片的最大排序編號
+        /// </summary>
+        public int GetArticleVideoMaxSortNo(Guid articleId)
+        {
+            Logger.Debug("GetArticleVideoMaxSortNo(articleId)");
+            int result = 0;
+
+            try
+            {
+                result = cmsCtx.ArticleVideo.Where(obj => obj.ArticleId == articleId).Max(obj => obj.SortNo) ?? 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return -1;
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region 搜尋用資料來源
