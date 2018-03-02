@@ -392,11 +392,11 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
         if (!articleData.IsVideoAreaShowInFrontStage)
             return;
 
-        DataSet dsVideos = artPub.GetArticleVideoListForFrontend(articleData.ArticleId.Value, c.qsCultureNameOfLangNo);
+        List<ArticleVideoForFrontend> videos = artPub.GetArticleVideoListForFrontend(articleData.ArticleId.Value, c.qsCultureNameOfLangNo);
 
-        if (dsVideos != null && dsVideos.Tables[0].Rows.Count > 0)
+        if (videos != null && videos.Count > 0)
         {
-            rptVideos.DataSource = dsVideos.Tables[0];
+            rptVideos.DataSource = videos;
             rptVideos.DataBind();
 
             VideosArea.Visible = true;
@@ -405,12 +405,12 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
 
     protected void rptVideos_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticleVideoForFrontend artVid = (ArticleVideoForFrontend)e.Item.DataItem;
 
-        Guid vidId = (Guid)drvTemp["VidId"];
-        string vidSubject = drvTemp.ToSafeStr("VidSubject");
-        string vidDesc = drvTemp.ToSafeStr("VidDesc");
-        string sourceVideoId = drvTemp.ToSafeStr("SourceVideoId");
+        Guid vidId = artVid.VidId;
+        string vidSubject = artVid.VidSubject;
+        string vidDesc = artVid.VidDesc;
+        string sourceVideoId = artVid.SourceVideoId;
 
         HtmlAnchor btnItem = (HtmlAnchor)e.Item.FindControl("btnItem");
         btnItem.HRef = string.Format("https://www.youtube.com/embed/{0}?autoplay=1", sourceVideoId);

@@ -1481,6 +1481,42 @@ where exists(
             return result;
         }
 
+        /// <summary>
+        /// 取得前台用網頁影片清單
+        /// </summary>
+        public List<ArticleVideoForFrontend> GetArticleVideoListForFrontend(Guid articleId, string cultureName)
+        {
+            Logger.Debug("GetArticleVideoListForFrontend(articleId, cultureName)");
+            List<ArticleVideoForFrontend> entities = null;
+
+            try
+            {
+                entities = (from avm in cmsCtx.ArticleVideoMultiLang
+                            from av in cmsCtx.ArticleVideo
+                            where avm.VidId == av.VidId
+                             && av.ArticleId == articleId
+                             && avm.CultureName == cultureName
+                             && avm.IsShowInLang
+                            orderby av.SortNo descending
+                            select new ArticleVideoForFrontend()
+                            {
+                                VidId = avm.VidId,
+                                VidSubject = avm.VidSubject,
+                                VidDesc = avm.VidDesc,
+                                SortNo = av.SortNo,
+                                SourceVideoId = av.SourceVideoId
+                            }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
 
         #region 搜尋用資料來源

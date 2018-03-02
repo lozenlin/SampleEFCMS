@@ -1291,18 +1291,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得前台用網頁影片清單
         /// </summary>
-        public DataSet GetArticleVideoListForFrontend(Guid articleId, string cultureName)
+        public List<ArticleVideoForFrontend> GetArticleVideoListForFrontend(Guid articleId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideo_GetListForFrontend cmdInfo = new spArticleVideo_GetListForFrontend()
-            {
-                ArticleId = articleId,
-                CultureName = cultureName
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            List<ArticleVideoForFrontend> entities = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entities = artPubDao.GetArticleVideoListForFrontend(articleId, cultureName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entities;
         }
 
         #endregion

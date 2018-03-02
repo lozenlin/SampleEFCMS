@@ -97,6 +97,7 @@
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\ArticleVideoForBEList.cs" />
+    <Compile Include="Model\ArticleVideoForFrontend.cs" />
     <Compile Include="Model\ArticleVideoMultiLang.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
