@@ -1010,18 +1010,25 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateArticlePictureData(ArticlePictureParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticlePicture_UpdateData cmdInfo = new spArticlePicture_UpdateData()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                PicId = param.PicId,
-                FileSavedName = param.FileSavedName,
-                FileSize = param.FileSize,
-                SortNo = param.SortNo,
-                FileMIME = param.FileMIME,
-                MdfAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                ArticlePicture entity = artPubDao.GetEmptyEntity<ArticlePicture>(new ArticlePictureRequiredPropValues()
+                {
+                    PicId = param.PicId
+                });
+
+                entity.FileSavedName = param.FileSavedName;
+                entity.FileSize = param.FileSize;
+                entity.SortNo = param.SortNo;
+                entity.FileMIME = param.FileMIME;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = artPubDao.Update();
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -1031,17 +1038,25 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateArticlePictureMultiLangData(ArticlePictureMultiLangParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticlePictureMultiLang_UpdateData cmdInfo = new spArticlePictureMultiLang_UpdateData()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                PicId = param.PicId,
-                CultureName = param.CultureName,
-                PicSubject = param.PicSubject,
-                IsShowInLang = param.IsShowInLang,
-                MdfAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                ArticlePictureMultiLang entity = artPubDao.GetEmptyEntity<ArticlePictureMultiLang>(new ArticlePictureMultiLangRequiredPropValues()
+                {
+                    PicId = param.PicId,
+                    CultureName = param.CultureName,
+                    IsShowInLang = !param.IsShowInLang
+                });
+
+                entity.PicSubject = param.PicSubject;
+                entity.IsShowInLang = param.IsShowInLang;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = artPubDao.Update();
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
