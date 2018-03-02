@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -92,42 +93,38 @@ public partial class Article_Video : System.Web.UI.Page
     {
         if (c.qsAct == ConfigFormAction.edit)
         {
-            DataSet dsVideo = artPub.GetArticleVideoDataForBackend(c.qsVidId);
+            ArticleVideo video = artPub.GetArticleVideoDataForBackend(c.qsVidId);
 
-            if (dsVideo != null && dsVideo.Tables[0].Rows.Count > 0)
+            if (video != null)
             {
-                DataRow drFirst = dsVideo.Tables[0].Rows[0];
-
-                txtSortNo.Text = drFirst.ToSafeStr("SortNo");
-                txtVidLinkUrl.Text = drFirst.ToSafeStr("VidLinkUrl");
-                txtSourceVideoId.Text = drFirst.ToSafeStr("SourceVideoId");
-                ltrPostAccount.Text = drFirst.ToSafeStr("PostAccount");
-                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", drFirst["PostDate"]);
-                string mdfAccount = drFirst.ToSafeStr("MdfAccount");
+                txtSortNo.Text = video.SortNo.ToString();
+                txtVidLinkUrl.Text = video.VidLinkUrl;
+                txtSourceVideoId.Text = video.SourceVideoId;
+                ltrPostAccount.Text = video.PostAccount;
+                ltrPostDate.Text = string.Format("{0:yyyy-MM-dd HH:mm:ss}", video.PostDate);
+                string mdfAccount = video.MdfAccount;
                 DateTime mdfDate = DateTime.MinValue;
 
-                if (!Convert.IsDBNull(drFirst["MdfDate"]))
+                if (video.MdfDate.HasValue)
                 {
-                    mdfDate = Convert.ToDateTime(drFirst["MdfDate"]);
+                    mdfDate = video.MdfDate.Value;
                 }
 
                 //zh-TW
                 if (LangManager.IsEnableEditLangZHTW())
                 {
-                    DataSet dsZhTw = artPub.GetArticleVideoMultiLangDataForBackend(c.qsVidId, LangManager.CultureNameZHTW);
+                    ArticleVideoMultiLang vidZhTw = artPub.GetArticleVideoMultiLangDataForBackend(c.qsVidId, LangManager.CultureNameZHTW);
 
-                    if (dsZhTw != null && dsZhTw.Tables[0].Rows.Count > 0)
+                    if (vidZhTw != null)
                     {
-                        DataRow drZhTw = dsZhTw.Tables[0].Rows[0];
+                        txtVidSubjectZhTw.Text = vidZhTw.VidSubject;
+                        chkIsShowInLangZhTw.Checked = vidZhTw.IsShowInLang;
+                        txtVidDescZhTw.Text = vidZhTw.VidDesc;
 
-                        txtVidSubjectZhTw.Text = drZhTw.ToSafeStr("VidSubject");
-                        chkIsShowInLangZhTw.Checked = Convert.ToBoolean(drZhTw["IsShowInLang"]);
-                        txtVidDescZhTw.Text = drZhTw.ToSafeStr("VidDesc");
-
-                        if (!Convert.IsDBNull(drZhTw["MdfDate"]) && Convert.ToDateTime(drZhTw["MdfDate"]) > mdfDate)
+                        if (vidZhTw.MdfDate.HasValue && vidZhTw.MdfDate.Value > mdfDate)
                         {
-                            mdfAccount = drZhTw.ToSafeStr("MdfAccount");
-                            mdfDate = Convert.ToDateTime(drZhTw["MdfDate"]);
+                            mdfAccount = vidZhTw.MdfAccount;
+                            mdfDate = vidZhTw.MdfDate.Value;
                         }
                     }
                 }
@@ -135,20 +132,18 @@ public partial class Article_Video : System.Web.UI.Page
                 //en
                 if (LangManager.IsEnableEditLangEN())
                 {
-                    DataSet dsEn = artPub.GetArticleVideoMultiLangDataForBackend(c.qsVidId, LangManager.CultureNameEN);
+                    ArticleVideoMultiLang vidEn = artPub.GetArticleVideoMultiLangDataForBackend(c.qsVidId, LangManager.CultureNameEN);
 
-                    if (dsEn != null && dsEn.Tables[0].Rows.Count > 0)
+                    if (vidEn != null)
                     {
-                        DataRow drEn = dsEn.Tables[0].Rows[0];
+                        txtVidSubjectEn.Text = vidEn.VidSubject;
+                        chkIsShowInLangEn.Checked = vidEn.IsShowInLang;
+                        txtVidDescEn.Text = vidEn.VidDesc;
 
-                        txtVidSubjectEn.Text = drEn.ToSafeStr("VidSubject");
-                        chkIsShowInLangEn.Checked = Convert.ToBoolean(drEn["IsShowInLang"]);
-                        txtVidDescEn.Text = drEn.ToSafeStr("VidDesc");
-
-                        if (!Convert.IsDBNull(drEn["MdfDate"]) && Convert.ToDateTime(drEn["MdfDate"]) > mdfDate)
+                        if (vidEn.MdfDate.HasValue && vidEn.MdfDate.Value > mdfDate)
                         {
-                            mdfAccount = drEn.ToSafeStr("MdfAccount");
-                            mdfDate = Convert.ToDateTime(drEn["MdfDate"]);
+                            mdfAccount = vidEn.MdfAccount;
+                            mdfDate = vidEn.MdfDate.Value;
                         }
                     }
                 }

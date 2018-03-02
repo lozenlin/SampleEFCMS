@@ -1103,32 +1103,33 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後台用網頁影片資料
         /// </summary>
-        public DataSet GetArticleVideoDataForBackend(Guid vidId)
+        public ArticleVideo GetArticleVideoDataForBackend(Guid vidId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideo_GetDataForBackend cmdInfo = new spArticleVideo_GetDataForBackend() { VidId = vidId };
+            ArticleVideo entity = null;
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entity = artPubDao.Get<ArticleVideo>(vidId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
-            return ds;
+            return entity;
         }
 
         /// <summary>
         /// 取得後台用網頁影片的多國語系資料
         /// </summary>
-        public DataSet GetArticleVideoMultiLangDataForBackend(Guid vidId, string cultureName)
+        public ArticleVideoMultiLang GetArticleVideoMultiLangDataForBackend(Guid vidId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideoMultiLang_GetDataForBackend cmdInfo = new spArticleVideoMultiLang_GetDataForBackend()
-            {
-                VidId = vidId,
-                CultureName = cultureName
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            ArticleVideoMultiLang entity = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entity = artPubDao.Get<ArticleVideoMultiLang>(vidId, cultureName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entity;
         }
 
         /// <summary>
