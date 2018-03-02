@@ -1207,17 +1207,24 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateArticleVideoData(ArticleVideoParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideo_UpdateData cmdInfo = new spArticleVideo_UpdateData()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                VidId = param.VidId,
-                SortNo = param.SortNo,
-                VidLinkUrl = param.VidLinkUrl,
-                SourceVideoId = param.SourceVideoId,
-                MdfAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                ArticleVideo entity = artPubDao.GetEmptyEntity<ArticleVideo>(new ArticleVideoRequiredPropValues()
+                {
+                    VidId = param.VidId
+                });
+
+                entity.SortNo = param.SortNo;
+                entity.VidLinkUrl = param.VidLinkUrl;
+                entity.SourceVideoId = param.SourceVideoId;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = artPubDao.Update();
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -1227,18 +1234,26 @@ namespace Common.LogicObject
         /// </summary>
         public bool UpdateArticleVideoMultiLangData(ArticleVideoMultiLangParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideoMultiLang_UpdateData cmdInfo = new spArticleVideoMultiLang_UpdateData()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                VidId = param.VidId,
-                CultureName = param.CultureName,
-                VidSubject = param.VidSubject,
-                VidDesc = param.VidDesc,
-                IsShowInLang = param.IsShowInLang,
-                MdfAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                ArticleVideoMultiLang entity = artPubDao.GetEmptyEntity<ArticleVideoMultiLang>(new ArticleVideoMultiLangRequiredPropValues()
+                {
+                    VidId = param.VidId,
+                    CultureName = param.CultureName,
+                    IsShowInLang = !param.IsShowInLang
+                });
+
+                entity.VidSubject = param.VidSubject;
+                entity.VidDesc = param.VidDesc;
+                entity.IsShowInLang = param.IsShowInLang;
+                entity.MdfAccount = param.PostAccount;
+                entity.MdfDate = DateTime.Now;
+
+                result = artPubDao.Update();
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
