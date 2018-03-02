@@ -1252,11 +1252,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool DeleteArticleVideoData(Guid vidId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticleVideo_DeleteData cmdInfo = new spArticleVideo_DeleteData() { VidId = vidId };
+            bool result = false;
 
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.DeleteArticleVideoData(vidId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }

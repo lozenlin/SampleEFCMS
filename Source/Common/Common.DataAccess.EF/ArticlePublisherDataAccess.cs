@@ -1303,6 +1303,47 @@ where exists(
             return entities;
         }
 
+        /// <summary>
+        /// 刪除網頁影片資料
+        /// </summary>
+        public bool DeleteArticleVideoData(Guid vidId)
+        {
+            Logger.Debug("DeleteArticleVideoData(vidId)");
+            DbContextTransaction tran = null;
+
+            try
+            {
+                tran = cmsCtx.Database.BeginTransaction();
+
+                // delete multi language data
+                cmsCtx.Database.ExecuteSqlCommand("delete from dbo.ArticleVideoMultiLang where VidId=@p0", vidId);
+
+                // delete main data
+                ArticleVideo entity = new ArticleVideo() { VidId = vidId };
+                cmsCtx.Entry<ArticleVideo>(entity).State = EntityState.Deleted;
+                cmsCtx.SaveChanges();
+
+                tran.Commit();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+
+                if (tran != null)
+                    tran.Rollback();
+
+                return false;
+            }
+            finally
+            {
+                if (tran != null)
+                    tran.Dispose();
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region 搜尋用資料來源
