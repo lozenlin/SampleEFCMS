@@ -924,12 +924,13 @@ namespace Common.LogicObject
         /// </summary>
         public int GetArticlePictureMaxSortNo(Guid? articleId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticlePicture_GetMaxSortNo cmdInfo = new spArticlePicture_GetMaxSortNo() { ArticleId = articleId };
+            int result = 0;
 
-            int errCode = -1;
-            int result = cmd.ExecuteScalar<int>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.GetArticlePictureMaxSortNo(articleId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }
@@ -955,21 +956,27 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertArticlePictureData(ArticlePictureParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticlePicture_InsertData cmdInfo = new spArticlePicture_InsertData()
-            {
-                PicId = param.PicId,
-                ArticleId = param.ArticleId,
-                FileSavedName = param.FileSavedName,
-                FileSize = param.FileSize,
-                SortNo = param.SortNo,
-                FileMIME = param.FileMIME,
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            return result;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                ArticlePicture entity = new ArticlePicture()
+                {
+                    PicId = param.PicId,
+                    ArticleId = param.ArticleId,
+                    FileSavedName = param.FileSavedName,
+                    FileSize = param.FileSize,
+                    SortNo = param.SortNo,
+                    FileMIME = param.FileMIME,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = artPubDao.Insert<ArticlePicture>(entity);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return insResult.IsSuccess;
         }
 
         /// <summary>
@@ -977,19 +984,25 @@ namespace Common.LogicObject
         /// </summary>
         public bool InsertArticlePictureMultiLangData(ArticlePictureMultiLangParams param)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticlePictureMultiLang_InsertData cmdInfo = new spArticlePictureMultiLang_InsertData()
-            {
-                PicId = param.PicId,
-                CultureName = param.CultureName,
-                PicSubject = param.PicSubject,
-                IsShowInLang = param.IsShowInLang,
-                PostAccount = param.PostAccount
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            InsertResult insResult = new InsertResult() { IsSuccess = false };
 
-            return result;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                ArticlePictureMultiLang entity = new ArticlePictureMultiLang()
+                {
+                    PicId = param.PicId,
+                    CultureName = param.CultureName,
+                    PicSubject = param.PicSubject,
+                    IsShowInLang = param.IsShowInLang,
+                    PostAccount = param.PostAccount,
+                    PostDate = DateTime.Now
+                };
+
+                insResult = artPubDao.Insert<ArticlePictureMultiLang>(entity);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return insResult.IsSuccess;
         }
 
         /// <summary>
