@@ -90,11 +90,11 @@ public partial class LayoutControls_ListBlocks : System.Web.UI.UserControl
             IsSortDesc = articleData.IsSortDescOfFrontStage
         };
 
-        DataSet dsSubitems = artPub.GetArticleValidListForFrontend(param);
+        List<ArticleForFEList> subitems = artPub.GetArticleValidListForFrontend(param);
 
-        if (dsSubitems != null)
+        if (subitems != null)
         {
-            rptSubitems.DataSource = dsSubitems.Tables[0];
+            rptSubitems.DataSource = subitems;
             rptSubitems.DataBind();
         }
     }
@@ -104,13 +104,13 @@ public partial class LayoutControls_ListBlocks : System.Web.UI.UserControl
         if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
             return;
 
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticleForFEList artData = (ArticleForFEList)e.Item.DataItem;
 
-        Guid articleId = (Guid)drvTemp["ArticleId"];
-        string articleSubject = drvTemp.ToSafeStr("ArticleSubject");
-        int showTypeId = Convert.ToInt32(drvTemp["ShowTypeId"]);
-        string linkUrl = drvTemp.ToSafeStr("LinkUrl");
-        string linkTarget = drvTemp.ToSafeStr("LinkTarget");
+        Guid articleId = artData.ArticleId;
+        string articleSubject = artData.ArticleSubject;
+        int showTypeId = artData.ShowTypeId.Value;
+        string linkUrl = artData.LinkUrl;
+        string linkTarget = artData.LinkTarget;
         string destUrl = "/" + StringUtility.GetLinkUrlOfShowType(articleId, c.qsLangNo, showTypeId, linkUrl);
 
         HtmlAnchor btnItem = (HtmlAnchor)e.Item.FindControl("btnItem");

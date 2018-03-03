@@ -107,9 +107,9 @@ namespace JsonService
                 IsSortDesc = articleData.IsSortDescOfFrontStage
             };
 
-            DataSet dsSubitems = artPub.GetArticleValidListForFrontend(param);
+            List<ArticleForFEList> subitems = artPub.GetArticleValidListForFrontend(param);
 
-            if (dsSubitems == null)
+            if (subitems == null)
             {
                 ArticlePagedInfo info = new ArticlePagedInfo() { pageCode = 0, pageTotal = 0 };
                 cr = new ClientResult() { b = true, o = info };
@@ -119,14 +119,12 @@ namespace JsonService
             }
 
             // get thumbs
-            DataTable dtSubitems = dsSubitems.Tables[0];
+            List<object> articleThumbs = new List<object>();
 
-            dtSubitems.Columns.Add("PicId", typeof(string));
-            dtSubitems.Columns.Add("PicSubject", typeof(string));
-
-            foreach (DataRow dr in dtSubitems.Rows)
+            foreach (ArticleForFEList art in subitems)
             {
-                Guid itemId = (Guid)dr["ArticleId"];
+                ArticleForFEListWithThumb artThumb = new ArticleForFEListWithThumb(art);
+                Guid itemId = art.ArticleId;
 
                 List<ArticlePictureForFrontend> pictures = artPub.GetArticlePictureListForFrontend(itemId, c.qsCultureNameOfLangNo);
                 string picId = "";
@@ -140,8 +138,10 @@ namespace JsonService
                     picSubject = artPic.PicSubject;
                 }
 
-                dr["PicId"] = picId;
-                dr["PicSubject"] = picSubject;
+                artThumb.PicId = picId;
+                artThumb.PicSubject = picSubject;
+
+                articleThumbs.Add(artThumb);
             }
 
             ArticlePagedInfo pagedInfo = new ArticlePagedInfo()
@@ -149,7 +149,7 @@ namespace JsonService
                 pageCode = p,
                 pageTotal = dataPager.PageTotalCount,
                 itemTotal = dataPager.ItemTotalCount,
-                itemList = dtSubitems
+                itemList = articleThumbs
             };
 
             cr = new ClientResult()
@@ -173,7 +173,7 @@ namespace JsonService
             public int pageCode { get; set; }
             public int pageTotal { get; set; }
             public int itemTotal = 0;
-            public DataTable itemList { get; set; }
+            public List<object> itemList { get; set; }
         }
     }
 

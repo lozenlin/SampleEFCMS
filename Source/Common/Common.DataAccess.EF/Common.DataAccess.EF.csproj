@@ -79,6 +79,8 @@
     <Compile Include="Model\ArticleDescendant.cs" />
     <Compile Include="Model\ArticleForBackend.cs" />
     <Compile Include="Model\ArticleForBEList.cs" />
+    <Compile Include="Model\ArticleForFEList.cs" />
+    <Compile Include="Model\ArticleForFEListWithThumb.cs" />
     <Compile Include="Model\ArticleForFESideSection.cs" />
     <Compile Include="Model\ArticleForFESitemap.cs" />
     <Compile Include="Model\ArticleForFEUnitArea.cs" />
@@ -169,6 +171,7 @@
     <Compile Include="QueryParam\ArticlePictureListQueryParamsDA.cs" />
     <Compile Include="QueryParam\ArticleUpdateIsAreaShowInFrontStageParamsDA.cs" />
     <Compile Include="QueryParam\ArticleUpdateSortFieldOfFrontStageParamsDA.cs" />
+    <Compile Include="QueryParam\ArticleValidListQueryParamsDA.cs" />
     <Compile Include="QueryParam\ArticleVideoListQueryParamsDA.cs" />
     <Compile Include="QueryParam\AttachFileListQueryParamsDA.cs" />
     <Compile Include="QueryParam\AuthenticationQueryParamsDA.cs" />

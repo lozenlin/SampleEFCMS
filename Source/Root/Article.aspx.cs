@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -143,24 +144,24 @@ public partial class Article : FrontendBasePage
             IsSortDesc = articleData.IsSortDescOfFrontStage
         };
 
-        DataSet dsSubitems = artPub.GetArticleValidListForFrontend(param);
+        List<ArticleForFEList> subitems = artPub.GetArticleValidListForFrontend(param);
 
-        if (dsSubitems != null)
+        if (subitems != null)
         {
-            rptSubitems.DataSource = dsSubitems.Tables[0];
+            rptSubitems.DataSource = subitems;
             rptSubitems.DataBind();
         }
     }
 
     protected void rptSubitems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticleForFEList artData = (ArticleForFEList)e.Item.DataItem;
 
-        Guid articleId = (Guid)drvTemp["ArticleId"];
-        string articleSubject  =drvTemp.ToSafeStr("ArticleSubject");
-        int showTypeId = Convert.ToInt32(drvTemp["ShowTypeId"]);
-        string linkUrl = drvTemp.ToSafeStr("LinkUrl");
-        string linkTarget = drvTemp.ToSafeStr("LinkTarget");
+        Guid articleId = artData.ArticleId;
+        string articleSubject = artData.ArticleSubject;
+        int showTypeId = artData.ShowTypeId.Value;
+        string linkUrl = artData.LinkUrl;
+        string linkTarget = artData.LinkTarget;
         string destUrl = StringUtility.GetLinkUrlOfShowType(articleId, c.qsLangNo, showTypeId, linkUrl);
 
         HtmlAnchor btnItem = (HtmlAnchor)e.Item.FindControl("btnItem");
@@ -183,7 +184,7 @@ public partial class Article : FrontendBasePage
             IsSortDesc = articleData.IsSortDescOfFrontStage
         };
 
-        DataSet dsSubitems = artPub.GetArticleValidListForFrontend(new ArticleValidListQueryParams()
+        List<ArticleForFEList> subitems = artPub.GetArticleValidListForFrontend(new ArticleValidListQueryParams()
         {
             ParentId = articleData.ArticleId.Value,
             CultureName = c.qsCultureNameOfLangNo,
@@ -191,13 +192,13 @@ public partial class Article : FrontendBasePage
             PagedParams = pagedParams
         });
 
-        if (dsSubitems != null && dsSubitems.Tables[0].Rows.Count > 0)
+        if (subitems != null && subitems.Count > 0)
         {
-            DataRow drFirst = dsSubitems.Tables[0].Rows[0];
+            ArticleForFEList artData = subitems[0];
 
-            Guid articleId = (Guid)drFirst["ArticleId"];
-            int showTypeId = Convert.ToInt32(drFirst["ShowTypeId"]);
-            string linkUrl = drFirst.ToSafeStr("LinkUrl");
+            Guid articleId = artData.ArticleId;
+            int showTypeId = artData.ShowTypeId.Value;
+            string linkUrl = artData.LinkUrl;
             string destUrl = StringUtility.GetLinkUrlOfShowType(articleId, c.qsLangNo, showTypeId, linkUrl);
 
             Response.Redirect(destUrl);

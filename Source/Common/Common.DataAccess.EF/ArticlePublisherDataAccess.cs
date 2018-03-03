@@ -934,6 +934,96 @@ where exists(
             return entity;
         }
 
+        /// <summary>
+        /// 取得前台用的有效網頁內容清單
+        /// </summary>
+        public List<ArticleForFEList> GetArticleValidListForFrontend(ArticleValidListQueryParamsDA param)
+        {
+            Logger.Debug("GetArticleValidListForFrontend(param)");
+            List<ArticleForFEList> entities = null;
+
+            try
+            {
+                var tempQuery = from am in cmsCtx.ArticleMultiLang
+                                from a in cmsCtx.Article
+                                where am.ArticleId == a.ArticleId
+                                    && a.ParentId == param.ParentId
+                                    && am.CultureName == param.CultureName
+                                    && !a.IsHideSelf
+                                    && a.StartDate <= DateTime.Now && DateTime.Now < DbFunctions.AddDays(a.EndDate, 1)
+                                    && am.IsShowInLang
+                                select new ArticleForFEList()
+                                {
+                                    ArticleId = am.ArticleId,
+                                    ArticleSubject = am.ArticleSubject,
+                                    PublisherName = am.PublisherName,
+                                    TextContext = am.TextContext,
+                                    ArticleAlias = a.ArticleAlias,
+                                    ShowTypeId = a.ShowTypeId,
+                                    LinkUrl = a.LinkUrl,
+                                    LinkTarget = a.LinkTarget,
+                                    StartDate = a.StartDate,
+                                    SortNo = a.SortNo,
+                                    PostDate = a.PostDate,
+                                    MdfDate = a.MdfDate,
+                                    PublishDate = a.PublishDate
+                                };
+
+                // Query conditions
+
+                if (param.Kw != "")
+                {
+                    tempQuery = tempQuery.Where(obj => obj.ArticleSubject.Contains(param.Kw));
+                }
+
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
+                // sorting
+                if (param.PagedParams.SortField != "")
+                {
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempQuery = tempQuery.OrderBy(obj => obj.SortNo);
+                }
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if (skipCount > 0)
+                {
+                    tempQuery = tempQuery.Skip(skipCount);
+                }
+
+                if (takeCount >= 0)
+                {
+                    tempQuery = tempQuery.Take(takeCount);
+                }
+
+                // result
+                entities = tempQuery.ToList();
+                int rowNum = 1;
+
+                foreach (var entity in entities)
+                {
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
 
         #region 附件檔案
