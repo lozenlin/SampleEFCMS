@@ -1310,14 +1310,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool SaveKeywordData(string cultureName, string kw)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spKeyword_SaveData cmdInfo = new spKeyword_SaveData()
+            bool result = false;
+
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                CultureName = cultureName,
-                Kw = kw
-            };
-            bool result = cmd.ExecuteNonQuery(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+                result = artPubDao.SaveKeywordData(cultureName, kw);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }

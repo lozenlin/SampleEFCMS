@@ -1754,6 +1754,58 @@ where exists(
 
         #endregion
 
+        #region 搜尋關鍵字
+
+        /// <summary>
+        /// 儲存搜尋關鍵字
+        /// </summary>
+        public bool SaveKeywordData(string cultureName, string kw)
+        {
+            Logger.Debug("SaveKeywordData(cultureName, kw)");
+
+            try
+            {
+                if (cmsCtx.Keyword.Any(obj => obj.CultureName == cultureName && obj.Kw == kw))
+                {
+                    // increase used count
+                    Keyword entity = cmsCtx.Keyword.Where(obj =>
+                        obj.CultureName == cultureName
+                        && obj.Kw == kw
+                        && obj.UsedCount >= 0)  // UsedCount >= 0 : enabled
+                        .FirstOrDefault();
+
+                    if (entity != null)
+                    {
+                        entity.UsedCount++;
+                        cmsCtx.SaveChanges();
+                    }
+                }
+                else
+                {
+                    // new one
+                    Keyword entity = new Keyword()
+                    {
+                        CultureName = cultureName,
+                        Kw = kw,
+                        UsedCount = 1
+                    };
+
+                    cmsCtx.Keyword.Add(entity);
+                    cmsCtx.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
         #region 搜尋用資料來源
 
         /// <summary>
