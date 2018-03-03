@@ -500,15 +500,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得指定網頁內容的前幾層網頁代碼
         /// </summary>
-        public DataSet GetArticleTopLevelIds(Guid articleId)
+        public ArticleTopLevelIds GetArticleTopLevelIds(Guid articleId)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetTopLevelIds cmdInfo = new spArticle_GetTopLevelIds() { ArticleId = articleId };
+            ArticleTopLevelIds result = null;
 
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.GetArticleTopLevelIds(articleId);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
-            return ds;
+            return result;
         }
 
         /// <summary>

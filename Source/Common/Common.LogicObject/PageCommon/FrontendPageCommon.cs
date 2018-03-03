@@ -303,26 +303,13 @@ namespace Common.LogicObject
                         articleData.IsPreviewMode = isPreviewMode;
 
                         // get top level id's
-                        DataSet dsTopLevelIds = artPub.GetArticleTopLevelIds(articleData.ArticleId.Value);
+                        ArticleTopLevelIds topLevelIds = artPub.GetArticleTopLevelIds(articleData.ArticleId.Value);
 
-                        if (dsTopLevelIds != null && dsTopLevelIds.Tables[0].Rows.Count > 0)
+                        if (topLevelIds != null)
                         {
-                            DataRow drFirst = dsTopLevelIds.Tables[0].Rows[0];
-
-                            if (!Convert.IsDBNull(drFirst["Lv1Id"]))
-                            {
-                                articleData.Lv1Id = (Guid)drFirst["Lv1Id"];
-                            }
-
-                            if (!Convert.IsDBNull(drFirst["Lv2Id"]))
-                            {
-                                articleData.Lv2Id = (Guid)drFirst["Lv2Id"];
-                            }
-
-                            if (!Convert.IsDBNull(drFirst["Lv3Id"]))
-                            {
-                                articleData.Lv3Id = (Guid)drFirst["Lv3Id"];
-                            }
+                            articleData.Lv1Id = topLevelIds.Lv1Id;
+                            articleData.Lv2Id = topLevelIds.Lv2Id;
+                            articleData.Lv3Id = topLevelIds.Lv3Id;
                         }
                         else
                         {

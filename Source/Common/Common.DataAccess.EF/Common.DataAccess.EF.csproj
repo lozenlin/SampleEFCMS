@@ -98,6 +98,7 @@
     <Compile Include="Model\ArticlePictureMultiLang.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\ArticleTopLevelIds.cs" />
     <Compile Include="Model\ArticleVideo.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>

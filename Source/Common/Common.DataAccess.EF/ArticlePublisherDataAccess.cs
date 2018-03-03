@@ -1074,6 +1074,65 @@ where exists(
             return result;
         }
 
+        /// <summary>
+        /// 取得指定網頁內容的前幾層網頁代碼
+        /// </summary>
+        public ArticleTopLevelIds GetArticleTopLevelIds(Guid articleId)
+        {
+            Logger.Debug("GetArticleTopLevelIds(Guid articleId)");
+            ArticleTopLevelIds result = null;
+
+            try
+            {
+                result = new ArticleTopLevelIds();
+                Guid? curArticleId = articleId;
+
+                do
+                {
+                    var entity = (from a in cmsCtx.Article
+                                  where a.ArticleId == curArticleId
+                                  select new
+                                  {
+                                      a.ArticleId,
+                                      a.ParentId,
+                                      a.ArticleLevelNo
+                                  }).FirstOrDefault();
+
+                    curArticleId = null;
+
+                    if (entity != null && entity.ArticleLevelNo >= 1)
+                    {
+                        switch (entity.ArticleLevelNo.Value)
+                        {
+                            case 1:
+                                result.Lv1Id = entity.ArticleId;
+                                break;
+                            case 2:
+                                result.Lv2Id = entity.ArticleId;
+                                break;
+                            case 3:
+                                result.Lv3Id = entity.ArticleId;
+                                break;
+                        }
+
+                        if (entity.ParentId.HasValue && entity.ArticleLevelNo > 1)
+                        {
+                            curArticleId = entity.ParentId;
+                        }
+                    }
+
+                } while (curArticleId.HasValue);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region 附件檔案
