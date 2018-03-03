@@ -565,18 +565,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得使用在側邊區塊的有效網頁清單
         /// </summary>
-        public DataSet GetArticleValidListForSideSection(Guid parentId, string cultureName)
+        public List<ArticleForFESideSection> GetArticleValidListForSideSection(Guid parentId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetValidListForSideSection cmdInfo = new spArticle_GetValidListForSideSection()
-            {
-                ParentId = parentId,
-                CultureName = cultureName
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            List<ArticleForFESideSection> entities = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entities = artPubDao.GetArticleValidListForSideSection(parentId, cultureName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entities;
         }
 
         /// <summary>

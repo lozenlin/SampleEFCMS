@@ -790,6 +790,46 @@ where exists(
         }
 
         /// <summary>
+        /// 取得使用在側邊區塊的有效網頁清單
+        /// </summary>
+        public List<ArticleForFESideSection> GetArticleValidListForSideSection(Guid parentId, string cultureName)
+        {
+            Logger.Debug("GetArticleValidListForSideSection(parentId, cultureName)");
+            List<ArticleForFESideSection> entities = null;
+
+            try
+            {
+                entities = (from am in cmsCtx.ArticleMultiLang
+                            from a in cmsCtx.Article
+                            where am.ArticleId == a.ArticleId
+                             && a.ParentId == parentId
+                             && am.CultureName == cultureName
+                             && !a.IsHideSelf
+                             && a.StartDate <= DateTime.Now && DateTime.Now < DbFunctions.AddDays(a.EndDate, 1)
+                             && am.IsShowInLang
+                            orderby a.SortNo
+                            select new ArticleForFESideSection()
+                            {
+                                ArticleId = am.ArticleId,
+                                ArticleSubject = am.ArticleSubject,
+                                ArticleAlias = a.ArticleAlias,
+                                ShowTypeId = a.ShowTypeId,
+                                LinkUrl = a.LinkUrl,
+                                LinkTarget = a.LinkTarget,
+                                IsHideChild = a.IsHideChild
+                            }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
+        /// <summary>
         /// 取得前台用網頁內容資料
         /// </summary>
         public ArticleForFrontend GetArticleDataForFrontend(Guid articleId, string cultureName)

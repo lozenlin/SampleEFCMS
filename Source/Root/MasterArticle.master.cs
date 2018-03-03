@@ -451,11 +451,11 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
             }
         }
 
-        DataSet dsSideLinks = artPub.GetArticleValidListForSideSection(parentId, c.qsCultureNameOfLangNo);
+        List<ArticleForFESideSection> sideLinks = artPub.GetArticleValidListForSideSection(parentId, c.qsCultureNameOfLangNo);
 
-        if (dsSideLinks != null)
+        if (sideLinks != null)
         {
-            rptSideLinks.DataSource = dsSideLinks.Tables[0];
+            rptSideLinks.DataSource = sideLinks;
             rptSideLinks.DataBind();
         }
     }
@@ -465,14 +465,14 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
         if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
             return;
 
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticleForFESideSection sideLink = (ArticleForFESideSection)e.Item.DataItem;
 
-        Guid articleId = (Guid)drvTemp["ArticleId"];
-        string articleSubject = drvTemp.ToSafeStr("ArticleSubject");
-        int showTypeId = Convert.ToInt32(drvTemp["ShowTypeId"]);
-        string linkUrl = drvTemp.ToSafeStr("LinkUrl");
-        string linkTarget = drvTemp.ToSafeStr("LinkTarget");
-        bool isHideChild = Convert.ToBoolean(drvTemp["IsHideChild"]);
+        Guid articleId = sideLink.ArticleId;
+        string articleSubject = sideLink.ArticleSubject;
+        int showTypeId = sideLink.ShowTypeId.Value;
+        string linkUrl = sideLink.LinkUrl;
+        string linkTarget = sideLink.LinkTarget;
+        bool isHideChild = sideLink.IsHideChild;
 
         HtmlGenericControl ItemArea = (HtmlGenericControl)e.Item.FindControl("ItemArea");
 
@@ -490,11 +490,11 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
 
         if (rptSubitems != null)    /*  && !isHideChild <-- 視專案需要加回 */
         {
-            DataSet dsSubitems = artPub.GetArticleValidListForSideSection(articleId, c.qsCultureNameOfLangNo);
+            List<ArticleForFESideSection> subitems = artPub.GetArticleValidListForSideSection(articleId, c.qsCultureNameOfLangNo);
 
-            if (dsSubitems != null && dsSubitems.Tables[0].Rows.Count > 0)
+            if (subitems != null && subitems.Count > 0)
             {
-                rptSubitems.DataSource = dsSubitems.Tables[0];
+                rptSubitems.DataSource = subitems;
                 rptSubitems.DataBind();
             }
         }
