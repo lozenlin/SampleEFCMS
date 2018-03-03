@@ -61,5 +61,14 @@ namespace Common.DataAccess.EF.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spStartJob", job_nameParameter);
         }
+    
+        public virtual ObjectResult<Nullable<bool>> spIsSQLInjectionExpr(string expr)
+        {
+            var exprParameter = expr != null ?
+                new ObjectParameter("Expr", expr) :
+                new ObjectParameter("Expr", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("spIsSQLInjectionExpr", exprParameter);
+        }
     }
 }

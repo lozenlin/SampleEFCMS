@@ -1,4 +1,5 @@
 ﻿using Common.DataAccess;
+using Common.DataAccess.EF;
 using Common.DataAccess.SQLInjectionFilter;
 using log4net;
 using System;
@@ -34,12 +35,13 @@ namespace Common.LogicObject
         /// </summary>
         public bool IsSQLInjectionExpr(string expr)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spIsSQLInjectionExpr cmdInfo = new spIsSQLInjectionExpr() { Expr = expr };
+            bool result = false;
 
-            bool errCode = false;
-            bool result = cmd.ExecuteScalar<bool>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                result = artPubDao.IsSQLInjectionExpr(expr);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
 
             return result;
         }

@@ -353,6 +353,9 @@
           <Parameter Name="AttId" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="CultureName" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="spIsSQLInjectionExpr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Expr" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="spSearchDataSource_Build" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MainLinkUrl" Type="nvarchar" Mode="In" />
         </Function>
@@ -763,6 +766,9 @@
           <FunctionImport Name="spStartJob">
           <Parameter Name="job_name" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="spIsSQLInjectionExpr" ReturnType="Collection(Boolean)">
+            <Parameter Name="Expr" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -1074,6 +1080,7 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="spSearchDataSource_Build" FunctionName="CmsModel.Store.spSearchDataSource_Build" />
           <FunctionImportMapping FunctionImportName="spStartJob" FunctionName="CmsModel.Store.spStartJob" />
+          <FunctionImportMapping FunctionImportName="spIsSQLInjectionExpr" FunctionName="CmsModel.Store.spIsSQLInjectionExpr" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

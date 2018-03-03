@@ -1940,6 +1940,34 @@ where exists(
 
         #endregion
 
+        #region SQLInjectionFilter
+
+        /// <summary>
+        /// 測試運算式是否成立,能否被用來做 SQL Injection
+        /// </summary>
+        public bool IsSQLInjectionExpr(string expr)
+        {
+            Logger.Debug("IsSQLInjectionExpr(expr)");
+            bool result = false;
+
+            try
+            {
+
+                System.Data.Entity.Core.Objects.ObjectResult<bool?> objResults = cmsCtx.spIsSQLInjectionExpr(expr);
+                result = objResults.First().Value;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return false;
+            }
+
+            return result;
+        }
+
+        #endregion
+
         #region msdb
 
         /// <summary>
