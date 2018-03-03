@@ -80,6 +80,7 @@
     <Compile Include="Model\ArticleForBackend.cs" />
     <Compile Include="Model\ArticleForBEList.cs" />
     <Compile Include="Model\ArticleForFESideSection.cs" />
+    <Compile Include="Model\ArticleForFESitemap.cs" />
     <Compile Include="Model\ArticleForFEUnitArea.cs" />
     <Compile Include="Model\ArticleForFrontend.cs" />
     <Compile Include="Model\ArticleMultiLang.cs">

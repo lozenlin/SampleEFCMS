@@ -581,18 +581,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得使用在網站導覽的有效網頁清單
         /// </summary>
-        public DataSet GetArticleValidListForSitemap(Guid parentId, string cultureName)
+        public List<ArticleForFESitemap> GetArticleValidListForSitemap(Guid parentId, string cultureName)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetValidListForSitemap cmdInfo = new spArticle_GetValidListForSitemap()
-            {
-                ParentId = parentId,
-                CultureName = cultureName
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            List<ArticleForFESitemap> entities = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entities = artPubDao.GetArticleValidListForSitemap(parentId, cultureName);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entities;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using Common.Utility;
 using System;
 using System.Collections.Generic;
@@ -45,11 +46,11 @@ public partial class Sitemap : FrontendBasePage
     private void DisplaySitemapLinks()
     {
         Guid rootId = Guid.Empty;
-        DataSet dsLinks = artPub.GetArticleValidListForSitemap(rootId, c.qsCultureNameOfLangNo);
+        List<ArticleForFESitemap> links = artPub.GetArticleValidListForSitemap(rootId, c.qsCultureNameOfLangNo);
 
-        if (dsLinks != null)
+        if (links != null)
         {
-            rptSitemapLinks.DataSource = dsLinks.Tables[0];
+            rptSitemapLinks.DataSource = links;
             rptSitemapLinks.DataBind();
         }
     }
@@ -59,15 +60,15 @@ public partial class Sitemap : FrontendBasePage
         if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
             return;
 
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        ArticleForFESitemap linkData = (ArticleForFESitemap)e.Item.DataItem;
 
-        Guid articleId = (Guid)drvTemp["ArticleId"];
-        string articleSubject = drvTemp.ToSafeStr("ArticleSubject");
-        int showTypeId = Convert.ToInt32(drvTemp["ShowTypeId"]);
-        string linkUrl = drvTemp.ToSafeStr("LinkUrl");
-        string linkTarget = drvTemp.ToSafeStr("LinkTarget");
-        bool isHideChild = Convert.ToBoolean(drvTemp["IsHideChild"]);
-        int articleLevelNo = Convert.ToInt32(drvTemp["ArticleLevelNo"]);
+        Guid articleId = linkData.ArticleId;
+        string articleSubject = linkData.ArticleSubject;
+        int showTypeId = linkData.ShowTypeId.Value;
+        string linkUrl = linkData.LinkUrl;
+        string linkTarget = linkData.LinkTarget;
+        bool isHideChild = linkData.IsHideChild;
+        int articleLevelNo = linkData.ArticleLevelNo.Value;
 
         HtmlAnchor btnItem = (HtmlAnchor)e.Item.FindControl("btnItem");
         string destUrl = StringUtility.GetLinkUrlOfShowType(articleId, c.qsLangNo, showTypeId, linkUrl);
@@ -97,11 +98,11 @@ public partial class Sitemap : FrontendBasePage
 
         if (!isHideChild && rptSubitems != null)
         {
-            DataSet dsSubitems = artPub.GetArticleValidListForSitemap(articleId, c.qsCultureNameOfLangNo);
+            List<ArticleForFESitemap> subitems = artPub.GetArticleValidListForSitemap(articleId, c.qsCultureNameOfLangNo);
 
-            if (dsSubitems != null && dsSubitems.Tables[0].Rows.Count > 0)
+            if (subitems != null && subitems.Count > 0)
             {
-                rptSubitems.DataSource = dsSubitems.Tables[0];
+                rptSubitems.DataSource = subitems;
                 rptSubitems.DataBind();
             }
         }
