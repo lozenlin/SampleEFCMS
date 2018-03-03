@@ -1938,6 +1938,104 @@ where exists(
             return true;
         }
 
+        /// <summary>
+        /// 取得搜尋用資料來源清單
+        /// </summary>
+        /// <returns></returns>
+        public List<SearchDataSourceForFrontend> GetSearchDataSourceList(SearchResultListQueryParamsDA param)
+        {
+            Logger.Debug("GetSearchDataSourceList(param)");
+            List<SearchDataSourceForFrontend> entities = null;
+
+            try
+            {
+                var tempQuery = from sds in cmsCtx.SearchDataSource
+                                select new SearchDataSourceForFrontend()
+                                {
+                                    ArticleId = sds.ArticleId,
+                                    SubId = sds.SubId,
+                                    CultureName = sds.CultureName,
+                                    ArticleSubject = sds.ArticleSubject,
+                                    ArticleContext = sds.ArticleContext,
+                                    ReadCount = sds.ReadCount,
+                                    LinkUrl = sds.LinkUrl,
+                                    PublishDate = sds.PublishDate,
+                                    BreadcrumbData = sds.BreadcrumbData,
+                                    Lv1ArticleId = sds.Lv1ArticleId,
+                                    PostDate = sds.PostDate,
+                                    MdfDate = sds.MdfDate,
+                                    MatchesTotal = 1
+                                };
+
+                if (param.Keywords.IndexOf(',') < 0)
+                {
+                    // 單一關鍵字查詢
+                    // Query conditions
+
+                    tempQuery = tempQuery.Where(obj => obj.CultureName == param.CultureName);
+
+                    if (param.Keywords != "")
+                    {
+                        tempQuery = tempQuery.Where(obj =>
+                            obj.ArticleSubject.Contains(param.Keywords)
+                            || obj.ArticleContext.Contains(param.Keywords));
+                    }
+                }
+                else
+                {
+                    // 多項關聯字查詢
+                    //todo by lozen
+                }
+
+                // total
+                param.PagedParams.RowCount = tempQuery.Count();
+
+                // sorting
+                if (param.PagedParams.SortField != "")
+                {
+                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                }
+                else
+                {
+                    // default
+                    tempQuery = tempQuery.OrderByDescending(obj => obj.MatchesTotal)
+                        .ThenByDescending(obj => obj.PublishDate);
+                }
+
+                // paging
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
+
+                if (skipCount > 0)
+                {
+                    tempQuery = tempQuery.Skip(skipCount);
+                }
+
+                if (takeCount >= 0)
+                {
+                    tempQuery = tempQuery.Take(takeCount);
+                }
+
+                // result
+                entities = tempQuery.ToList();
+                int rowNum = 1;
+
+                foreach (var entity in entities)
+                {
+                    entity.RowNum = skipCount + rowNum;
+                    rowNum++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
 
         #region SQLInjectionFilter
@@ -1952,7 +2050,6 @@ where exists(
 
             try
             {
-
                 System.Data.Entity.Core.Objects.ObjectResult<bool?> objResults = cmsCtx.spIsSQLInjectionExpr(expr);
                 result = objResults.First().Value;
             }

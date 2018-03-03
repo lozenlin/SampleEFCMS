@@ -1,4 +1,5 @@
-﻿using Common.LogicObject;
+﻿using Common.DataAccess.EF.Model;
+using Common.LogicObject;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -115,12 +116,12 @@ public partial class Search_Result : FrontendBasePage
                 IsSortDesc = false
             };
 
-            DataSet dsResult = artPub.GetSearchDataSourceList(param);
+            List<SearchDataSourceForFrontend> results = artPub.GetSearchDataSourceList(param);
 
-            if (dsResult != null)
+            if (results != null)
             {
                 total = param.PagedParams.RowCount;
-                rptResultItems.DataSource = dsResult.Tables[0];
+                rptResultItems.DataSource = results;
                 rptResultItems.DataBind();
             }
         }
@@ -134,13 +135,13 @@ public partial class Search_Result : FrontendBasePage
 
     protected void rptResultItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        DataRowView drvTemp = (DataRowView)e.Item.DataItem;
+        SearchDataSourceForFrontend itemData = (SearchDataSourceForFrontend)e.Item.DataItem;
 
-        Guid articleId = (Guid)drvTemp["ArticleId"];
-        string articleSubject = drvTemp.ToSafeStr("ArticleSubject");
-        string articleContext = drvTemp.ToSafeStr("ArticleContext");
-        string linkUrl = drvTemp.ToSafeStr("LinkUrl");
-        string breadcrumbData = drvTemp.ToSafeStr("BreadcrumbData");
+        Guid articleId = itemData.ArticleId;
+        string articleSubject = itemData.ArticleSubject;
+        string articleContext = itemData.ArticleContext;
+        string linkUrl = itemData.LinkUrl;
+        string breadcrumbData = itemData.BreadcrumbData;
 
         HtmlAnchor btnSubject = (HtmlAnchor)e.Item.FindControl("btnSubject");
         btnSubject.InnerHtml = articleSubject;

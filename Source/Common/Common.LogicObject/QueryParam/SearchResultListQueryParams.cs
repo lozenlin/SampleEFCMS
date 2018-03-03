@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.DataAccess.EF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,18 @@ namespace Common.LogicObject
         public SearchResultListQueryParams()
         {
             PagedParams = new PagedListQueryParams();
+        }
+
+        public SearchResultListQueryParamsDA GenSearchResultListQueryParamsDA()
+        {
+            SearchResultListQueryParamsDA result = new SearchResultListQueryParamsDA()
+            {
+                Keywords = Keywords,
+                CultureName = CultureName,
+                PagedParams = PagedParams.GenPagedListQueryParamsDA()
+            };
+
+            return result;
         }
     }
 }
