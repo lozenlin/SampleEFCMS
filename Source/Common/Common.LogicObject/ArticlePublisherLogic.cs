@@ -470,16 +470,12 @@ namespace Common.LogicObject
         /// </summary>
         public Guid? GetArticleIdByAlias(string articleAlias)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetArticleIdByAlias cmdInfo = new spArticle_GetArticleIdByAlias() { ArticleAlias = articleAlias };
+            Guid? result = null;
 
-            Guid errCode = new Guid("093F6F50-FC1C-42A9-927B-595A39F6C8D9");
-            Guid result = cmd.ExecuteScalar<Guid>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
-
-            if (result == errCode)
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                return null;
+                result = artPubDao.GetArticleIdByAlias(articleAlias);
+                dbErrMsg = artPubDao.GetErrMsg();
             }
 
             return result;
@@ -490,16 +486,12 @@ namespace Common.LogicObject
         /// </summary>
         public Guid? GetArticleIdByLinkUrl(string linkUrl)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spArticle_GetArticleIdByLinkUrl cmdInfo = new spArticle_GetArticleIdByLinkUrl() { LinkUrl = linkUrl };
+            Guid? result = null;
 
-            Guid errCode = new Guid("093F6F50-FC1C-42A9-927B-595A39F6C8D9");
-            Guid result = cmd.ExecuteScalar<Guid>(cmdInfo, errCode);
-            dbErrMsg = cmd.GetErrMsg();
-
-            if (result == errCode)
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                return null;
+                result = artPubDao.GetArticleIdByLinkUrl(linkUrl);
+                dbErrMsg = artPubDao.GetErrMsg();
             }
 
             return result;

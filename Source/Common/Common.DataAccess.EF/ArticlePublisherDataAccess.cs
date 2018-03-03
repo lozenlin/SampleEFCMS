@@ -1024,6 +1024,56 @@ where exists(
             return entities;
         }
 
+        /// <summary>
+        /// 依網址別名取得網頁代碼
+        /// </summary>
+        public Guid? GetArticleIdByAlias(string articleAlias)
+        {
+            Logger.Debug("GetArticleIdByAlias(articleAlias)");
+            Guid? result = null;
+
+            try
+            {
+                result = cmsCtx.Article.Where(obj => obj.ArticleAlias == articleAlias)
+                    .OrderBy(obj => obj.PostDate)
+                    .Select(obj => obj.ArticleId)
+                    .First();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 依超連結網址取得網頁代碼
+        /// </summary>
+        public Guid? GetArticleIdByLinkUrl(string linkUrl)
+        {
+            Logger.Debug("GetArticleIdByLinkUrl(linkUrl)");
+            Guid? result = null;
+
+            try
+            {
+                result = cmsCtx.Article.Where(obj => obj.ShowTypeId == 3 /* URL */ && obj.LinkUrl == linkUrl)
+                    .OrderBy(obj => obj.PostDate)
+                    .Select(obj => obj.ArticleId)
+                    .First();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region 附件檔案
