@@ -1913,6 +1913,35 @@ where exists(
             return true;
         }
 
+        /// <summary>
+        /// 取得前台用搜尋關鍵字
+        /// </summary>
+        public List<Keyword> GetKeywordListForFrontend(string cultureName, string kw, int topCount)
+        {
+            Logger.Debug("GetKeywordListForFrontend(cultureName, kw, topCount)");
+            List<Keyword> entities = null;
+
+            try
+            {
+                entities = (from k in cmsCtx.Keyword
+                            where k.CultureName == cultureName
+                                && k.Kw.Contains(kw)
+                                && k.UsedCount > 0
+                            orderby k.UsedCount descending
+                            select k)
+                            .Take(topCount)
+                            .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("", ex);
+                errMsg = ex.Message;
+                return null;
+            }
+
+            return entities;
+        }
+
         #endregion
 
         #region 搜尋用資料來源

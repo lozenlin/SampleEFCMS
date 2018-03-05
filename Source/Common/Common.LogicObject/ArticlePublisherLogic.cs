@@ -1318,19 +1318,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得前台用搜尋關鍵字
         /// </summary>
-        public DataSet GetKeywordListForFrontend(string cultureName, string kw, int topCount)
+        public List<Keyword> GetKeywordListForFrontend(string cultureName, string kw, int topCount)
         {
-            IDataAccessCommand cmd = DataAccessCommandFactory.GetDataAccessCommand(DBs.MainDB);
-            spKeyword_GetListForFrontend cmdInfo = new spKeyword_GetListForFrontend()
-            {
-                CultureName = cultureName,
-                Kw = kw,
-                TopCount = topCount
-            };
-            DataSet ds = cmd.ExecuteDataset(cmdInfo);
-            dbErrMsg = cmd.GetErrMsg();
+            List<Keyword> entities = null;
 
-            return ds;
+            using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
+            {
+                entities = artPubDao.GetKeywordListForFrontend(cultureName, kw, topCount);
+                dbErrMsg = artPubDao.GetErrMsg();
+            }
+
+            return entities;
         }
 
         #endregion

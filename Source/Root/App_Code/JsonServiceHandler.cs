@@ -203,15 +203,15 @@ namespace JsonService
             string term = GetParamValue("term");
             int topCount = 5;
 
-            DataSet dsKeywords = artPub.GetKeywordListForFrontend(c.qsCultureNameOfLangNo, term, topCount);
+            List<Keyword> keywords = artPub.GetKeywordListForFrontend(c.qsCultureNameOfLangNo, term, topCount);
 
-            if (dsKeywords != null)
+            if (keywords != null)
             {
                 List<string> kwList = new List<string>(topCount);
 
-                foreach (DataRow dr in dsKeywords.Tables[0].Rows)
+                foreach (Keyword kw in keywords)
                 {
-                    kwList.Add(dr.ToSafeStr("Kw"));
+                    kwList.Add(kw.Kw);
                 }
 
                 cr = new ClientResult()
