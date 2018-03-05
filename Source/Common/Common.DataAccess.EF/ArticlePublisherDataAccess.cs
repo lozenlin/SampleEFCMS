@@ -1964,14 +1964,17 @@ where exists(
                                     Lv1ArticleId = sds.Lv1ArticleId,
                                     PostDate = sds.PostDate,
                                     MdfDate = sds.MdfDate,
-                                    MatchesTotal = 1
+                                    MatchesTotal = 0
                                 };
+
+                int skipCount = param.PagedParams.GetSkipCount();
+                int takeCount = param.PagedParams.GetTakeCount();
 
                 if (param.Keywords.IndexOf(',') < 0)
                 {
                     // 單一關鍵字查詢
-                    // Query conditions
 
+                    // Query conditions
                     tempQuery = tempQuery.Where(obj => obj.CultureName == param.CultureName);
 
                     if (param.Keywords != "")
@@ -1980,44 +1983,105 @@ where exists(
                             obj.ArticleSubject.Contains(param.Keywords)
                             || obj.ArticleContext.Contains(param.Keywords));
                     }
+
+                    // total
+                    param.PagedParams.RowCount = tempQuery.Count();
+
+                    // sorting
+                    if (param.PagedParams.SortField != "")
+                    {
+                        tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
+                    }
+                    else
+                    {
+                        // default
+                        tempQuery = tempQuery.OrderByDescending(obj => obj.PublishDate);
+                    }
+
+                    // paging
+                    if (skipCount > 0)
+                    {
+                        tempQuery = tempQuery.Skip(skipCount);
+                    }
+
+                    if (takeCount >= 0)
+                    {
+                        tempQuery = tempQuery.Take(takeCount);
+                    }
+
+                    // result
+                    entities = tempQuery.ToList();
                 }
                 else
                 {
                     // 多項關聯字查詢
-                    //todo by lozen
+
+                    List<string> kws = param.Keywords.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(x => x.Trim()).ToList();
+
+                    // Query conditions
+                    System.Linq.Expressions.Expression<Func<SearchDataSourceForFrontend, bool>> whereClause = null;
+
+                    foreach (string kw in kws)
+                    {
+                        if (kw != "")
+                        {
+                            System.Linq.Expressions.Expression<Func<SearchDataSourceForFrontend, bool>> tempWhere = obj =>
+                                obj.ArticleSubject.Contains(kw)
+                                || obj.ArticleContext.Contains(kw);
+
+                            if (whereClause == null)
+                            {
+                                whereClause = tempWhere;
+                            }
+                            else
+                            {
+                                whereClause = whereClause.Or(tempWhere);
+                            }
+                        }
+                    }
+
+                    if (whereClause != null)
+                    {
+                        tempQuery = tempQuery.Where(whereClause);
+                    }
+
+                    // get data
+                    entities = tempQuery.ToList();
+
+                    // total
+                    param.PagedParams.RowCount = entities.Count;
+
+                    // 記錄符合的關鍵字數量
+                    foreach (string kw in kws)
+                    {
+                        foreach (var entity in entities)
+                        {
+                            if (entity.ArticleSubject.IndexOf(kw, StringComparison.CurrentCultureIgnoreCase) >= 0
+                                || entity.ArticleContext.IndexOf(kw, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                            {
+                                entity.MatchesTotal++;
+                            }
+                        }
+                    }
+
+                    // sorting
+                    entities = entities.OrderByDescending(obj => obj.MatchesTotal)
+                        .ThenByDescending(obj => obj.PublishDate)
+                        .ToList();
+
+                    // paging
+                    if (skipCount > 0)
+                    {
+                        entities = entities.Skip(skipCount).ToList();
+                    }
+
+                    if (takeCount >= 0)
+                    {
+                        entities = entities.Take(takeCount).ToList();
+                    }
                 }
 
-                // total
-                param.PagedParams.RowCount = tempQuery.Count();
-
-                // sorting
-                if (param.PagedParams.SortField != "")
-                {
-                    tempQuery = tempQuery.OrderBy(param.PagedParams.SortField, param.PagedParams.IsSortDesc);
-                }
-                else
-                {
-                    // default
-                    tempQuery = tempQuery.OrderByDescending(obj => obj.MatchesTotal)
-                        .ThenByDescending(obj => obj.PublishDate);
-                }
-
-                // paging
-                int skipCount = param.PagedParams.GetSkipCount();
-                int takeCount = param.PagedParams.GetTakeCount();
-
-                if (skipCount > 0)
-                {
-                    tempQuery = tempQuery.Skip(skipCount);
-                }
-
-                if (takeCount >= 0)
-                {
-                    tempQuery = tempQuery.Take(takeCount);
-                }
-
-                // result
-                entities = tempQuery.ToList();
                 int rowNum = 1;
 
                 foreach (var entity in entities)
