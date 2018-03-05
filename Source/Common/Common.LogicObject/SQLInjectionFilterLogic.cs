@@ -1,6 +1,4 @@
-﻿using Common.DataAccess;
-using Common.DataAccess.EF;
-using Common.DataAccess.SQLInjectionFilter;
+﻿using Common.DataAccess.EF;
 using log4net;
 using System;
 using System.Collections.Generic;

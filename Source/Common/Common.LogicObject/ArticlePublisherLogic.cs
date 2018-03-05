@@ -9,8 +9,6 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // ===============================================================================
 
-using Common.DataAccess;
-using Common.DataAccess.ArticlePublisher;
 using Common.DataAccess.EF;
 using Common.DataAccess.EF.EntityRequiredPropValues;
 using Common.DataAccess.EF.Model;
