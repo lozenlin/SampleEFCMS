@@ -168,7 +168,7 @@ public partial class Article : FrontendBasePage
         btnItem.HRef = destUrl;
         btnItem.Title = articleSubject;
 
-        if (linkTarget != "")
+        if (!string.IsNullOrEmpty(linkTarget))
         {
             btnItem.Target = linkTarget;
         }

@@ -170,12 +170,12 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
 
     private void LoadBannerSubjectUIData()
     {
-        if (articleData.BannerPicFileName != "")
+        if (!string.IsNullOrEmpty(articleData.BannerPicFileName))
         {
             bannerImageUrl = string.Format("images/{0}/{1}", c.qsLangNo, articleData.BannerPicFileName);
         }
 
-        if (customBannerSubjectHtml != "")
+        if (!string.IsNullOrEmpty(customBannerSubjectHtml))
         {
             BannerSubjectArea.Visible = false;
             ltrCustomBannerSubject.Text = customBannerSubjectHtml;
@@ -285,7 +285,7 @@ public partial class MasterArticle : System.Web.UI.MasterPage, IMasterArticleSet
             ltrArticleSubject.Text = articleData.ArticleSubject;
         }
 
-        if (articleData.Subtitle != "")
+        if (!string.IsNullOrEmpty(articleData.Subtitle))
         {
             //SubtitleArea.Visible = true;
             ltrSubtitle.Text = articleData.Subtitle;

@@ -73,7 +73,7 @@ namespace Common.DataAccess.EF
             {
                 entity = (from a in cmsCtx.Article
                           from e in cmsCtx.Employee
-                          where a.PostAccount == e.PostAccount
+                          where a.PostAccount == e.EmpAccount
                              && a.ArticleId == articleId
                           select new ArticleForBackend()
                           {

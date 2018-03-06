@@ -14,7 +14,6 @@
   </appSettings>
   <connectionStrings>
     <add name="CmsContext" connectionString="metadata=res://*/Model.Cms.csdl|res://*/Model.Cms.ssdl|res://*/Model.Cms.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=.\sqlexpress2012;initial catalog=SampleEFCMS;user id=cmsDev;password=yourpassword;MultipleActiveResultSets=True;App=SampleEFCMSBackEnd&quot;" providerName="System.Data.EntityClient" />
-    <add name="DBConnString" connectionString="Data Source=.\sqlexpress2012;User ID=cmsDev;PWD=yourpassword;Initial Catalog=SampleEFCMS;Application Name=SampleEFCMSBackEnd;"/>
   </connectionStrings>
   <!--驗證碼圖片不用驗證-->
   <location path="captcha.ashx">

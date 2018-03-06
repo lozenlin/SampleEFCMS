@@ -252,9 +252,9 @@ public partial class Article_Config : System.Web.UI.Page
                 if (parentShowTypeId == 3)
                 {
                     // setting Sub-item default URL
-                    string parentSubItemLinkUrl = parent.SubItemLinkUrl;
+                    string parentSubItemLinkUrl = parent.SubItemLinkUrl ?? "";
 
-                    if (parentSubItemLinkUrl != "")
+                    if (!string.IsNullOrEmpty(parentSubItemLinkUrl))
                     {
                         rdolShowType.SelectedValue = parentShowTypeId.ToString();
                         txtLinkUrl.Text = parentSubItemLinkUrl;
@@ -263,9 +263,9 @@ public partial class Article_Config : System.Web.UI.Page
                 else if (parentShowTypeId == 4)
                 {
                     // setting Sub-item default control
-                    string parentSubItemControlName = parent.SubItemControlName;
+                    string parentSubItemControlName = parent.SubItemControlName ?? "";
 
-                    if (parentSubItemControlName != "")
+                    if (!string.IsNullOrEmpty(parentSubItemControlName))
                     {
                         rdolShowType.SelectedValue = parentShowTypeId.ToString();
                         txtControlName.Text = parentSubItemControlName;

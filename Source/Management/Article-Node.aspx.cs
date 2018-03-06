@@ -127,7 +127,7 @@ public partial class Article_Node : BasePage
                     // get icon of operation
                     OperationHtmlAnchorData anchorData = empAuth.GetOperationHtmlAnchorData(c.GetOpIdOfPage(), false);
 
-                    if (anchorData != null && anchorData.IconImageFileUrl != "")
+                    if (anchorData != null && !string.IsNullOrEmpty(anchorData.IconImageFileUrl))
                     {
                         string iconImageFile = "~/BPImages/icon/" + anchorData.IconImageFileUrl;
                         hud.SetHeadIconImageUrl(iconImageFile);
@@ -329,10 +329,10 @@ public partial class Article_Node : BasePage
             }
 
             // article-content-setting
-            string sortFieldOfFrontStage = article.SortFieldOfFrontStage;
+            string sortFieldOfFrontStage = article.SortFieldOfFrontStage ?? "";
             bool isSortDescOfFrontStage = article.IsSortDescOfFrontStage;
 
-            if (sortFieldOfFrontStage != "")
+            if (!string.IsNullOrEmpty(sortFieldOfFrontStage))
             {
                 ddlSortFieldOfFrontStage.SelectedValue = sortFieldOfFrontStage;
                 ddlIsSortDescOfFrontStage.SelectedValue = isSortDescOfFrontStage.ToString();

@@ -110,7 +110,7 @@ public partial class LayoutControls_ListItemsThumb : System.Web.UI.UserControl
         string articleSubject = artData.ArticleSubject;
         int showTypeId = artData.ShowTypeId.Value;
         string linkUrl = artData.LinkUrl;
-        string linkTarget = artData.LinkTarget;
+        string linkTarget = artData.LinkTarget ?? "";
         string destUrl = "/" + StringUtility.GetLinkUrlOfShowType(articleId, c.qsLangNo, showTypeId, linkUrl);
 
         HtmlAnchor btnItem = (HtmlAnchor)e.Item.FindControl("btnItem");
@@ -121,7 +121,7 @@ public partial class LayoutControls_ListItemsThumb : System.Web.UI.UserControl
         btnPic.HRef = destUrl;
         btnPic.Title = articleSubject;
 
-        if (linkTarget != "")
+        if (!string.IsNullOrEmpty(linkTarget))
         {
             btnItem.Target = linkTarget;
             btnPic.Target = linkTarget;

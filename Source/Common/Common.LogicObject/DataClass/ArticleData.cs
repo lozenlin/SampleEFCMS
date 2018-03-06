@@ -56,7 +56,7 @@ namespace Common.LogicObject
             ParentId = artFE.ParentId;
             ArticleLevelNo = artFE.ArticleLevelNo.Value;
             ArticleAlias = artFE.ArticleAlias;
-            BannerPicFileName = artFE.BannerPicFileName;
+            BannerPicFileName = artFE.BannerPicFileName ?? "";
             LayoutModeId = artFE.LayoutModeId.Value;
             ShowTypeId = artFE.ShowTypeId.Value;
             LinkUrl = artFE.LinkUrl;
