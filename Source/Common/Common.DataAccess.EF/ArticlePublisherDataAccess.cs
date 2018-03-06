@@ -1996,6 +1996,9 @@ where exists(
                                     MatchesTotal = 0
                                 };
 
+                // Query conditions
+                tempQuery = tempQuery.Where(obj => obj.CultureName == param.CultureName);
+
                 int skipCount = param.PagedParams.GetSkipCount();
                 int takeCount = param.PagedParams.GetTakeCount();
 
@@ -2004,8 +2007,6 @@ where exists(
                     // 單一關鍵字查詢
 
                     // Query conditions
-                    tempQuery = tempQuery.Where(obj => obj.CultureName == param.CultureName);
-
                     if (param.Keywords != "")
                     {
                         tempQuery = tempQuery.Where(obj =>
