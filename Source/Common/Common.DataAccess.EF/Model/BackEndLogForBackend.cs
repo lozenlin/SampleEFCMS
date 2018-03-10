@@ -16,6 +16,7 @@ namespace Common.DataAccess.EF.Model
 
         public string EmpName { get; set; }
         public Nullable<int> DeptId { get; set; }
+        public string OwnerAccount { get; set; }
         public int RowNum { get; set; }
     }
 }

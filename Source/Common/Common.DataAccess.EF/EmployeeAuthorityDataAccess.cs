@@ -1507,7 +1507,8 @@ namespace Common.DataAccess.EF
                                     IP = l.IP,
 
                                     EmpName = e.EmpName,
-                                    DeptId = e.DeptId
+                                    DeptId = e.DeptId,
+                                    OwnerAccount = e.OwnerAccount
                                 };
 
                 // Query conditions
@@ -1516,7 +1517,8 @@ namespace Common.DataAccess.EF
                 {
                     tempQuery = tempQuery.Where(obj =>
                         param.AuthParams.CanReadSubItemOfCrew && obj.DeptId == param.AuthParams.MyDeptId
-                        || param.AuthParams.CanReadSubItemOfSelf && obj.EmpAccount == param.AuthParams.MyAccount);
+                        || param.AuthParams.CanReadSubItemOfSelf
+                            && (obj.EmpAccount == param.AuthParams.MyAccount || obj.OwnerAccount == param.AuthParams.MyAccount));
                 }
 
                 if(param.Account != "")
