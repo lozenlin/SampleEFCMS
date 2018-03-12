@@ -787,7 +787,7 @@ public partial class Article_Node : BasePage
         btnUploadAttachFile.Attributes["onclick"] = 
             string.Format("popWin('Article-Attach.aspx?act={0}&artid={1}', 700, 600); return false;", 
                 ConfigFormAction.add, c.qsArtId);
-        btnUploadAttachFile.Visible = empAuth.CanAddSubItemInThisPage();
+        btnUploadAttachFile.Visible = empAuth.CanEditThisPage();
 
         AttachFileListQueryParams param = new AttachFileListQueryParams()
         {
@@ -994,7 +994,7 @@ public partial class Article_Node : BasePage
         btnUploadPicture.Attributes["onclick"] =
             string.Format("popWin('Article-Picture.aspx?act={0}&artid={1}', 700, 600); return false;",
                 ConfigFormAction.add, c.qsArtId);
-        btnUploadPicture.Visible = empAuth.CanAddSubItemInThisPage();
+        btnUploadPicture.Visible = empAuth.CanEditThisPage();
 
         ArticlePictureListQueryParams param = new ArticlePictureListQueryParams()
         {
@@ -1151,7 +1151,7 @@ public partial class Article_Node : BasePage
         btnAddVideo.Attributes["onclick"] =
             string.Format("popWin('Article-Video.aspx?act={0}&artid={1}', 700, 600); return false;",
                 ConfigFormAction.add, c.qsArtId);
-        btnAddVideo.Visible = empAuth.CanAddSubItemInThisPage();
+        btnAddVideo.Visible = empAuth.CanEditThisPage();
 
         ArticleVideoListQueryParams param = new ArticleVideoListQueryParams()
         {
