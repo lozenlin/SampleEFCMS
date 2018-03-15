@@ -148,6 +148,11 @@ public partial class Role_Privilege : System.Web.UI.Page
         bool canEditSubItemOfOthers = opAuth.CanEditSubItemOfOthers;
         bool canDelSubItemOfOthers = opAuth.CanDelSubItemOfOthers;
 
+        if (c.seCultureNameOfBackend == "en")
+        {
+            opSubject = opAuth.EnglishSubject;
+        }
+
         string lastMdfAccount = "";
         DateTime? lastMdfDate = null;
 
