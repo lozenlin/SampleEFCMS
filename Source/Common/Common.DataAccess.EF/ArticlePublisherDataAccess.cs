@@ -44,6 +44,7 @@ namespace Common.DataAccess.EF
                             where am.ArticleId == a.ArticleId
                              && am.CultureName == cultureName
                              && a.ParentId == parentId
+                            orderby a.SortNo
                             select new ArticleMultiLangForOpMenu()
                             {
                                 ArticleId = am.ArticleId,
