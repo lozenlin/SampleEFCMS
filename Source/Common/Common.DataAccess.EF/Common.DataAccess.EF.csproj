@@ -168,6 +168,7 @@
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\SearchDataSourceForFrontend.cs" />
+    <Compile Include="MyConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryParam\AccountListQueryParamsDA.cs" />
     <Compile Include="QueryParam\ArticleListQueryParamsDA.cs" />

@@ -109,6 +109,7 @@
       <appender-ref ref="RollingFileAppender"/>
     </root>
   </log4net>
+  <!-- for SQL Azure: <entityFramework codeConfigurationType="Common.DataAccess.EF.MyConfiguration, Common.DataAccess.EF"> -->
   <entityFramework>
     <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
       <parameters>

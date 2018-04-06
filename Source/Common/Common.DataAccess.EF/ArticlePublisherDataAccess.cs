@@ -352,6 +352,7 @@ namespace Common.DataAccess.EF
         {
             Logger.Debug("DeleteArticleData(articleId)");
             DbContextTransaction tran = null;
+            MyConfiguration.SuspendExecutionStrategy = true;
 
             try
             {
@@ -415,6 +416,8 @@ where exists(
             {
                 if (tran != null)
                     tran.Dispose();
+
+                MyConfiguration.SuspendExecutionStrategy = false;
             }
 
             return true;
@@ -1367,6 +1370,7 @@ where exists(
         {
             Logger.Debug("DeleteAttachFileData(attId)");
             DbContextTransaction tran = null;
+            MyConfiguration.SuspendExecutionStrategy = true;
 
             try
             {
@@ -1396,6 +1400,8 @@ where exists(
             {
                 if (tran != null)
                     tran.Dispose();
+
+                MyConfiguration.SuspendExecutionStrategy = false;
             }
 
             return true;
@@ -1570,6 +1576,7 @@ where exists(
         {
             Logger.Debug("DeleteArticlePictureData(picId)");
             DbContextTransaction tran = null;
+            MyConfiguration.SuspendExecutionStrategy = true;
 
             try
             {
@@ -1599,6 +1606,8 @@ where exists(
             {
                 if (tran != null)
                     tran.Dispose();
+
+                MyConfiguration.SuspendExecutionStrategy = false;
             }
 
             return true;
@@ -1769,6 +1778,7 @@ where exists(
         {
             Logger.Debug("DeleteArticleVideoData(vidId)");
             DbContextTransaction tran = null;
+            MyConfiguration.SuspendExecutionStrategy = true;
 
             try
             {
@@ -1798,6 +1808,8 @@ where exists(
             {
                 if (tran != null)
                     tran.Dispose();
+
+                MyConfiguration.SuspendExecutionStrategy = false;
             }
 
             return true;

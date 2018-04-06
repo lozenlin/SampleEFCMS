@@ -666,6 +666,7 @@ namespace Common.DataAccess.EF
         {
             Logger.Debug("DeleteOperationData(opId)");
             DbContextTransaction tran = null;
+            MyConfiguration.SuspendExecutionStrategy = true;
 
             try
             {
@@ -703,6 +704,8 @@ namespace Common.DataAccess.EF
             {
                 if (tran != null)
                     tran.Dispose();
+
+                MyConfiguration.SuspendExecutionStrategy = false;
             }
 
             return true;
@@ -1027,8 +1030,8 @@ namespace Common.DataAccess.EF
         public bool DeleteEmployeeRoleData(int roleId)
         {
             Logger.Debug("DeleteEmployeeRoleData(roleId)");
-
             DbContextTransaction tran = null;
+            MyConfiguration.SuspendExecutionStrategy = true;
 
             try
             {
@@ -1074,6 +1077,8 @@ namespace Common.DataAccess.EF
             {
                 if (tran != null)
                     tran.Dispose();
+
+                MyConfiguration.SuspendExecutionStrategy = false;
             }
 
             return true;
@@ -1108,9 +1113,9 @@ namespace Common.DataAccess.EF
         public InsertResult InsertEmployeeRoleData(EmployeeRole entity, string copyPrivilegeFromRoleName)
         {
             Logger.Debug("InsertEmployeeRoleData(entity, copyPrivilegeFromRoleName)");
-
             InsertResult insResult = new InsertResult() { IsSuccess = false };
             DbContextTransaction tran = null;
+            MyConfiguration.SuspendExecutionStrategy = true;
 
             try
             {
@@ -1171,6 +1176,8 @@ namespace Common.DataAccess.EF
             {
                 if (tran != null)
                     tran.Dispose();
+
+                MyConfiguration.SuspendExecutionStrategy = false;
             }
 
             return insResult;
