@@ -189,7 +189,7 @@ public partial class Article_Node : BasePage
         btnSortPostDeptName.Text = Resources.Lang.Col_DeptName;
         hidSortPostDeptName.Text = btnSortPostDeptName.Text;
 
-        c.DisplySortableCols(new string[] { 
+        c.DisplaySortableCols(new string[] { 
             "ArticleSubject", "SortNo", "StartDate", 
             "PostDeptName"
         });
@@ -1020,7 +1020,7 @@ public partial class Article_Node : BasePage
             MyDeptId = c.GetDeptId()
         };
 
-        List<ArticlePictureForBEList> articlePictures = artPub.GetArticlePicutreMultiLangListForBackend(param);
+        List<ArticlePictureForBEList> articlePictures = artPub.GetArticlePictureMultiLangListForBackend(param);
 
         if (articlePictures != null)
         {

@@ -1476,9 +1476,12 @@ where exists(
         /// <summary>
         /// 取得後台用指定語系的網頁照片清單
         /// </summary>
-        public List<ArticlePictureForBEList> GetArticlePicutreMultiLangListForBackend(ArticlePictureListQueryParamsDA param)
+        /// <history>
+        /// 2019/02/28, lozenlin, modify, typo fixes "Picutre" to "Picture"
+        /// </history>
+        public List<ArticlePictureForBEList> GetArticlePictureMultiLangListForBackend(ArticlePictureListQueryParamsDA param)
         {
-            Logger.Debug("GetArticlePicutreMultiLangListForBackend(param)");
+            Logger.Debug("GetArticlePictureMultiLangListForBackend(param)");
             List<ArticlePictureForBEList> entities = null;
 
             try

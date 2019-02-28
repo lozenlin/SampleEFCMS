@@ -1050,14 +1050,17 @@ namespace Common.LogicObject
         /// <summary>
         /// 取得後台用指定語系的網頁照片清單
         /// </summary>
-        public List<ArticlePictureForBEList> GetArticlePicutreMultiLangListForBackend(ArticlePictureListQueryParams param)
+        /// <history>
+        /// 2019/02/28, lozenlin, modify, typo fixes "Picutre" to "Picture"
+        /// </history>
+        public List<ArticlePictureForBEList> GetArticlePictureMultiLangListForBackend(ArticlePictureListQueryParams param)
         {
             List<ArticlePictureForBEList> entities = null;
 
             using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
                 ArticlePictureListQueryParamsDA paramDA = param.GenArticlePictureListQueryParamsDA();
-                entities = artPubDao.GetArticlePicutreMultiLangListForBackend(paramDA);
+                entities = artPubDao.GetArticlePictureMultiLangListForBackend(paramDA);
                 dbErrMsg = artPubDao.GetErrMsg();
                 param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
