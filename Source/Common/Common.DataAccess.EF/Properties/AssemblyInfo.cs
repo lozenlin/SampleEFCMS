@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Common.DataAccess.EF")]
-[assembly: AssemblyCopyright("Copyright ©  2018, based on SampleEFCMS Common.DataAccess.EF v1.2")]
+[assembly: AssemblyCopyright("Copyright ©  2019, based on SampleEFCMS Common.DataAccess.EF v1.3")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,6 +31,6 @@ using System.Runtime.InteropServices;
 //
 // 您可以指定所有的值，也可以依照以下的方式，使用 '*' 將組建和修訂編號
 // 指定為預設值: 
-[assembly: AssemblyVersion("1.2.0.*")]
+[assembly: AssemblyVersion("1.3.0.*")]
 //[assembly: AssemblyVersion("1.0.0.0")]
 //[assembly: AssemblyFileVersion("1.0.0.0")]

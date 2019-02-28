@@ -5,7 +5,7 @@
 // ArticlePublisherDataAccess.cs
 //
 // ===============================================================================
-// Copyright (c) 2018 lozenlin
+// Copyright (c) 2019 lozenlin
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // ===============================================================================
 
@@ -17,6 +17,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.DataAccess.EF.QueryParam;
 
 namespace Common.DataAccess.EF
 {
@@ -185,7 +186,7 @@ namespace Common.DataAccess.EF
         /// <summary>
         /// 取得後台用指定語系的網頁內容清單
         /// </summary>
-        public List<ArticleForBEList> GetArticleMultiLangListForBackend(ArticleListQueryParamsDA param)
+        public List<ArticleForBEList> GetArticleMultiLangListForBackend(ArticleListQueryParams param)
         {
             Logger.Debug("GetArticleMultiLangListForBackend(param)");
             List<ArticleForBEList> entities = null;
@@ -547,7 +548,7 @@ where exists(
         /// <summary>
         /// 更新網頁內容的指定區域是否在前台顯示
         /// </summary>
-        public bool UpdateArticleIsAreaShowInFrontStage(ArticleUpdateIsAreaShowInFrontStageParamsDA param)
+        public bool UpdateArticleIsAreaShowInFrontStage(ArticleUpdateIsAreaShowInFrontStageParams param)
         {
             Logger.Debug("UpdateArticleIsAreaShowInFrontStage(param)");
 
@@ -608,7 +609,7 @@ where exists(
         /// <summary>
         /// 更新網頁內容的前台子項目排序欄位
         /// </summary>
-        public bool UpdateArticleSortFieldOfFrontStage(ArticleUpdateSortFieldOfFrontStageParamsDA param)
+        public bool UpdateArticleSortFieldOfFrontStage(ArticleUpdateSortFieldOfFrontStageParams param)
         {
             Logger.Debug("UpdateArticleSortFieldOfFrontStage(param)");
 
@@ -941,7 +942,7 @@ where exists(
         /// <summary>
         /// 取得前台用的有效網頁內容清單
         /// </summary>
-        public List<ArticleForFEList> GetArticleValidListForFrontend(ArticleValidListQueryParamsDA param)
+        public List<ArticleForFEList> GetArticleValidListForFrontend(ArticleValidListQueryParams param)
         {
             Logger.Debug("GetArticleValidListForFrontend(param)");
             List<ArticleForFEList> entities = null;
@@ -1144,7 +1145,7 @@ where exists(
         /// <summary>
         /// 取得後台用指定語系的附件檔案清單
         /// </summary>
-        public List<AttachFileForBEList> GetAttachFileMultiLangListForBackend(AttachFileListQueryParamsDA param)
+        public List<AttachFileForBEList> GetAttachFileMultiLangListForBackend(AttachFileListQueryParams param)
         {
             Logger.Debug("GetAttachFileMultiLangListForBackend(param)");
             List<AttachFileForBEList> entities = null;
@@ -1479,7 +1480,7 @@ where exists(
         /// <history>
         /// 2019/02/28, lozenlin, modify, typo fixes "Picutre" to "Picture"
         /// </history>
-        public List<ArticlePictureForBEList> GetArticlePictureMultiLangListForBackend(ArticlePictureListQueryParamsDA param)
+        public List<ArticlePictureForBEList> GetArticlePictureMultiLangListForBackend(ArticlePictureListQueryParams param)
         {
             Logger.Debug("GetArticlePictureMultiLangListForBackend(param)");
             List<ArticlePictureForBEList> entities = null;
@@ -1681,7 +1682,7 @@ where exists(
         /// <summary>
         /// 取得後台用指定語系的網頁影片清單
         /// </summary>
-        public List<ArticleVideoForBEList> GetArticleVideoMultiLangListForBackend(ArticleVideoListQueryParamsDA param)
+        public List<ArticleVideoForBEList> GetArticleVideoMultiLangListForBackend(ArticleVideoListQueryParams param)
         {
             Logger.Debug("GetArticleVideoMultiLangListForBackend(param)");
             List<ArticleVideoForBEList> entities = null;
@@ -1987,7 +1988,7 @@ where exists(
         /// 取得搜尋用資料來源清單
         /// </summary>
         /// <returns></returns>
-        public List<SearchDataSourceForFrontend> GetSearchDataSourceList(SearchResultListQueryParamsDA param)
+        public List<SearchDataSourceForFrontend> GetSearchDataSourceList(SearchResultListQueryParams param)
         {
             Logger.Debug("GetSearchDataSourceList(param)");
             List<SearchDataSourceForFrontend> entities = null;

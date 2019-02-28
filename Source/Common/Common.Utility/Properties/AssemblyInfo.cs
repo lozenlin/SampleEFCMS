@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Common.Utility")]
-[assembly: AssemblyCopyright("Copyright ©  2018, based on SampleCMS Common.Utility v1.0")]
+[assembly: AssemblyCopyright("Copyright ©  2019, based on SampleCMS Common.Utility v1.0")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

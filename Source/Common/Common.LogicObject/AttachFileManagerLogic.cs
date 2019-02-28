@@ -10,6 +10,7 @@
 // ===============================================================================
 
 using Common.DataAccess.EF.Model;
+using Common.DataAccess.EF.QueryParam;
 using log4net;
 using System;
 using System.Collections.Generic;

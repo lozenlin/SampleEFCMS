@@ -5,7 +5,7 @@
 // EmployeeAuthorityDataAccess.cs
 //
 // ===============================================================================
-// Copyright (c) 2018 lozenlin
+// Copyright (c) 2019 lozenlin
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // ===============================================================================
 
@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using Common.DataAccess.EF.EntityRequiredPropValues;
+using Common.DataAccess.EF.QueryParam;
 
 namespace Common.DataAccess.EF
 {
@@ -179,7 +180,7 @@ namespace Common.DataAccess.EF
         /// <summary>
         /// 取得後台用帳號名單
         /// </summary>
-        public List<EmployeeForBackend> GetEmployeeListForBackend(AccountListQueryParamsDA param)
+        public List<EmployeeForBackend> GetEmployeeListForBackend(AccountListQueryParams param)
         {
             Logger.Debug("GetEmployeeListForBackend(param)");
 
@@ -400,7 +401,7 @@ namespace Common.DataAccess.EF
         /// <summary>
         /// 取得後台用後端作業選項清單
         /// </summary>
-        public List<OperationForBackend> GetOperationListForBackend(OpListQueryParamsDA param)
+        public List<OperationForBackend> GetOperationListForBackend(OpListQueryParams param)
         {
             Logger.Debug("GetOperationListForBackend(param)");
             List<OperationForBackend> entities = null;
@@ -933,7 +934,7 @@ namespace Common.DataAccess.EF
         /// <summary>
         /// 取得後台用員工身分清單
         /// </summary>
-        public List<EmployeeRoleForBackend> GetEmployeeRoleListForBackend(RoleListQueryParamsDA param)
+        public List<EmployeeRoleForBackend> GetEmployeeRoleListForBackend(RoleListQueryParams param)
         {
             Logger.Debug("GetEmployeeRoleListForBackend(param)");
 
@@ -1284,7 +1285,7 @@ namespace Common.DataAccess.EF
         /// <summary>
         /// 取得後台用部門清單
         /// </summary>
-        public List<DepartmentForBackend> GetDepartmentListForBackend(DeptListQueryParamsDA param)
+        public List<DepartmentForBackend> GetDepartmentListForBackend(DeptListQueryParams param)
         {
             Logger.Debug("GetDepartmentListForBackend(param)");
             List<DepartmentForBackend> entities = null;
@@ -1493,7 +1494,7 @@ namespace Common.DataAccess.EF
         /// <summary>
         /// 取得後端操作記錄清單
         /// </summary>
-        public List<BackEndLogForBackend> GetBackEndLogList(BackEndLogListQueryParamsDA param)
+        public List<BackEndLogForBackend> GetBackEndLogList(BackEndLogListQueryParams param)
         {
             Logger.Debug("GetBackEndLogList(param)");
             List<BackEndLogForBackend> entities = null;

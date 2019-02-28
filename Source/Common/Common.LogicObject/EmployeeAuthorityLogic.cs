@@ -5,7 +5,7 @@
 // EmployeeAuthorityLogic.cs
 //
 // ===============================================================================
-// Copyright (c) 2018 lozenlin
+// Copyright (c) 2019 lozenlin
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // ===============================================================================
 
@@ -18,6 +18,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using Common.DataAccess.EF.EntityRequiredPropValues;
+using Common.DataAccess.EF.QueryParam;
 
 namespace Common.LogicObject
 {
@@ -390,10 +391,8 @@ namespace Common.LogicObject
 
             using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                BackEndLogListQueryParamsDA paramDA = param.GenBackEndLogListQueryParamsDA();
-                entities = empAuthDao.GetBackEndLogList(paramDA);
+                entities = empAuthDao.GetBackEndLogList(param);
                 dbErrMsg = empAuthDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;
@@ -497,13 +496,11 @@ namespace Common.LogicObject
         public List<EmployeeForBackend> GetAccountList(AccountListQueryParams param)
         {
             List<EmployeeForBackend> entities = null;
-            AccountListQueryParamsDA paramDA = param.GenAccountListQueryParamsDA();
 
             using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                entities = empAuthDao.GetEmployeeListForBackend(paramDA);
+                entities = empAuthDao.GetEmployeeListForBackend(param);
                 dbErrMsg = empAuthDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;
@@ -822,10 +819,8 @@ namespace Common.LogicObject
 
             using(EmployeeAuthorityDataAccess empAuthDao=new EmployeeAuthorityDataAccess())
             {
-                OpListQueryParamsDA paramDA = param.GenOpListQueryParamsDA();
-                entities = empAuthDao.GetOperationListForBackend(paramDA);
+                entities = empAuthDao.GetOperationListForBackend(param);
                 dbErrMsg = empAuthDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;
@@ -1028,13 +1023,11 @@ namespace Common.LogicObject
         public List<EmployeeRoleForBackend> GetEmployeeRoleList(RoleListQueryParams param)
         {
             List<EmployeeRoleForBackend> entities = null;
-            RoleListQueryParamsDA paramDA = param.GenRoleListQueryParamsDA();
 
             using (EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                entities = empAuthDao.GetEmployeeRoleListForBackend(paramDA);
+                entities = empAuthDao.GetEmployeeRoleListForBackend(param);
                 dbErrMsg = empAuthDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;
@@ -1205,10 +1198,8 @@ namespace Common.LogicObject
 
             using(EmployeeAuthorityDataAccess empAuthDao = new EmployeeAuthorityDataAccess())
             {
-                DeptListQueryParamsDA paramDA = param.GenDeptListQueryParamsDA();
-                entities = empAuthDao.GetDepartmentListForBackend(paramDA);
+                entities = empAuthDao.GetDepartmentListForBackend(param);
                 dbErrMsg = empAuthDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;

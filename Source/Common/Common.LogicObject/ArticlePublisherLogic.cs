@@ -5,13 +5,14 @@
 // ArticlePublisherLogic.cs
 //
 // ===============================================================================
-// Copyright (c) 2018 lozenlin
+// Copyright (c) 2019 lozenlin
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // ===============================================================================
 
 using Common.DataAccess.EF;
 using Common.DataAccess.EF.EntityRequiredPropValues;
 using Common.DataAccess.EF.Model;
+using Common.DataAccess.EF.QueryParam;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -338,10 +339,8 @@ namespace Common.LogicObject
 
             using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleListQueryParamsDA paramDA = param.GenArticleListQueryParamsDA();
-                entities = artPubDao.GetArticleMultiLangListForBackend(paramDA);
+                entities = artPubDao.GetArticleMultiLangListForBackend(param);
                 dbErrMsg = artPubDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;
@@ -356,10 +355,8 @@ namespace Common.LogicObject
 
             using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleValidListQueryParamsDA paramDA = param.GenArticleValidListQueryParamsDA();
-                entities = artPubDao.GetArticleValidListForFrontend(paramDA);
+                entities = artPubDao.GetArticleValidListForFrontend(param);
                 dbErrMsg = artPubDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;
@@ -438,8 +435,7 @@ namespace Common.LogicObject
 
             using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleUpdateIsAreaShowInFrontStageParamsDA paramDA = param.GenArticleUpdateIsAreaShowInFrontStageParamsDA();
-                result = artPubDao.UpdateArticleIsAreaShowInFrontStage(paramDA);
+                result = artPubDao.UpdateArticleIsAreaShowInFrontStage(param);
                 dbErrMsg = artPubDao.GetErrMsg();
             }
 
@@ -455,8 +451,7 @@ namespace Common.LogicObject
 
             using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleUpdateSortFieldOfFrontStageParamsDA paramDA = param.GenArticleUpdateSortFieldOfFrontStageParamsDA();
-                result = artPubDao.UpdateArticleSortFieldOfFrontStage(paramDA);
+                result = artPubDao.UpdateArticleSortFieldOfFrontStage(param);
                 dbErrMsg = artPubDao.GetErrMsg();
             }
 
@@ -789,10 +784,8 @@ namespace Common.LogicObject
 
             using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                AttachFileListQueryParamsDA paramDA = param.GenAttachFileListQueryParamsDA();
-                entities = artPubDao.GetAttachFileMultiLangListForBackend(paramDA);
+                entities = artPubDao.GetAttachFileMultiLangListForBackend(param);
                 dbErrMsg = artPubDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;
@@ -1059,10 +1052,8 @@ namespace Common.LogicObject
 
             using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticlePictureListQueryParamsDA paramDA = param.GenArticlePictureListQueryParamsDA();
-                entities = artPubDao.GetArticlePictureMultiLangListForBackend(paramDA);
+                entities = artPubDao.GetArticlePictureMultiLangListForBackend(param);
                 dbErrMsg = artPubDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;
@@ -1255,10 +1246,8 @@ namespace Common.LogicObject
 
             using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                ArticleVideoListQueryParamsDA paramDA = param.GenArticleVideoListQueryParamsDA();
-                entities = artPubDao.GetArticleVideoMultiLangListForBackend(paramDA);
+                entities = artPubDao.GetArticleVideoMultiLangListForBackend(param);
                 dbErrMsg = artPubDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;
@@ -1362,10 +1351,8 @@ namespace Common.LogicObject
 
             using (ArticlePublisherDataAccess artPubDao = new ArticlePublisherDataAccess())
             {
-                SearchResultListQueryParamsDA paramDA = param.GenSearchResultListQueryParamsDA();
-                entities = artPubDao.GetSearchDataSourceList(paramDA);
+                entities = artPubDao.GetSearchDataSourceList(param);
                 dbErrMsg = artPubDao.GetErrMsg();
-                param.PagedParams.RowCount = paramDA.PagedParams.RowCount;
             }
 
             return entities;

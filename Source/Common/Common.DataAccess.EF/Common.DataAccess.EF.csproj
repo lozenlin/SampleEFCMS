@@ -164,28 +164,43 @@
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\OperationWithRoleAuth.cs" />
+    <Compile Include="Model\RoleOpPvg.cs" />
     <Compile Include="Model\SearchDataSource.cs">
       <DependentUpon>Cms.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\SearchDataSourceForFrontend.cs" />
     <Compile Include="MyConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryParam\AccountListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\ArticleListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\ArticlePictureListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\ArticleUpdateIsAreaShowInFrontStageParamsDA.cs" />
-    <Compile Include="QueryParam\ArticleUpdateSortFieldOfFrontStageParamsDA.cs" />
-    <Compile Include="QueryParam\ArticleValidListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\ArticleVideoListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\AttachFileListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\AuthenticationQueryParamsDA.cs" />
-    <Compile Include="QueryParam\AuthenticationUpdateParamsDA.cs" />
-    <Compile Include="QueryParam\BackEndLogListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\DeptListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\OpListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\PagedListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\RoleListQueryParamsDA.cs" />
-    <Compile Include="QueryParam\SearchResultListQueryParamsDA.cs" />
+    <Compile Include="QueryParam\AccountListQueryParams.cs" />
+    <Compile Include="QueryParam\AccountParams.cs" />
+    <Compile Include="QueryParam\ArticleListQueryParams.cs" />
+    <Compile Include="QueryParam\ArticleMultiLangParams.cs" />
+    <Compile Include="QueryParam\ArticleParams.cs" />
+    <Compile Include="QueryParam\ArticlePictureListQueryParams.cs" />
+    <Compile Include="QueryParam\ArticlePictureMultiLangParams.cs" />
+    <Compile Include="QueryParam\ArticlePictureParams.cs" />
+    <Compile Include="QueryParam\ArticleUpdateIsAreaShowInFrontStageParams.cs" />
+    <Compile Include="QueryParam\ArticleUpdateSortFieldOfFrontStageParams.cs" />
+    <Compile Include="QueryParam\ArticleValidListQueryParams.cs" />
+    <Compile Include="QueryParam\ArticleVideoListQueryParams.cs" />
+    <Compile Include="QueryParam\ArticleVideoMultiLangParams.cs" />
+    <Compile Include="QueryParam\ArticleVideoParams.cs" />
+    <Compile Include="QueryParam\AttachFileListQueryParams.cs" />
+    <Compile Include="QueryParam\AttachFileMultiLangParams.cs" />
+    <Compile Include="QueryParam\AttachFileParams.cs" />
+    <Compile Include="QueryParam\AuthenticationQueryParams.cs" />
+    <Compile Include="QueryParam\AuthenticationUpdateParams.cs" />
+    <Compile Include="QueryParam\BackEndLogListQueryParams.cs" />
+    <Compile Include="QueryParam\DeptListQueryParams.cs" />
+    <Compile Include="QueryParam\DeptParams.cs" />
+    <Compile Include="QueryParam\OpListQueryParams.cs" />
+    <Compile Include="QueryParam\OpParams.cs" />
+    <Compile Include="QueryParam\PagedListQueryParams.cs" />
+    <Compile Include="QueryParam\RoleListQueryParams.cs" />
+    <Compile Include="QueryParam\RoleOpDescParams.cs" />
+    <Compile Include="QueryParam\RoleParams.cs" />
+    <Compile Include="QueryParam\RolePrivilegeParams.cs" />
+    <Compile Include="QueryParam\SearchResultListQueryParams.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Model\Cms.edmx">

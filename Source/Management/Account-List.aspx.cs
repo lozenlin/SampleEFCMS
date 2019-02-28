@@ -1,4 +1,5 @@
 ﻿using Common.DataAccess.EF.Model;
+using Common.DataAccess.EF.QueryParam;
 using Common.LogicObject;
 using Common.Utility;
 using System;

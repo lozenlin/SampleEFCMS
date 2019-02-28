@@ -9,6 +9,7 @@ using System.Configuration;
 using Newtonsoft.Json;
 using System.Data;
 using Common.DataAccess.EF.Model;
+using Common.DataAccess.EF.QueryParam;
 
 namespace JsonService
 {
